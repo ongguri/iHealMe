@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/postDetail.css">
+</head>
+<body>
+<div class="container">
+    <div class="post">
+        <h2 class="post-title">[새롬소아청소년과의원] 여기 추천합니다! </h2>
+        <p class="post-author">lee***   &nbsp;&nbsp;&nbsp;&nbsp;
+        <span class="post-hits">조회수 | 238</span>
+        <span class="post-registerDate">23.4.4 화</span>
+        </p>
+        <hr>
+        <div class="post-content">
+            <p>맛집이네요</p>
+        </div>
+        <hr>
+        <div class="lbuttons">
+            <button type="submit" class="btn btn-secondary btn-sm">신고</button>
+        </div>
+        <div class="rbuttons">
+            <button type="submit" class="btn btn-secondary btn-sm">수정</button>
+            <button type="button" class="btn btn-secondary btn-sm" onclick="">삭제</button>
+        </div>
+        <br><br><br><br>
+        <h4 class="comment-title">댓글<span class="comment-count">(7)</span></h4>
+        <hr>
+        <table class="table table-borderless">
+            <tbody class="comments-table">
+            <tr>
+                <td rowspan="2">long***</td>
+                <td>good입니다.</td>
+            </tr>
+            <tr class="border-bottom">
+                <td>
+                    <button type="submit" class="btn btn-secondary btn-sm">수정</button>
+                    <button type="submit" class="btn btn-secondary btn-sm">삭제</button>
+                </td>
+                <td>2023-04-20</td>
+            </tr>
+            <tr>
+                <td rowspan="2">harang***</td>
+                <td>동감합니다.</td>
+            </tr>
+            <tr>
+                <td>
+                    <button type="submit" class="btn btn-secondary btn-sm">수정</button>
+                    <button type="submit" class="btn btn-secondary btn-sm">삭제</button>
+                </td>
+                <td>2023-04-24</td>
+            </tr>
+            </tbody>
+        </table>
+        <hr>
+        <form class="comment-form">
+            <label for="comment" class="comment-writer">har*** : &nbsp;</label>
+            <textarea id="comment" name="comment" class="comment-input" rows="2" cols="60%" required placeholder="댓글을 입력해보세요."></textarea>  &nbsp;&nbsp;
+            <button type="submit" class="btn btn-secondary btn-sm">등록</button>
+        </form>
+        <hr>
+        <form>
+            <button type="button" class="btn btn-secondary btn-sm">목록으로 돌아가기</button>
+        </form>
+    </div>
+</div>
+</body>
+</html>
