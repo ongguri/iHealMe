@@ -42,6 +42,13 @@
     align-items: center;
 }
 
+.co2 {
+    flex: 1;
+    padding: 10px;
+    display: flex;
+    align-items: normal;
+}
+
 h5 {
     margin: 0;
     font-size: 1.5rem;
