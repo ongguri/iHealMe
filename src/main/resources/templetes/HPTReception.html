@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>접수내역 확인 페이지</title>
-    <link rel="stylesheet" type="text/css" href="../css/style.css">
+    <link rel="stylesheet" type="text/css" href="../css/HPTReception.css">
     <script>
         const counterValue = document.querySelector('.counter-value');
         const addBtn = document.querySelector('#add-btn');
@@ -51,6 +51,10 @@
             <td>소아 진료</td>
             <td></td>
             <td>접수대기</td>
+            <td>
+                <a href="HPTReception.html" class="hidden-link">접수</a>&nbsp;&nbsp;
+                <a href="HPTReception.html" class="hidden-link">거절</a>
+            </td>
         </tr>
         <tr>
             <td>3</td>
@@ -66,7 +70,7 @@
             <td>영유아검진</td>
             <td>2023-04-25 15:35:22</td>
             <td>진료 전</td>
-            <td><a href="HPTReception.html" th:href="@{/templates/}" class="hidden-link">진료완료</a></td></td>
+            <td><a href="HPTReception.html" class="hidden-link">진료완료</a></td>
         </tr>
         <tr>
             <td>1</td>
