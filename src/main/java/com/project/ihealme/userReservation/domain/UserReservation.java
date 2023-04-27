@@ -18,7 +18,6 @@ public class UserReservation {
     private Long resNo;
     private String userEmail;
     private String hptName;
-
     private String txList;
     private LocalDateTime rDate;
     private String status;
