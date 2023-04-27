@@ -6,47 +6,30 @@
     <link rel="stylesheet" type="text/css" href="/css/reservationStyle.css">
 </head>
 <body>
-<h2>접수내역 확인</h2>
-    <table>
-        <tr>
-            <th>No</th>
-            <th>병원명</th>
-            <th>진료항목</th>
-            <th>접수 일시</th>
-            <th>상태</th>
-            <th>비고</th>
-        </tr>
-        <tr th:each="reservationInfo : ${userReservationList}">
-                    <td th:text="${reservationInfo.resNo}"></td>
-                    <td th:text="${reservationInfo.hptName}"></td>
-                    <td th:text="${reservationInfo.txList}"></td>
-                    <td th:text="${reservationInfo.rDate}"></td>
-                    <td th:text="${reservationInfo.status}"></td>
-        </tr>
-<!--        <tr class="test">-->
-<!--            <td>3</td>-->
-<!--            <td>새롬소아청소년과의원</td>-->
-<!--            <td>영유아 검진</td>-->
-<!--            <td></td>-->
-<!--            <td>접수 대기</td>-->
-<!--            <td><a href="writeReview.html" th:href="@{/templates/}">취소하기</a></td>-->
-<!--        </tr>-->
-<!--        <tr>-->
-<!--            <td>2</td>-->
-<!--            <td>새롬소아청소년과의원</td>-->
-<!--            <td>영유아 검진</td>-->
-<!--            <td>2023-04-11 10:23:12</td>-->
-<!--            <td>접수 대기</td>-->
-<!--            <td><a href="cancel.html" th:href="@{/templates/}">후기작성</a></td>-->
-<!--        </tr>-->
-<!--        <tr class="test">-->
-<!--            <td>1</td>-->
-<!--            <td>새롬소아청소년과의원</td>-->
-<!--            <td>소아 진료</td>-->
-<!--            <td>2023-04-01 15:33:15</td>-->
-<!--            <td>후기작성완료</td>-->
-<!--            <td></td>-->
-<!--        </tr>-->
-    </table>
+<div class="container">
+    <h2>접수내역 확인</h2>
+        <table>
+            <thead>
+            <tr>
+                <th>No</th>
+                <th>병원명</th>
+                <th>진료항목</th>
+                <th>접수 일시</th>
+                <th>상태</th>
+                <th>비고</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="reservationInfo : ${userReservationList}">
+                        <td th:text="${reservationInfo.resNo}"></td>
+                        <td th:text="${reservationInfo.hptName}"></td>
+                        <td th:text="${reservationInfo.txList}"></td>
+                        <td th:text="${reservationInfo.rDate}"></td>
+                        <td th:text="${reservationInfo.status}"></td>
+                        <td></td>
+            </tr>
+            </tbody>
+        </table>
+</div>
 </body>
 </html>
