@@ -208,37 +208,31 @@
 			el.innerHTML = itemStr;
 			el.className = 'item';
 			
-			// 예약하기 버튼을 클릭하면 이벤트 핸들러를 실행
-			el.querySelector('.book_button').addEventListener('click', function () {
+			// 예약하기 버튼 클릭 시 팝업창 열기
+			el.querySelector('.book_button').addEventListener('click', function() {
+				var popupHtml = '<div id="popup" style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: skyblue; border: 1px solid black; padding: 20px; text-align: center; z-index: 999;">' +
+						'<h3>접수하기</h3>' +
+							'<form>' +
+							'<label for="name">환자명:</label>' +
+							'<input type="text" id="name" name="name"><br><br>' +
+							'<label for="treatment">진료 항목:</label>' +
+							'<select id="treatment" name="treatment">' +
+							'<option value="1">소아진료</option>' +
+							'<option value="2">영유아검진</option>' +
+							'<option value="3">예방접종</option>' +
+							'</select><br><br>' +
+							'<input type="button" id="submitBtn" value="접수 신청">' +
+							'</form>' +
+						'</div>';
 				
-				// 모달 창 생성
-				const modal = document.createElement('div');
-				modal.className = 'modal';
-				modal.innerHTML = `
-			      <div class="modal-content">
-			        <h3>접수하기</h3>
-			        <form>
-			          <label for="patient_name">환아명 : </label>
-			          <input type="text" id="patient_name" name="patient_name" required><br>
-			          <label for="treatment">진료 항목 : </label>
-			          <select id="treatment" name="treatment" required>
-			            <option value="소아진료">소아진료</option>
-			            <option value="영유아검진">영유아검진</option>
-			            <option value="예방접종">예방접종</option>
-			          </select><br>
-			          <button type="submit">접수 신청</button>
-			        </form>
-			      </div>ㅇ
-			    `;
-				document.body.appendChild(modal);
+				var popup = document.createElement('div');
+				popup.innerHTML = popupHtml;
+				document.body.appendChild(popup);
 				
-				// 접수 신청 폼 제출시 실행
-				modal.querySelector('form').addEventListener('submit', function (e) {
-					e.preventDefault(); // 폼 제출 이벤트 중지
-					modal.innerHTML = '<h3>접수 완료!</h3>'; // 폼 제출 완료 메시지 출력
-					setTimeout(function () {
-						modal.remove(); // 일정 시간 후 모달 창 제거
-					}, 3000);
+				// 접수 신청 버튼 클릭 시 팝업창 닫기 및 alert 창 띄우기
+				document.getElementById('submitBtn').addEventListener('click', function() {
+					popup.remove();
+					alert('접수 완료!');
 				});
 			});
 			
