@@ -56,6 +56,7 @@ dependencies {
     implementation group: 'org.json', name: 'json', version: '20160810'
 //Redis
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+
 // 테스트 코드를 위한 Lombok 라이브러리
     testCompileOnly 'org.projectlombok:lombok:1.18.12'
     testAnnotationProcessor 'org.projectlombok:lombok:1.18.12'
@@ -65,11 +66,11 @@ dependencies {
 // implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
 // 유효성 검사
     implementation 'org.springframework.boot:spring-boot-starter-validation'
-//  thymeleaf
-    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 // hibernate
     implementation 'org.hibernate:hibernate-core:{Hibernate version}'
     implementation 'javax.persistence:javax.persistence-api:{JPA version}'
+// 타임리프
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 }
 
 tasks.named('test') {
