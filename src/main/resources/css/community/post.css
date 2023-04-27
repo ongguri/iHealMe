@@ -1,0 +1,86 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    max-width: 800px;
+    margin: 10px auto;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.post-title {
+    font-size: 32px;
+    font-weight: bold;
+    margin: 0;
+    padding: 0;
+}
+
+.post-author {
+    font-size: 14px;
+    margin: 5px 0;
+    padding: 0;
+}
+
+.post-hits {
+    font-size: 12px;
+    margin: 5px 0;
+    padding: 0;
+}
+
+.post-registerDate{
+    font-size: 12px;
+    margin: 5px 0;
+    padding: 0;
+    float: right;
+}
+hr {
+    border: none;
+    border-top: 1px solid;
+    margin: 20px 0;
+}
+
+.post-content {
+    padding: 20px;
+    background-color: #f9f9f9;
+    box-shadow: 0 2px 2px #ccc;
+}
+
+.lbuttons{
+    float: left;
+    justify-content: flex-end;
+}
+.rbuttons {
+    float: right;
+    justify-content: flex-end;
+}
+
+
+.comment-title{
+    clear: both;
+    font-size: 18px;
+    font-weight: bold;
+    margin: 0;
+    padding: 0;
+}
+
+.comment-count{
+    font-size: 15px;
+    font-weight: normal;
+}
+
+.comment-input{
+    position: relative;
+}
+
+
+tr {
+    /*border: 1px solid gray;*/
+    border-spacing: 10px;
+}
+
+td {
+    vertical-align: middle;
+}
