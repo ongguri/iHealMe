@@ -15,7 +15,7 @@ public class UserReservationController {
     @Autowired
     private UserReservationService userReservationService;
 
-    @GetMapping("/")
+    @GetMapping("/userReservation")
     public String userRes(Model model) {
 
         List<UserReservation> reservations = userReservationService.findReservations();
