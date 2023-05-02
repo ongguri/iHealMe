@@ -21,12 +21,12 @@ public class Comment {
     private String content;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "useremail", nullable = false)
+    @JoinColumn(name = "userEmail", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "postno", nullable = false)
+    @JoinColumn(name = "postNo", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Post post;
 

@@ -3,10 +3,7 @@ package com.project.ihealme.userReservation.domain;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
@@ -15,10 +12,21 @@ public class UserReservation {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "resNo")
     private Long resNo;
+
+    @Column(name = "userEmail")
     private String userEmail;
+
+    @Column(name = "hptName")
     private String hptName;
+
+    @Column(name = "txList")
     private String txList;
+
+    @Column(name = "rDate")
     private LocalDateTime rDate;
-    private String status;
+
+    @Column(name = "currentStatus")
+    private String currentStatus;
 }
