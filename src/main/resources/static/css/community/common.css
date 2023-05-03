@@ -6,4 +6,5 @@
 
 .btn-secondary:hover {
     background-color: steelblue;
+    text-decoration: none;
 }
