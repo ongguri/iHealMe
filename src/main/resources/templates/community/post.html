@@ -7,84 +7,91 @@
           integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
     <link rel="stylesheet" th:href="@{/css/community/post.css}" href="../../css/community/post.css">
     <link rel="stylesheet" th:href="@{/css/community/common.css}" href="../../css/community/common.css">
-    <script type="text/javascript" src="/static/js/comment.js"></script>
 </head>
 <body>
 <div class="container">
     <div class="post">
-        <div class="post-title">
-            <h2>[새롬소아청소년과의원] 여기 추천합니다! </h2>
-            <p class="post-author">lee*** &nbsp;&nbsp;&nbsp;&nbsp;
-            <span class="post-hits">조회수 | 238</span>
-            <span class="post-registerDate">23.4.4 화</span>
-        </p>
-        </div>
+        <h2 class="post-title" th:text="|[${dto.hptName}] ${dto.title}|">[병원명] 제목</h2>
+        <p class="post-author" th:text="${dto.userEmail}">작성자 이메일 &nbsp;&nbsp;&nbsp;&nbsp;</p>
+        <span class="post-hits" th:text="|조회수 ${dto.hit}|">조회수 238</span>
+        <span class="post-registerDate" th:text="${#temporals.format(dto.regDate, 'yyyy/MM/dd HH:mm')}">23.4.4 화</span>
         <hr>
         <div class="post-content">
             <p>맛집이네요</p>
         </div>
         <hr>
-        <div class="lbuttons">
-            <button type="submit" class="btn btn-secondary btn-sm">신고</button>
-        </div>
-        <div class="rbuttons">
-            <button type="submit" class="btn btn-secondary btn-sm"
-                    onclick="location.href='editPost.html'"
-                    th:onclick="|location.href='@{/community/edit}'|">수정</button>
-            <button type="button" class="btn btn-secondary btn-sm" onclick="">삭제</button>
-        </div>
-        <br>
-        <br>
-        <br>
-        <br>
-        <div class="comment">
-            <h4 class="comment-title">댓글<span class="comment-count">(7)</span></h4>
-            <hr>
-            <div class="comment-list">
-                <table class="table table-borderless">
-                    <tbody class="comments-table">
-                    <tr>
-                        <td rowspan="2">long***</td>
-                        <td>good입니다.</td>
-                    </tr>
-                    <tr class="border-bottom">
-                        <td>
-                            <button type="submit" class="btn btn-secondary btn-sm">수정</button>
-                            <button type="submit" class="btn btn-secondary btn-sm">삭제</button>
-                        </td>
-                        <td>2023-04-20</td>
-                    </tr>
-                    <tr>
-                        <td rowspan="2">harang***</td>
-                        <td>동감합니다.</td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <button type="submit" class="btn btn-secondary btn-sm">수정</button>
-                            <button type="submit" class="btn btn-secondary btn-sm">삭제</button>
-                        </td>
-                        <td>2023-04-24</td>
-                    </tr>
-                    </tbody>
-                </table>
+
+        <form th:action="@{/community/report}" method="post">
+            <input type="hidden" name="postNo" th:value="${dto.postNo}">
+            <input type="hidden" name="type" th:value="${pageRequestDTO.type}">
+            <input type="hidden" name="keyword" th:value="${pageRequestDTO.keyword}">
+
+            <div class="lbuttons">
+                <button type="submit" class="btn btn-secondary btn-sm" th:text="|신고 (${dto.report})|">신고</button>
             </div>
-            <hr>
-            <div class="comment-form">
-                <form>
-                    <label for="comment-content">har*** : &nbsp;</label>
-                    <textarea id="comment-content" name="comment-content" class="comment-content" rows="2" cols="60%" required
-                              placeholder="댓글을 입력해보세요."></textarea> &nbsp;&nbsp;
-                    <button type="button" id="btn-comment-create" class="btn btn-secondary btn-sm" >등록</button>
-                    <input type="hidden" id="postNo" value="{postNo}" />
-                </form>
-            </div>
-            <hr>
-            <form>
+        </form>
+        <form th:action="@{/community/delete}" method="post">
+            <div class="rbuttons">
                 <button type="button" class="btn btn-secondary btn-sm"
-                        onclick="location.href='posts.html'"
-                        th:onclick="|location.href='@{/community/posts}'|">목록으로</button>
+                        onclick="location.href='editPost.html'"
+                        th:onclick="|location.href='@{/community/{postNo}/edit(postNo=${dto.postNo},page=${pageRequestDTO.page},type=${pageRequestDTO.type},keyword=${pageRequestDTO.keyword})}'|">
+                    수정
+                </button>
+
+                <input type="hidden" name="postNo" th:value="${dto.postNo}">
+                <button type="submit" class="btn btn-secondary btn-sm">삭제</button>
+            </div>
+        </form>
+        <br>
+        <br>
+        <br>
+        <br>
+
+        <!-- 댓글 -->
+        <div class="comment">
+            <h4 class="comment-title">댓글<span class="comment-count" th:text="|(${dto.commentCount})|">(7)</span></h4>
+            <hr>
+            <table class="table table-borderless">
+                <tbody class="comments-table">
+                <tr>
+                    <td rowspan="2">long***</td>
+                    <td>good입니다.</td>
+                </tr>
+                <tr class="border-bottom">
+                    <td>
+                        <button type="submit" class="btn btn-secondary btn-sm">수정</button>
+                        <button type="submit" class="btn btn-secondary btn-sm">삭제</button>
+                    </td>
+                    <td>2023-04-20</td>
+                </tr>
+                <tr>
+                    <td rowspan="2">harang***</td>
+                    <td>동감합니다.</td>
+                </tr>
+                <tr>
+                    <td>
+                        <button type="submit" class="btn btn-secondary btn-sm">수정</button>
+                        <button type="submit" class="btn btn-secondary btn-sm">삭제</button>
+                    </td>
+                    <td>2023-04-24</td>
+                </tr>
+                </tbody>
+            </table>
+            <hr>
+            <form class="comment-form">
+                <label for="comment-content" class="comment-writer">har*** : &nbsp;</label>
+                <textarea id="comment-content" name="comment-content" class="comment-content" rows="2" cols="60%" required
+                          placeholder="댓글을 입력해보세요."></textarea> &nbsp;&nbsp;
+                <button type="submit" class="btn btn-secondary btn-sm">등록</button>
             </form>
         </div>
+        <hr>
+
+        <button type="button" class="btn btn-secondary btn-sm"
+                onclick="location.href='posts.html'"
+                th:onclick="|location.href='@{/community(page=${pageRequestDTO.page},type=${pageRequestDTO.type},keyword=${pageRequestDTO.keyword})}'|">
+            목록으로 돌아가기
+        </button>
     </div>
 </div>
 </body>

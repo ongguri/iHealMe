@@ -1,15 +1,23 @@
 package com.project.ihealme.community.domain;
 
-import lombok.Data;
+import lombok.*;
 
 import javax.persistence.*;
 
+@Getter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@ToString
 @Entity
-@Data
+@Table(name = "USERS")
 public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "USERID_GEN")
     @SequenceGenerator(sequenceName = "USER_USERID_SEQ", name = "USERID_GEN", allocationSize = 1)
-    private Long userNo;
+    private Long userId;
+
+    @Column(unique = true)
+    private String userEmail;
 }

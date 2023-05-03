@@ -1,72 +1,96 @@
 package com.project.ihealme.community.domain;
 
-import com.project.ihealme.community.dto.EditPostRequestDto;
-import com.project.ihealme.community.dto.InsertPostRequestDto;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import com.project.ihealme.community.dto.PostResponseDTO;
+import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
-import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString(exclude = "user")
 @Entity
-@Table (name = "POST")
-public class Post {
+public class Post extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "POSTNO_GEN")
     @SequenceGenerator(sequenceName = "POST_POSTNO_SEQ", name = "POSTNO_GEN", allocationSize = 1)
-    private Long postno;
+    private Long postNo;
 
-/*@OneToOne(fetch = FetchType.LAZY)
-@JoinColumns({
-@JoinColumn(name = "resno"),
-@JoinColumn(name = "hptname", referencedColumnName = "hpt_name"),
-@JoinColumn(name = "useremail", referencedColumnName = "user_email")
-})
-private UserReservation userReservation;*/
+//    @OneToOne(fetch = FetchType.LAZY)
+//    @JoinColumns({
+//            @JoinColumn(name = "resNo", referencedColumnName = "resNo"),
+//            @JoinColumn(name = "hptName", referencedColumnName = "hptName")
+//    })
+//    private UserReservation userReservation;
 
-    private Long resno;
-    private String hptname;
-    private String useremail;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "userId")
+    private User user;
 
-/*@ManyToOne(fetch = FetchType.LAZY)
-@JoinColumn(name = "useremail")
-private User user;*/
+//    @OneToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "resNo")
+//    private Reservation reservation;
 
-    @Column(nullable = false, length = 100)
+    @Column(nullable = false)
+    private int resNo;
+
+    @Column(nullable = false)
+    private String hptName;
+
+//    @Column(nullable = false)
+//    private String userEmail;
+
+    @Column(nullable = false)
     private String title;
 
     @Lob
     private String content;
 
-    @CreatedDate
-    private LocalDateTime regdate;
+    @ColumnDefault("0")
+    private int hit;
 
     @ColumnDefault("0")
-    private Long hit;
+    private int report;
 
-    @ColumnDefault("0")
-    private Long report;
+    @OneToMany(mappedBy = "post", fetch = FetchType.LAZY)
+    @Transient
+    private List<Comment> comments = new ArrayList<>();
 
-    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Comment> comments;
+    public PostResponseDTO toPostResponseDTO() {
+        PostResponseDTO postResponseDTO = PostResponseDTO.builder()
+                .postNo(postNo)
+                .resNo(resNo)
+                .hptName(hptName)
+                .title(title)
+                .content(content)
+                .userEmail(user.getUserEmail())
+                .regDate(getRegdate())
+                .hit(hit)
+                .report(report)
+                .commentCount(comments.size())
+                .build();
 
-    public Post(InsertPostRequestDto insertPostRequestDto) {
-        title = insertPostRequestDto.getTitle();
-        content = insertPostRequestDto.getContent();
+        return postResponseDTO;
     }
 
-    public void editPost(EditPostRequestDto editPostRequestDto) {
-        title = editPostRequestDto.getTitle();
-        content = editPostRequestDto.getContent();
+    public void changeTitle(String title) {
+        this.title = title;
+    }
+
+    public void changeContent(String content) {
+        this.content = content;
+    }
+
+    public void addHitCount() {
+        hit++;
+    }
+
+    public void addReportCount() {
+        report++;
     }
 }

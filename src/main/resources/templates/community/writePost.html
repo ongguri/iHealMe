@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>후기 작성</title>
@@ -12,12 +12,16 @@
 
 <div class="container">
     <form action="post.html" th:action method="post">
+        <input type="hidden" name="resNo" value="3">
+        <input type="hidden" name="hptName" value="이지소아청소년과의원">
+        <input type="hidden" name="userEmail" value="user100@naver.com">
+
         <h4 class="head">후기 작성</h4>
         <div class="buttons">
             <button type="submit" class="btn btn-secondary btn-md">등록</button>
             <button type="button" class="btn btn-secondary btn-md"
                     onclick="location.href='posts.html'"
-                    th:onclick="|location.href='@{/community/posts}'|">취소</button>
+                    th:onclick="|location.href='@{/community}'|">취소</button>
         </div>
         <hr>
         <div class="mb-3">

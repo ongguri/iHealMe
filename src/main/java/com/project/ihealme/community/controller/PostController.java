@@ -1,32 +1,32 @@
 package com.project.ihealme.community.controller;
 
+import com.project.ihealme.community.dto.*;
+import com.project.ihealme.community.service.PostService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
+@RequiredArgsConstructor
 @RequestMapping("/community")
 public class PostController {
 
+    private final PostService postService;
 
-    @GetMapping("/posts")
-    public String posts() {
+    @GetMapping
+    public String posts(@ModelAttribute PageRequestDTO pageRequestDTO, Model model) {
+        model.addAttribute("result", postService.getList(pageRequestDTO));
+
         return "community/posts";
     }
 
-    @GetMapping("/post")
-    public String post() {
-        return "community/post";
-    }
+    @GetMapping("/{postNo}")
+    public String post(@ModelAttribute PageRequestDTO pageRequestDTO, @PathVariable Long postNo, Model model) {
+        PostResponseDTO postResponseDTO = postService.get(postNo);
+        model.addAttribute("dto", postResponseDTO);
 
-    @GetMapping("/edit")
-    public String editForm() {
-        return "community/editPost";
-    }
-
-    @PostMapping("/edit")
-    public String editPost() {
         return "community/post";
     }
 
@@ -36,8 +36,53 @@ public class PostController {
     }
 
     @PostMapping("/write")
-    public String writePost() {
-        return "community/post";
+    public String writePost(@ModelAttribute InsertPostRequestDTO insertPostRequestDTO, RedirectAttributes redirectAttributes) {
+        Long postNo = postService.write(insertPostRequestDTO);
+        redirectAttributes.addAttribute("postNo", postNo);
+        return "redirect:/community/{postNo}";
     }
 
+    @GetMapping("/{postNo}/edit")
+    public String editForm(@PathVariable Long postNo, @ModelAttribute PageRequestDTO pageRequestDTO, Model model) {
+        PostResponseDTO postResponseDTO = postService.get(postNo);
+        model.addAttribute("dto", postResponseDTO);
+
+        return "community/editPost";
+    }
+
+    @PostMapping("/{postNo}/edit")
+    public String editPost(@PathVariable Long postNo,
+                           @ModelAttribute EditPostRequestDTO editPostRequestDTO,
+                           @ModelAttribute PageRequestDTO pageRequestDTO,
+                           RedirectAttributes redirectAttributes) {
+
+        editPostRequestDTO.setPostNo(postNo);
+        postService.edit(editPostRequestDTO);
+
+        redirectAttributes.addAttribute("postNo", postNo);
+        redirectAttributes.addAttribute("page", pageRequestDTO.getPage());
+        redirectAttributes.addAttribute("type", pageRequestDTO.getType());
+        redirectAttributes.addAttribute("keyword", pageRequestDTO.getKeyword());
+
+        return "redirect:/community/{postNo}";
+    }
+
+    @PostMapping("/delete")
+    public String delete(@RequestParam Long postNo) {
+        postService.deleteWithReplies(postNo);
+
+        return "redirect:/community";
+    }
+
+    @PostMapping("/report")
+    public String report(@RequestParam Long postNo, @ModelAttribute PageRequestDTO pageRequestDTO, RedirectAttributes redirectAttributes) {
+        postService.addReport(postNo);
+
+        redirectAttributes.addAttribute("postNo", postNo);
+        redirectAttributes.addAttribute("page", pageRequestDTO.getPage());
+        redirectAttributes.addAttribute("type", pageRequestDTO.getType());
+        redirectAttributes.addAttribute("keyword", pageRequestDTO.getKeyword());
+
+        return "redirect:/community/{postNo}";
+    }
 }

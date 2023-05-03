@@ -1,7 +1,6 @@
 package com.project.ihealme.community.domain;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.data.annotation.CreatedDate;
