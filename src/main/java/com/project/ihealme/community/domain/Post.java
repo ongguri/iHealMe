@@ -14,11 +14,12 @@ import java.util.List;
 @AllArgsConstructor
 @ToString(exclude = "user")
 @Entity
-public class Post extends BaseEntity {
+public class Post extends BaseTimeEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "POSTNO_GEN")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "POSTNO_GEN")
     @SequenceGenerator(sequenceName = "POST_POSTNO_SEQ", name = "POSTNO_GEN", allocationSize = 1)
+    @Column(name = "POSTNO")
     private Long postNo;
 
 //    @OneToOne(fetch = FetchType.LAZY)
@@ -36,16 +37,16 @@ public class Post extends BaseEntity {
 //    @JoinColumn(name = "resNo")
 //    private Reservation reservation;
 
-    @Column(nullable = false)
+    @Column(name = "RESNO", nullable = false)
     private int resNo;
 
-    @Column(nullable = false)
+    @Column(name = "HPTNAME", nullable = false)
     private String hptName;
 
 //    @Column(nullable = false)
 //    private String userEmail;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 100)
     private String title;
 
     @Lob
@@ -56,27 +57,6 @@ public class Post extends BaseEntity {
 
     @ColumnDefault("0")
     private int report;
-
-    @OneToMany(mappedBy = "post", fetch = FetchType.LAZY)
-    @Transient
-    private List<Comment> comments = new ArrayList<>();
-
-    public PostResponseDTO toPostResponseDTO() {
-        PostResponseDTO postResponseDTO = PostResponseDTO.builder()
-                .postNo(postNo)
-                .resNo(resNo)
-                .hptName(hptName)
-                .title(title)
-                .content(content)
-                .userEmail(user.getUserEmail())
-                .regDate(getRegdate())
-                .hit(hit)
-                .report(report)
-                .commentCount(comments.size())
-                .build();
-
-        return postResponseDTO;
-    }
 
     public void changeTitle(String title) {
         this.title = title;

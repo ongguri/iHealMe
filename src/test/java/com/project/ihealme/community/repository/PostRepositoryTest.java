@@ -2,6 +2,7 @@ package com.project.ihealme.community.repository;
 
 import com.project.ihealme.community.domain.User;
 import com.project.ihealme.community.domain.Post;
+import com.project.ihealme.community.dto.PostResponseDTO;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -46,6 +47,24 @@ class PostRepositoryTest {
 
             postRepository.save(post);
         });
+
+        /**
+         * INSERT INTO userreservation(useremail, hptname, txlist)
+         * VALUES ('longlee@daum.net', '새롬소아청년과의원', '영유아 검진');
+         *
+         *
+         * INSERT INTO userreservation(resno, useremail, hptname, txlist)
+         * VALUES (userreservation_no_seq.nextval, 'longlee@daum.net', '새롬소아청년과의원', '영유아 검진');
+         *
+         * INSERT INTO userreservation(resno, useremail, hptname, txlist, currentStatus)
+         * VALUES (userreservation_no_seq.nextval, 'longlee@daum.net', '새롬소아청년과의원', '영유아 검진', '진료 전');
+         *
+         * INSERT INTO userreservation(resno, useremail, hptname, txlist, currentStatus)
+         * VALUES (userreservation_no_seq.nextval, 'longlee@daum.net', '새롬소아청년과의원', '영유아 검진', '진료 완료');
+         *
+         * INSERT INTO userreservation(resno, useremail, hptname, txlist, currentStatus)
+         * VALUES (userreservation_no_seq.nextval, 'longlee@daum.net', '새롬소아청년과의원', '영유아 검진', '후기작성완료');
+         */
     }
 
     @Test
@@ -64,7 +83,7 @@ class PostRepositoryTest {
         System.out.println(savedPost);
     }
 
-    @Test
+    /*@Test
     void findPostWithUser() {
         Long postNo = 100L;
 
@@ -73,12 +92,12 @@ class PostRepositoryTest {
 
         System.out.println("------------------");
         System.out.println(Arrays.toString(arr));
-    }
+    }*/
 
     @Test
-    void findPostWithUser2() {
+    void findPostWithDetails() {
         Pageable pageable = PageRequest.of(0, 10, Sort.by("postNo").descending());
-        Page<Object[]> result = postRepository.findPostWithUser(pageable);
+        Page<Object[]> result = postRepository.findPostWithDetails(pageable);
 
         result.get().forEach(row -> {
             Object[] arr = (Object[]) row;

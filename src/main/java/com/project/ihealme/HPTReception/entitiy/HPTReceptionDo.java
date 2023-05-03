@@ -8,7 +8,8 @@ import java.time.LocalDateTime;
 public class HPTReceptionDo {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "NO_GEN")
+    @SequenceGenerator(sequenceName = "HPTRESERVATION_NO_SEQ", name = "NO_GEN", allocationSize = 1)
     private Long no;
 
     private String pname;

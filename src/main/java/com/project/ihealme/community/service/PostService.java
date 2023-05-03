@@ -3,6 +3,7 @@ package com.project.ihealme.community.service;
 import com.project.ihealme.community.domain.User;
 import com.project.ihealme.community.domain.Post;
 import com.project.ihealme.community.dto.*;
+import com.project.ihealme.community.repository.CommentRepository;
 import com.project.ihealme.community.repository.PostRepository;
 import com.project.ihealme.community.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -12,16 +13,18 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.function.Function;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class PostService {
 
     private final PostRepository postRepository;
+    private final CommentRepository commentRepository;
     private final UserRepository userRepository;
 
-    public Long write(InsertPostRequestDTO insertPostRequestDTO) {
+    public Long writePost(InsertPostRequestDTO insertPostRequestDTO) {
         User user = userRepository.findByUserEmail(insertPostRequestDTO.getUserEmail());
 
         Post post = insertPostRequestDTO.toEntity(user);
@@ -30,20 +33,16 @@ public class PostService {
         return savedPost.getPostNo();
     }
 
-    public PageResultDTO<PostResponseDTO, Object[]> getList(PageRequestDTO pageRequestDTO) {
-
-        Function<Object[], PostResponseDTO> fn
-                = (en -> entityToDTO((Post) en[0], (User) en[1], 0)); //(int) en[2]
-
+    public PostPageResponseDTO getPostList(PostPageRequestDTO postPageRequestDTO) {
         Page<Object[]> result = null;
 
-        String type = pageRequestDTO.getType();
-        Pageable pageable = pageRequestDTO.getPageable(Sort.by("postNo").descending());
+        String type = postPageRequestDTO.getType();
+        Pageable pageable = postPageRequestDTO.getPageable(Sort.by("postNo").descending());
 
         if (type == null || type.equals("")) {
-            result = postRepository.findPostWithUser(pageable);
+            result = postRepository.findPostWithDetails(pageable);
         } else {
-            String keyword = pageRequestDTO.getKeyword();
+            String keyword = postPageRequestDTO.getKeyword();
 
             switch (type) {
                 case "h":
@@ -58,28 +57,36 @@ public class PostService {
             }
         }
 
-        return new PageResultDTO<>(result, fn);
+        List<Integer> commentCountList = new ArrayList<>();
+
+        result.get().forEach(row -> {
+            Object[] arr = (Object[]) row;
+            Post post = (Post) arr[0];
+
+            Integer commentCount = commentRepository.countByPost(post);
+            commentCountList.add(commentCount);
+        });
+
+        return new PostPageResponseDTO(result, commentCountList);
     }
 
-    public PostResponseDTO get(Long postNo) {
+    public PostResponseDTO getPost(Long postNo, Boolean addHitCount) {
         Object result = postRepository.findPostByPostNo(postNo);
         Object[] arr = (Object[]) result;
         Post post = (Post) arr[0];
+        User user = (User) arr[1];
 
-        post.addHitCount();
+        if (addHitCount) {
+            post.addHitCount();
+        }
         Post savedPost = postRepository.save(post);
+        Integer commentCount = commentRepository.countByPost(savedPost);
 
-        PostResponseDTO postResponseDTO = entityToDTO(savedPost, (User) arr[1], 0); //(int) arr[2]
+        PostResponseDTO postResponseDTO = new PostResponseDTO(savedPost, user, commentCount);
 
         return postResponseDTO;
     }
 
-    private PostResponseDTO entityToDTO(Post post, User user, int commentCount) {
-        PostResponseDTO postResponseDTO = post.toPostResponseDTO();
-        postResponseDTO.setUserEmail(user.getUserEmail());
-        postResponseDTO.setCommentCount(commentCount);
-        return postResponseDTO;
-    }
 
     @Transactional
     public void deleteWithReplies(Long postNo) {

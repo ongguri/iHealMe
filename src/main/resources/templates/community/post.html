@@ -24,8 +24,9 @@
 
         <form th:action="@{/community/report}" method="post">
             <input type="hidden" name="postNo" th:value="${dto.postNo}">
-            <input type="hidden" name="type" th:value="${pageRequestDTO.type}">
-            <input type="hidden" name="keyword" th:value="${pageRequestDTO.keyword}">
+            <input type="hidden" name="page" th:value="${postPageRequestDTO.page}">
+            <input type="hidden" name="type" th:value="${postPageRequestDTO.type}">
+            <input type="hidden" name="keyword" th:value="${postPageRequestDTO.keyword}">
 
             <div class="lbuttons">
                 <button type="submit" class="btn btn-secondary btn-sm" th:text="|신고 (${dto.report})|">신고</button>
@@ -35,7 +36,7 @@
             <div class="rbuttons">
                 <button type="button" class="btn btn-secondary btn-sm"
                         onclick="location.href='editPost.html'"
-                        th:onclick="|location.href='@{/community/{postNo}/edit(postNo=${dto.postNo},page=${pageRequestDTO.page},type=${pageRequestDTO.type},keyword=${pageRequestDTO.keyword})}'|">
+                        th:onclick="|location.href='@{/community/{postNo}/edit(postNo=${dto.postNo},page=${postPageRequestDTO.page},type=${postPageRequestDTO.type},keyword=${postPageRequestDTO.keyword})}'|">
                     수정
                 </button>
 
@@ -85,7 +86,7 @@
 
         <button type="button" class="btn btn-secondary btn-sm"
                 onclick="location.href='posts.html'"
-                th:onclick="|location.href='@{/community(page=${pageRequestDTO.page},type=${pageRequestDTO.type},keyword=${pageRequestDTO.keyword})}'|">
+                th:onclick="|location.href='@{/community(page=${postPageRequestDTO.page},type=${postPageRequestDTO.type},keyword=${postPageRequestDTO.keyword})}'|">
             목록으로 돌아가기
         </button>
     </div>
