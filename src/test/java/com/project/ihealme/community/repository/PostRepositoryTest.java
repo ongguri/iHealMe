@@ -1,8 +1,7 @@
 package com.project.ihealme.community.repository;
 
-import com.project.ihealme.community.domain.Post;
 import com.project.ihealme.community.domain.User;
-import org.assertj.core.api.Assertions;
+import com.project.ihealme.community.domain.Post;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -14,8 +13,6 @@ import org.springframework.data.domain.Sort;
 import java.util.Arrays;
 import java.util.stream.IntStream;
 import java.util.stream.LongStream;
-
-import static org.assertj.core.api.Assertions.*;
 
 @SpringBootTest
 class PostRepositoryTest {

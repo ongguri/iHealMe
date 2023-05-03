@@ -11,10 +11,12 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Getter
 @Entity
+@Table(name = "COMMENTS")
 public class Comment {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "COMMNO_GEN")
+    @SequenceGenerator(sequenceName = "COMMENT_COMMNO_SEQ", name = "COMMNO_GEN", allocationSize = 1)
     private Long commno;
 
     @Column(nullable = false, length = 600)

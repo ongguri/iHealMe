@@ -1,7 +1,7 @@
 package com.project.ihealme.community.service;
 
-import com.project.ihealme.community.domain.Post;
 import com.project.ihealme.community.domain.User;
+import com.project.ihealme.community.domain.Post;
 import com.project.ihealme.community.dto.*;
 import com.project.ihealme.community.repository.PostRepository;
 import com.project.ihealme.community.repository.UserRepository;
@@ -12,7 +12,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.function.BiFunction;
 import java.util.function.Function;
 
 @Service

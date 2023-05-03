@@ -5,6 +5,7 @@ import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -16,7 +17,8 @@ import java.util.List;
 public class Post extends BaseEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "POSTNO_GEN")
+    @SequenceGenerator(sequenceName = "POST_POSTNO_SEQ", name = "POSTNO_GEN", allocationSize = 1)
     private Long postNo;
 
 //    @OneToOne(fetch = FetchType.LAZY)
@@ -56,8 +58,8 @@ public class Post extends BaseEntity {
     private int report;
 
     @OneToMany(mappedBy = "post", fetch = FetchType.LAZY)
-    @Column(insertable = false, updatable = false)
-    private List<Comment> comment;
+    @Transient
+    private List<Comment> comments = new ArrayList<>();
 
     public PostResponseDTO toPostResponseDTO() {
         PostResponseDTO postResponseDTO = PostResponseDTO.builder()
@@ -70,7 +72,7 @@ public class Post extends BaseEntity {
                 .regDate(getRegdate())
                 .hit(hit)
                 .report(report)
-                .commentCount(comment.size())
+                .commentCount(comments.size())
                 .build();
 
         return postResponseDTO;

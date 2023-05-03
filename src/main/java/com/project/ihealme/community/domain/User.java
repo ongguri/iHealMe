@@ -10,10 +10,12 @@ import javax.persistence.*;
 @AllArgsConstructor
 @ToString
 @Entity
+@Table(name = "USERS")
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "USERID_GEN")
+    @SequenceGenerator(sequenceName = "USER_USERID_SEQ", name = "USERID_GEN", allocationSize = 1)
     private Long userId;
 
     @Column(unique = true)

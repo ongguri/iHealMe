@@ -1,7 +1,7 @@
 package com.project.ihealme.community.dto;
 
-import com.project.ihealme.community.domain.Post;
 import com.project.ihealme.community.domain.User;
+import com.project.ihealme.community.domain.Post;
 import lombok.*;
 
 @Builder
