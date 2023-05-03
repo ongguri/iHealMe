@@ -1,8 +1,7 @@
 package com.project.ihealme.community.service;
 
-import com.project.ihealme.community.dto.PageRequestDTO;
-import com.project.ihealme.community.dto.PageResultDTO;
-import com.project.ihealme.community.dto.PostDTO;
+import com.project.ihealme.community.dto.*;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -17,41 +16,61 @@ class PostServiceTest {
 
     @Test
     void write() {
-        PostDTO postDTO = PostDTO.builder()
+        InsertPostRequestDTO insertPostRequestDTO = InsertPostRequestDTO.builder()
                 .hptName("이지소아청소년과의원")
                 .title("title 테스트2")
                 .content("content 테스트2")
                 .userEmail("user60@naver.com")
                 .build();
 
-        Long postNo = postService.write(postDTO);
+        Long postNo = postService.write(insertPostRequestDTO);
         assertThat(postNo).isEqualTo(104);
     }
 
     @Test
     void getList1() {
         PageRequestDTO pageRequestDTO = new PageRequestDTO();
-        PageResultDTO<PostDTO, Object[]> result = postService.getList(pageRequestDTO);
+        PageResultDTO<PostResponseDTO, Object[]> result = postService.getList(pageRequestDTO);
 
-        for (PostDTO postDTO : result.getDtoList()) {
-            System.out.println(postDTO);
+        for (PostResponseDTO postResponseDTO : result.getDtoList()) {
+            System.out.println(postResponseDTO);
         }
     }
 
     @Test
+    @DisplayName("병원명 검색1")
     void getList2() {
         PageRequestDTO pageRequestDTO = new PageRequestDTO();
-        PageResultDTO<PostDTO, Object[]> result = postService.getList(pageRequestDTO);
+        pageRequestDTO.setType("h");
+        pageRequestDTO.setKeyword("이지");
+        PageResultDTO<PostResponseDTO, Object[]> result = postService.getList(pageRequestDTO);
 
-        for (PostDTO postDTO : result.getDtoList()) {
-            System.out.println(postDTO);
+        for (PostResponseDTO postResponseDTO : result.getDtoList()) {
+            System.out.println(postResponseDTO);
         }
+    }
+
+    @Test
+    @DisplayName("병원명 검색2")
+    void getList3() {
+        PageRequestDTO pageRequestDTO = new PageRequestDTO();
+        pageRequestDTO.setPage(11);
+        pageRequestDTO.setType("h");
+        pageRequestDTO.setKeyword("새롬");
+        PageResultDTO<PostResponseDTO, Object[]> result = postService.getList(pageRequestDTO);
+
+        for (PostResponseDTO postResponseDTO : result.getDtoList()) {
+            System.out.println(postResponseDTO);
+        }
+
+        System.out.println("totalPage: " + result.getTotalPage());
+        System.out.println("isNext: " + result.isNext());
     }
 
     @Test
     void get() {
-        PostDTO postDTO = postService.get(37L);
-        System.out.println(postDTO);
+        PostResponseDTO postResponseDTO = postService.get(37L);
+        System.out.println(postResponseDTO);
     }
 
     @Test
@@ -61,13 +80,13 @@ class PostServiceTest {
 
     @Test
     void modify() {
-        PostDTO postDTO = PostDTO.builder()
+        EditPostRequestDTO editPostRequestDTO = EditPostRequestDTO.builder()
                 .postNo(99L)
                 .title("title 수정")
                 .content("content 수정")
                 .build();
 
-        postService.edit(postDTO);
+        postService.edit(editPostRequestDTO);
     }
 
 }

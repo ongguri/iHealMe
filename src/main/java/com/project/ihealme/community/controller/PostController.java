@@ -16,7 +16,7 @@ public class PostController {
     private final PostService postService;
 
     @GetMapping
-    public String posts(PageRequestDTO pageRequestDTO, Model model) {
+    public String posts(@ModelAttribute PageRequestDTO pageRequestDTO, Model model) {
         model.addAttribute("result", postService.getList(pageRequestDTO));
 
         return "community/posts";
@@ -24,8 +24,8 @@ public class PostController {
 
     @GetMapping("/{postNo}")
     public String post(@ModelAttribute PageRequestDTO pageRequestDTO, @PathVariable Long postNo, Model model) {
-        PostDTO postDTO = postService.get(postNo);
-        model.addAttribute("dto", postDTO);
+        PostResponseDTO postResponseDTO = postService.get(postNo);
+        model.addAttribute("dto", postResponseDTO);
 
         return "community/post";
     }
@@ -36,25 +36,30 @@ public class PostController {
     }
 
     @PostMapping("/write")
-    public String writePost(PostDTO postDTO, RedirectAttributes redirectAttributes) {
-        Long postNo = postService.write(postDTO);
+    public String writePost(@ModelAttribute InsertPostRequestDTO insertPostRequestDTO, RedirectAttributes redirectAttributes) {
+        Long postNo = postService.write(insertPostRequestDTO);
         redirectAttributes.addAttribute("postNo", postNo);
         return "redirect:/community/{postNo}";
     }
 
     @GetMapping("/{postNo}/edit")
-    public String editForm(@ModelAttribute PageRequestDTO pageRequestDTO, @PathVariable Long postNo, Model model) {
-        PostDTO postDTO = postService.get(postNo);
-        model.addAttribute("dto", postDTO);
+    public String editForm(@PathVariable Long postNo, @ModelAttribute PageRequestDTO pageRequestDTO, Model model) {
+        PostResponseDTO postResponseDTO = postService.get(postNo);
+        model.addAttribute("dto", postResponseDTO);
 
         return "community/editPost";
     }
 
     @PostMapping("/{postNo}/edit")
-    public String editPost(PostDTO postDTO, PageRequestDTO pageRequestDTO, RedirectAttributes redirectAttributes) {
-        postService.edit(postDTO);
+    public String editPost(@PathVariable Long postNo,
+                           @ModelAttribute EditPostRequestDTO editPostRequestDTO,
+                           @ModelAttribute PageRequestDTO pageRequestDTO,
+                           RedirectAttributes redirectAttributes) {
 
-        redirectAttributes.addAttribute("postNo", postDTO.getPostNo());
+        editPostRequestDTO.setPostNo(postNo);
+        postService.edit(editPostRequestDTO);
+
+        redirectAttributes.addAttribute("postNo", postNo);
         redirectAttributes.addAttribute("page", pageRequestDTO.getPage());
         redirectAttributes.addAttribute("type", pageRequestDTO.getType());
         redirectAttributes.addAttribute("keyword", pageRequestDTO.getKeyword());
@@ -70,7 +75,7 @@ public class PostController {
     }
 
     @PostMapping("/report")
-    public String report(@RequestParam Long postNo, PageRequestDTO pageRequestDTO, RedirectAttributes redirectAttributes) {
+    public String report(@RequestParam Long postNo, @ModelAttribute PageRequestDTO pageRequestDTO, RedirectAttributes redirectAttributes) {
         postService.addReport(postNo);
 
         redirectAttributes.addAttribute("postNo", postNo);

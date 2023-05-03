@@ -18,7 +18,7 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     Object findPostWithUser(@Param("postNo") Long postNo);
 
     /**
-     * 임시 화면에 필요한 데이터: Post, User, UserReservation
+     * 임시 화면에 필요한 데이터: Post, User
      */
     @Query(value = "select p, u from Post p left join p.user u",
             countQuery = "select count(p) from Post p")
@@ -31,15 +31,14 @@ public interface PostRepository extends JpaRepository<Post, Long> {
      * 검색
      */
     @Query(value = "select p, u from Post p left join p.user u where p.hptName like %:hptName%",
-            countQuery = "select count(p) from Post p")
+            countQuery = "select count(p) from Post p where p.hptName like %:hptName%")
     Page<Object[]> findByHptNameContaining(@Param("hptName") String keyword, Pageable pageable);
 
     @Query(value = "select p, u from Post p left join p.user u where p.title like %:title%",
-            countQuery = "select count(p) from Post p")
+            countQuery = "select count(p) from Post p where p.title like %:title%")
     Page<Object[]> findByTitleContaining(@Param("title") String keyword, Pageable pageable);
 
-    @Query(value = "select p, u from Post p left join p.user u where u.userEmail like %:userEmail%",
-            countQuery = "select count(p) from Post p")
+    @Query("select p, u from Post p left join p.user u where u.userEmail like %:userEmail%")
     Page<Object[]> findByUserEmailContaining(@Param("userEmail") String keyword, Pageable pageable);
 
 

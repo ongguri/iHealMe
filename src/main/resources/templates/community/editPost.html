@@ -12,20 +12,18 @@
 
 <div class="container">
     <form action="post.html" th:action method="post">
-        <input type="hidden" name="page" th:value="${pageRequestDTO.page}">
-        <input type="hidden" name="type" th:value="${pageRequestDTO.type}">
-        <input type="hidden" name="keyword" th:value="${pageRequestDTO.keyword}">
+        <input type="hidden" name="page" th:value="${pageRequestDTO.page}" value="1">
 
         <h4 class="head">후기 수정</h4>
         <div class="buttons">
             <button type="submit" class="btn btn-secondary btn-md">수정</button>
             <button type="button" class="btn btn-secondary btn-md"
                     onclick="location.href='posts.html'"
-                    th:onclick="|location.href='@{/community(page=${pageRequestDTO.page},type=${pageRequestDTO.type},keyword=${pageRequestDTO.keyword})}'|">취소</button>
+                    th:onclick="|location.href='@{/community/{postNo}(postNo=${dto.postNo},page=${pageRequestDTO.page},type=${pageRequestDTO.type},keyword=${pageRequestDTO.keyword})}'|">취소</button>
         </div>
         <hr>
         <div class="mb-3">
-            <input type="text" class="form-control" name="hptName" th:value="|[${dto.hptName}]|" value="[병원명]" readonly>
+            <input type="text" class="form-control-plaintext" name="hptName" th:value="|[${dto.hptName}]|" value="[병원명]" readonly>
             <input type="text" class="form-control" name="title" th:value="${dto.title}" value="제목">
         </div>
         <div class="mb-3">

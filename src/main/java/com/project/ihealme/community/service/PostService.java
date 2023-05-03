@@ -2,10 +2,7 @@ package com.project.ihealme.community.service;
 
 import com.project.ihealme.community.domain.Post;
 import com.project.ihealme.community.domain.User;
-import com.project.ihealme.community.dto.PageRequestDTO;
-import com.project.ihealme.community.dto.PageResultDTO;
-import com.project.ihealme.community.dto.PostDTO;
-import com.project.ihealme.community.repository.CommentRepository;
+import com.project.ihealme.community.dto.*;
 import com.project.ihealme.community.repository.PostRepository;
 import com.project.ihealme.community.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +12,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.function.BiFunction;
 import java.util.function.Function;
 
 @Service
@@ -23,19 +21,23 @@ public class PostService {
 
     private final PostRepository postRepository;
     private final UserRepository userRepository;
-    private final CommentRepository commentRepository;
 
-    public Long write(PostDTO postDTO) {
-        Post post = dtoToEntity(postDTO);
+    public Long write(InsertPostRequestDTO insertPostRequestDTO) {
+        User user = userRepository.findByUserEmail(insertPostRequestDTO.getUserEmail());
+
+        Post post = insertPostRequestDTO.toEntity(user);
         Post savedPost = postRepository.save(post);
 
         return savedPost.getPostNo();
     }
 
-    public PageResultDTO<PostDTO, Object[]> getList(PageRequestDTO pageRequestDTO) {
-        Function<Object[], PostDTO> fn = (en -> entityToDTO((Post) en[0], (User) en[1], 0));
+    public PageResultDTO<PostResponseDTO, Object[]> getList(PageRequestDTO pageRequestDTO) {
+
+        Function<Object[], PostResponseDTO> fn
+                = (en -> entityToDTO((Post) en[0], (User) en[1], 0)); //(int) en[2]
 
         Page<Object[]> result = null;
+
         String type = pageRequestDTO.getType();
         Pageable pageable = pageRequestDTO.getPageable(Sort.by("postNo").descending());
 
@@ -60,15 +62,24 @@ public class PostService {
         return new PageResultDTO<>(result, fn);
     }
 
-    public PostDTO get(Long postNo) {
+    public PostResponseDTO get(Long postNo) {
         Object result = postRepository.findPostByPostNo(postNo);
         Object[] arr = (Object[]) result;
         Post post = (Post) arr[0];
 
         post.addHitCount();
-        postRepository.save(post);
+        Post savedPost = postRepository.save(post);
 
-        return entityToDTO(post, (User) arr[1], 0);
+        PostResponseDTO postResponseDTO = entityToDTO(savedPost, (User) arr[1], 0); //(int) arr[2]
+
+        return postResponseDTO;
+    }
+
+    private PostResponseDTO entityToDTO(Post post, User user, int commentCount) {
+        PostResponseDTO postResponseDTO = post.toPostResponseDTO();
+        postResponseDTO.setUserEmail(user.getUserEmail());
+        postResponseDTO.setCommentCount(commentCount);
+        return postResponseDTO;
     }
 
     @Transactional
@@ -77,10 +88,10 @@ public class PostService {
         postRepository.deleteById(postNo);
     }
 
-    public void edit(PostDTO postDTO) {
-        Post post = postRepository.findById(postDTO.getPostNo()).get();
-        post.changeTitle(postDTO.getTitle());
-        post.changeContent(postDTO.getContent());
+    public void edit(EditPostRequestDTO editPostRequestDTO) {
+        Post post = postRepository.findById(editPostRequestDTO.getPostNo()).get();
+        post.changeTitle(editPostRequestDTO.getTitle());
+        post.changeContent(editPostRequestDTO.getContent());
 
         postRepository.save(post);
     }
@@ -90,39 +101,5 @@ public class PostService {
         post.addReportCount();
 
         postRepository.save(post);
-    }
-
-    public Post dtoToEntity(PostDTO postDTO) {
-        User user = User.builder().userEmail(postDTO.getUserEmail()).build();
-
-        Post post = Post.builder()
-                .postNo(postDTO.getPostNo())
-                .resNo(postDTO.getResNo())
-                .user(userRepository.findByUserEmail(postDTO.getUserEmail()))
-                .hptName(postDTO.getHptName())
-                .title(postDTO.getTitle())
-                .content(postDTO.getContent())
-                .hit(postDTO.getHit())
-                .report(postDTO.getReport())
-                .build();
-
-        return post;
-    }
-
-    public PostDTO entityToDTO(Post post, User user, int commentCount) {
-        PostDTO postDTO = PostDTO.builder()
-                .postNo(post.getPostNo())
-                .resNo(post.getResNo())
-                .hptName(post.getHptName())
-                .title(post.getTitle())
-                .content(post.getContent())
-                .userEmail(user.getUserEmail())
-                .regDate(post.getRegdate())
-                .hit(post.getHit())
-                .report(post.getReport())
-                .commentCount(commentCount)
-                .build();
-
-        return postDTO;
     }
 }

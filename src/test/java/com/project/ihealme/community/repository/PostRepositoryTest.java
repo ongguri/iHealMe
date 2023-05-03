@@ -2,6 +2,7 @@ package com.project.ihealme.community.repository;
 
 import com.project.ihealme.community.domain.Post;
 import com.project.ihealme.community.domain.User;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -13,6 +14,8 @@ import org.springframework.data.domain.Sort;
 import java.util.Arrays;
 import java.util.stream.IntStream;
 import java.util.stream.LongStream;
+
+import static org.assertj.core.api.Assertions.*;
 
 @SpringBootTest
 class PostRepositoryTest {
@@ -49,6 +52,22 @@ class PostRepositoryTest {
     }
 
     @Test
+    void insertPost() {
+        User user = User.builder().userId(55L).build();
+
+        Post post = Post.builder()
+                .title("제목")
+                .resNo((int) 103)
+                .hptName("새롬소아청소년과의원")
+                .user(user)
+                .content("내용용")
+                .build();
+
+        Post savedPost = postRepository.save(post);
+        System.out.println(savedPost);
+    }
+
+    @Test
     void findPostWithUser() {
         Long postNo = 100L;
 
@@ -81,12 +100,17 @@ class PostRepositoryTest {
     @Test
     void findByHptNameContaining() {
         Pageable pageable = PageRequest.of(0, 10, Sort.by("postNo").descending());
-        Page<Object[]> result = postRepository.findByHptNameContaining("이지", pageable);
+        Page<Object[]> result = postRepository.findByHptNameContaining("새롬", pageable);
 
         result.get().forEach(row -> {
             Object[] arr = (Object[]) row;
             System.out.println(Arrays.toString(arr));
         });
+
+        System.out.println(result.getTotalElements());
+        System.out.println(result.getTotalPages());
+//        assertThat(result.getTotalElements()).isEqualTo(100);
+//        assertThat(result.getTotalPages()).isEqualTo(10);
     }
 
     @Test
@@ -98,17 +122,23 @@ class PostRepositoryTest {
             Object[] arr = (Object[]) row;
             System.out.println(Arrays.toString(arr));
         });
+
+        System.out.println(result.getTotalElements());
+        System.out.println(result.getTotalPages());
     }
 
     @Test
     void findByUserEmailContaining() {
         Pageable pageable = PageRequest.of(0, 10, Sort.by("postNo").descending());
-        Page<Object[]> result = postRepository.findByUserEmailContaining("60", pageable);
+        Page<Object[]> result = postRepository.findByUserEmailContaining("55", pageable);
 
         result.get().forEach(row -> {
             Object[] arr = (Object[]) row;
             System.out.println(Arrays.toString(arr));
         });
+
+        System.out.println(result.getTotalElements());
+        System.out.println(result.getTotalPages());
     }
 
 }

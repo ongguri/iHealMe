@@ -1,15 +1,10 @@
 package com.project.ihealme.community.domain;
 
-import com.project.ihealme.community.dto.EditPostRequestDto;
-import com.project.ihealme.community.dto.InsertPostRequestDto;
-import com.project.ihealme.community.dto.PostDTO;
-import com.project.ihealme.userReservation.domain.UserReservation;
+import com.project.ihealme.community.dto.PostResponseDTO;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
-import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
@@ -59,6 +54,27 @@ public class Post extends BaseEntity {
 
     @ColumnDefault("0")
     private int report;
+
+    @OneToMany(mappedBy = "post", fetch = FetchType.LAZY)
+    @Column(insertable = false, updatable = false)
+    private List<Comment> comment;
+
+    public PostResponseDTO toPostResponseDTO() {
+        PostResponseDTO postResponseDTO = PostResponseDTO.builder()
+                .postNo(postNo)
+                .resNo(resNo)
+                .hptName(hptName)
+                .title(title)
+                .content(content)
+                .userEmail(user.getUserEmail())
+                .regDate(getRegdate())
+                .hit(hit)
+                .report(report)
+                .commentCount(comment.size())
+                .build();
+
+        return postResponseDTO;
+    }
 
     public void changeTitle(String title) {
         this.title = title;

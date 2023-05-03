@@ -24,6 +24,8 @@
 
         <form th:action="@{/community/report}" method="post">
             <input type="hidden" name="postNo" th:value="${dto.postNo}">
+            <input type="hidden" name="type" th:value="${pageRequestDTO.type}">
+            <input type="hidden" name="keyword" th:value="${pageRequestDTO.keyword}">
 
             <div class="lbuttons">
                 <button type="submit" class="btn btn-secondary btn-sm" th:text="|신고 (${dto.report})|">신고</button>
