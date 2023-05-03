@@ -19,7 +19,7 @@ public class UserReservationController {
     @GetMapping("/userReservation")
     public String userRes(Model model) {
 
-        List<UserReservation> reservations = userReservationService.findReservations();
+        List<UserReservation> reservations = userReservationService.getUserReservationList();
         model.addAttribute("userReservationList", reservations);
         return "reservation/userReservation";
     }

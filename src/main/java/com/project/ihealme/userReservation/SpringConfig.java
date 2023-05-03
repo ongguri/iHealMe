@@ -5,14 +5,12 @@ import com.project.ihealme.userReservation.service.UserReservationService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import javax.persistence.EntityManager;
-
 @Configuration
 public class SpringConfig {
-    private final EntityManager em;
 
-    public SpringConfig(EntityManager em) {
-        this.em = em;
+    @Bean
+    public UserReservationRepository userReservationRepository() {
+        return new UserReservationRepository();
     }
 
     @Bean
@@ -20,8 +18,4 @@ public class SpringConfig {
         return new UserReservationService();
     }
 
-    @Bean
-    public UserReservationRepository userReservationRepository() {
-        return new UserReservationRepository(em);
-    }
 }

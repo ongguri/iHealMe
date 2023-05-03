@@ -26,10 +26,10 @@
                         <td th:text="${reservationInfo.hptName}"></td>
                         <td th:text="${reservationInfo.txList}"></td>
                         <td th:text="${#temporals.format(reservationInfo.rDate, 'yyyy-MM-dd HH:mm:ss')}"></td>
-                        <td th:text="${reservationInfo.status}"></td>
+                        <td th:text="${reservationInfo.currentStatus}"></td>
                         <td>
-                            <a th:if="${reservationInfo.status == '진료 전'}" th:href="@{/userReservation}" onclick="cancelReservation()">취소 하기</a>
-                            <a th:if="${reservationInfo.status == '진료 완료'}" th:href="@{/community/writePost}">후기 작성</a>
+                            <a th:if="${reservationInfo.currentStatus == '진료 전'}" th:href="@{/userReservationUpdate}" onclick="cancelReservation()">취소 하기</a>
+                            <a th:if="${reservationInfo.currentStatus == '진료 완료'}" th:href="@{/community/writePost}">후기 작성</a>
                         </td>
 
             </tr>

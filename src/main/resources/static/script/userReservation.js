@@ -4,7 +4,7 @@ function cancelReservation() {
     if(isCancel) {
         alert("접수가 취소되었습니다.")
     }
-    else {
+    else (!isCancel) {
         return false;
     }
 }
