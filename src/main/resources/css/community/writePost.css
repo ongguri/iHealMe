@@ -1,0 +1,18 @@
+.container {
+    margin-top: 10px;
+}
+
+.head {
+    font-weight: bold;
+    display: inline;
+}
+
+.buttons {
+    float: right;
+    justify-content: flex-end;
+}
+
+.form-control {
+    resize: none;
+    border-color: darkgray;
+}
