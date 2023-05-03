@@ -8,12 +8,10 @@ import java.time.LocalDateTime;
 
 @Entity
 @Getter @Setter
-@Table(name = "USERRESERVATION")
 public class UserReservation {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "RESNO_GEN")
-    @SequenceGenerator(sequenceName = "USERRES_RESNO_SEQ", name = "RESNO_GEN", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "resNo")
     private Long resNo;
 
@@ -29,6 +27,6 @@ public class UserReservation {
     @Column(name = "rDate")
     private LocalDateTime rDate;
 
-    @Column(name = "currentStatus")
-    private String currentStatus;
+    @Column(name = "status")
+    private String status;
 }
