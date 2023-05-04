@@ -17,4 +17,29 @@ public class UserReservationService {
     public List<UserReservation> getUserReservationList() {
         return reservationRepository.findAll();
     }
+//
+//    public UserReservation getUserReservationId() {
+//        return reservationRepository.findById()
+//    }
+
+//    public Long writePost(InsertPostRequestDTO insertPostRequestDTO) {
+//        User user = userRepository.findByUserEmail(insertPostRequestDTO.getUserEmail());
+//
+//        Post post = insertPostRequestDTO.toEntity(user);
+//        Post savedPost = postRepository.save(post);
+//
+//        return savedPost.getPostNo();
+//    }
+//
+//    public Post toEntity(User user) {
+//        Post post = Post.builder()
+//                .resNo(resNo)
+//                .user(user)
+//                .hptName(hptName)
+//                .title(title)
+//                .content(content)
+//                .build();
+//
+//        return post;
+//    }
 }
