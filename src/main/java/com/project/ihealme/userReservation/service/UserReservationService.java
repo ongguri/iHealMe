@@ -1,6 +1,5 @@
 package com.project.ihealme.userReservation.service;
 
-import com.project.ihealme.community.domain.User;
 import com.project.ihealme.userReservation.domain.UserReservation;
 import com.project.ihealme.userReservation.repository.ReservationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,25 +31,4 @@ public class UserReservationService {
 
         return userRes.getResNo();
     }
-
-//    public Long writePost(InsertPostRequestDTO insertPostRequestDTO) {
-//        User user = userRepository.findByUserEmail(insertPostRequestDTO.getUserEmail());
-//
-//        Post post = insertPostRequestDTO.toEntity(user);
-//        Post savedPost = postRepository.save(post);
-//
-//        return savedPost.getPostNo();
-//    }
-//
-//    public Post toEntity(User user) {
-//        Post post = Post.builder()
-//                .resNo(resNo)
-//                .user(user)
-//                .hptName(hptName)
-//                .title(title)
-//                .content(content)
-//                .build();
-//
-//        return post;
-//    }
 }
