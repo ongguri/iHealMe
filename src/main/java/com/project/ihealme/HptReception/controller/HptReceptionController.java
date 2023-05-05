@@ -21,35 +21,35 @@ public class HptReceptionController {
         this.hptReceptionService = hptReceptionService;
     }
 
-    @GetMapping("/HptReception")
+    @GetMapping("/HptReception/HptReceptionList")
     public String hptReception(Model model) {
         int rtCount = hptReceptionService.getRtCount();
         model.addAttribute("rtCount", rtCount);
         List<HptReception> hptReceptionList = hptReceptionService.getHptReceptionList();
         model.addAttribute("hptReceptionList", hptReceptionList);
-        return "HptReception";
+        return "HptReception/HptReceptionList";
     }
 
-    @PostMapping("/HptReception/addCounter")
+    @PostMapping("/HptReception/HptReceptionList/addCounter")
     @ResponseBody
     public String addCounter() {
         hptReceptionService.increaseRtCount();
         return "success";
     }
 
-    @PostMapping("/HptReception/subCounter")
+    @PostMapping("/HptReception/HptReceptionList/subCounter")
     @ResponseBody
     public String subCounter() {
         hptReceptionService.decreaseRtCount();
         return "success";
     }
 
-    @GetMapping("/HptReception/updateCurrentStatus")
+    @GetMapping("/HptReception/HptReceptionList/updateCurrentStatus")
     public String updateCurrentStatus(@RequestParam("resNo") int resNo) {
         hptReceptionService.updateCurrentStatus(resNo, "진료 전", LocalDateTime.now());
         hptReceptionService.increaseRtCount(); // 대기자 수 +1
 
-        return "redirect:/HptReception";
+        return "redirect:/HptReception/HptReceptionList";
     }
 
 }

@@ -5,8 +5,8 @@
 <head>
     <meta charset="UTF-8">
     <title>접수내역 확인 페이지</title>
-    <link rel="stylesheet" type="text/css" href="../css/HptReception.css">
-    <script src="../script/HptReception.js" defer></script>
+    <link rel="stylesheet" type="text/css" href="../css/HptReception/HptReception.css">
+    <script src="../script/HptReception/HptReception.js" defer></script>
 </head>
 
 <body>
@@ -34,11 +34,11 @@
             <td th:text="${hptReception.resNo}"></td>
             <td th:text="${hptReception.pName}"></td>
             <td th:text="${hptReception.txList}"></td>
-            <td th:text="${hptReception.rDate}"></td>
+            <td th:text="${#temporals.format(hptReception.rDate, 'yy/MM/dd HH:mm:ss')}"></td>
             <td th:text="${hptReception.currentStatus}"></td>
             <td>
                 <a th:if="${hptReception.currentStatus == '접수대기'}"
-                   th:href="@{/HptReception/updateCurrentStatus(resNo=${hptReception.resNo})}"
+                   th:href="@{/HptReception/HptReceptionList/updateCurrentStatus(resNo=${hptReception.resNo})}"
                    th:method="post"
                    onclick="acceptReception()">접수</a>
                 <a th:if="${hptReception.currentStatus == '접수대기'}" th:href="@{/HptReception/reject/{resNo}(resNo=${hptReception.resNo})}">거절</a>
