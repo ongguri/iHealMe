@@ -44,8 +44,7 @@ public class HptReceptionController {
         return "success";
     }
 
-    @PostMapping("/HptReception/updateCurrentStatus")
-    @ResponseBody
+    @GetMapping("/HptReception/updateCurrentStatus")
     public String updateCurrentStatus(@RequestParam("resNo") int resNo) {
         hptReceptionService.updateCurrentStatus(resNo, "진료 전", LocalDateTime.now());
         hptReceptionService.increaseRtCount(); // 대기자 수 +1
