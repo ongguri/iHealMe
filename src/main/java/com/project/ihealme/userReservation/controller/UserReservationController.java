@@ -32,4 +32,9 @@ public class UserReservationController {
 //        System.out.println("user = " + user);
         return "redirect:/userReservation";
     }
+
+    @GetMapping("/community/writePost")
+    public String writePostPage() {
+        return "community/writePost";
+    }
 }
