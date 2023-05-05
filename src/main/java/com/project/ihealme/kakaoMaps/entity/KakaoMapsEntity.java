@@ -1,17 +1,19 @@
 package com.project.ihealme.kakaoMaps.entity;
 
 import lombok.Getter;
+import lombok.Setter;
 import lombok.ToString;
 
 import javax.persistence.*;
 
 @Entity
 @Table(name = "maps")
-@Getter @ToString
+@Getter @Setter
+@ToString
 public class KakaoMapsEntity {
 
     @Id
-    @Column(name = "maps_id", length = 15, nullable = false)
+    @Column(name = "id", length = 15, nullable = false)
     @GeneratedValue(strategy = GenerationType.AUTO)
     private String id;
 

@@ -1,15 +1,14 @@
 package com.project.ihealme.kakaoMaps.dto;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
-@Getter @Setter
+@Data
 public class KakaoMapsDto {
 
     private String id;
     private String repEmail;
     private String placeName;
-    private String idstance;
+    private String distance;
     private String placeUrl;
     private String categoryName;
     private String addressName;
