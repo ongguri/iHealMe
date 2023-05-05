@@ -1,5 +1,5 @@
 function addCounter() {
-    fetch('/HptReception/addCounter', {method: 'POST'})
+    fetch('/HptReception/HptReceptionList/addCounter', {method: 'POST'})
         .then(response => {
             if (response.ok) {
                 return response.text();
@@ -26,7 +26,7 @@ function addCounter() {
 }
 
 function subCounter() {
-    fetch('/HptReception/subCounter', {method: 'POST'})
+    fetch('/HptReception/HptReceptionList/subCounter', {method: 'POST'})
         .then(response => {
             if (response.ok) {
                 return response.text();
@@ -74,5 +74,5 @@ function acceptReception() {
   form.submit();
 
   // 알림창을 띄우는 코드
-  alert('${hptReception.resNo}번 접수 완료되었습니다.');
+  alert('접수 완료되었습니다.');
 }
