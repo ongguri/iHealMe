@@ -17,4 +17,5 @@ public abstract class BaseEntity {
     @CreatedDate
     @Column(updatable = false)
     private LocalDateTime regdate;
+
 }
