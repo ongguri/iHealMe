@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<div class="b-example-divider" th:fragment="header">
+	<nav class="py-2 bg-body-tertiary border-bottom">
+		<div class="container d-flex flex-row-reverse">
+			<ul class="nav">
+				<li class="nav-item"><a href="#" class="nav-link link-dark px-4">로그인</a></li>
+			</ul>
+		</div>
+	</nav>
+	<header class="py-3 mb-4 border-bottom">
+		<div class="container d-flex flex-wrap justify-content-center">
+			<a href="/" class="d-flex align-items-center mb-3 mb-lg-0 me-lg-auto link-body-emphasis text-decoration-none">
+				<svg class="bi me-2" width="40" height="32"><use xlink:href="/maps"/></svg>
+				<span class="fs-4">iHealMe</span>
+			</a>
+			<ul class="nav">
+				<li class="nav-item"><a href="/maps" class="nav-link link-dark px-3 active" aria-current="page">Home</a></li>
+				<li class="nav-item"><a href="#" class="nav-link link-dark px-3">접수 내역</a></li>
+				<li class="nav-item"><a href="#" class="nav-link link-dark px-3">커뮤니티</a></li>
+				<li class="nav-item"><a href="#" class="nav-link link-dark px-3">마이페이지</a></li>
+			</ul>
+		</div>
+	</header>
+</div>
+</html>
