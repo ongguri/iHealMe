@@ -1,5 +1,7 @@
 <!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout}">
 <head>
     <title>Hello</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -7,34 +9,36 @@
     <script type="text/javascript" src="/script/userReservation.js" defer></script>
 </head>
 <body>
-<div class="container">
-    <h1>접수내역 확인</h1>
-        <table>
-            <thead>
-            <tr>
-                <th>No</th>
-                <th>병원명</th>
-                <th>진료항목</th>
-                <th>접수 일시</th>
-                <th>상태</th>
-                <th>비고</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="reservationInfo : ${session.userReservationList}">
-                        <td th:text="${reservationInfo.resNo}"></td>
-                        <td th:text="${reservationInfo.hptName}"></td>
-                        <td th:text="${reservationInfo.txList}"></td>
-                        <td th:text="${#temporals.format(reservationInfo.regdate, 'yyyy-MM-dd HH:mm:ss')}"></td>
-                        <td th:text="${reservationInfo.currentStatus}"></td>
-                        <td>
-                            <a th:if="${reservationInfo.currentStatus == '진료 전'}" th:href="@{/userResCancelUpdate}" onclick="cancelReservation()">취소 하기</a>
-                            <a th:if="${reservationInfo.currentStatus == '진료 완료'}" th:href="@{/community/writePost}">후기 작성</a>
-                        </td>
+<div layout:fragment="content">
+    <div class="container">
+        <h1>접수내역 확인</h1>
+            <table>
+                <thead>
+                <tr>
+                    <th>No</th>
+                    <th>병원명</th>
+                    <th>진료항목</th>
+                    <th>접수 일시</th>
+                    <th>상태</th>
+                    <th>비고</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="reservationInfo : ${session.userReservationList}">
+                            <td th:text="${reservationInfo.resNo}"></td>
+                            <td th:text="${reservationInfo.hptName}"></td>
+                            <td th:text="${reservationInfo.txList}"></td>
+                            <td th:text="${#temporals.format(reservationInfo.regdate, 'yyyy-MM-dd HH:mm:ss')}"></td>
+                            <td th:text="${reservationInfo.currentStatus}"></td>
+                            <td>
+                                <a th:if="${reservationInfo.currentStatus == '진료 전'}" th:href="@{/userResCancelUpdate}" onclick="cancelReservation()">취소 하기</a>
+                                <a th:if="${reservationInfo.currentStatus == '진료 완료'}" th:href="@{/community/writePost}">후기 작성</a>
+                            </td>
 
-            </tr>
-            </tbody>
-        </table>
+                </tr>
+                </tbody>
+            </table>
+    </div>
 </div>
 </body>
 </html>
