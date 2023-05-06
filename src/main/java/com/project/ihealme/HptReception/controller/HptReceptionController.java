@@ -4,10 +4,7 @@ import com.project.ihealme.HptReception.domain.HptReception;
 import com.project.ihealme.HptReception.service.HptReceptionService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -44,10 +41,25 @@ public class HptReceptionController {
         return "success";
     }
 
-    @GetMapping("/HptReception/HptReceptionList/updateCurrentStatus")
-    public String updateCurrentStatus(@RequestParam("resNo") int resNo) {
+    @GetMapping("/HptReception/HptReceptionList/updateCurrentStatusToAccept")       // <a> 태그는 get 방식으로 요청한다.
+    public String updateCurrentStatusToAccept(@RequestParam("resNo") int resNo) {
         hptReceptionService.updateCurrentStatus(resNo, "진료 전", LocalDateTime.now());
         hptReceptionService.increaseRtCount(); // 대기자 수 +1
+
+        return "redirect:/HptReception/HptReceptionList";
+    }
+
+    @GetMapping("/HptReception/HptReceptionList/updateCurrentStatusToReject")
+    public String updateCurrentStatusToReject(@RequestParam("resNo") int resNo) {
+        hptReceptionService.updateCurrentStatus(resNo, "접수취소", LocalDateTime.now());
+
+        return "redirect:/HptReception/HptReceptionList";
+    }
+
+    @GetMapping("/HptReception/HptReceptionList/updateCurrentStatusToComplete")
+    public String updateCurrentStatusToComplete(@RequestParam("resNo") int resNo) {
+        hptReceptionService.updateCurrentStatus(resNo, "진료완료", LocalDateTime.now());
+        hptReceptionService.decreaseRtCount(); // 대기자 수 -1
 
         return "redirect:/HptReception/HptReceptionList";
     }
