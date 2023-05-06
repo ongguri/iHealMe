@@ -3,6 +3,7 @@ package com.project.ihealme.kakaoMaps.controller;
 import com.project.ihealme.kakaoMaps.service.KakaoMapsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
@@ -15,7 +16,7 @@ public class KakaoMapsController {
     // @RequestBody : JSON 데이터를 전송하는 경우
 
     @GetMapping("/")
-    public String Maps(model) {
+    public String Maps(Model model) {
         return "maps/kakaoMaps";
     }
 }
