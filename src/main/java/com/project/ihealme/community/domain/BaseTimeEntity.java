@@ -1,6 +1,7 @@
 package com.project.ihealme.community.domain;
 
 import lombok.Getter;
+import org.hibernate.annotations.ColumnDefault;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -16,5 +17,7 @@ public abstract class BaseTimeEntity {
 
     @CreatedDate
     @Column(updatable = false)
+    @ColumnDefault("sysdate")
     private LocalDateTime regdate;
+
 }
