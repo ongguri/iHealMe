@@ -23,14 +23,10 @@ public class PostPageResponseDTO {
     private boolean prev, next; //이전, 다음
     private List<Integer> pageList; //페이지 번호 목록
 
-    public PostPageResponseDTO(Page<Object[]> result, List<Integer> commentCountList) {
+    public PostPageResponseDTO(Page<Object[]> result) {
         Function<Object[], PostResponseDTO> fn
                 = (en -> new PostResponseDTO((Post) en[0], (User) en[1]));
         dtoList = result.stream().map(fn).collect(Collectors.toList());
-
-        for (int i = 0; i < commentCountList.size(); i++) {
-            dtoList.get(i).setCommentCount(commentCountList.get(i));
-        }
 
         totalPage = result.getTotalPages();
         makeInformation(result.getPageable());

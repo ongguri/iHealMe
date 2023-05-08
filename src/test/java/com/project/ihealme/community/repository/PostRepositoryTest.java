@@ -2,7 +2,6 @@ package com.project.ihealme.community.repository;
 
 import com.project.ihealme.community.domain.User;
 import com.project.ihealme.community.domain.Post;
-import com.project.ihealme.community.dto.PostResponseDTO;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -10,8 +9,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.stream.IntStream;
 import java.util.stream.LongStream;
 
@@ -83,34 +84,43 @@ class PostRepositoryTest {
         System.out.println(savedPost);
     }
 
-    /*@Test
-    void findPostWithUser() {
-        Long postNo = 100L;
+    @Test
+    @Transactional
+    void findPostAndUserByPostNo() {
+        List<Object[]> results = postRepository.findPostAndUserByPostNo(101L);
 
-        Object result = postRepository.findPostWithUser(postNo);
-        Object[] arr = (Object[]) result;
+        Post post = null;
+        User user = null;
 
-        System.out.println("------------------");
-        System.out.println(Arrays.toString(arr));
-    }*/
+        for (Object[] result : results) {
+            post = (Post) result[0];
+            user = (User) result[1];
+        }
+
+        System.out.println(post);
+        System.out.println(user);
+    }
+
 
     @Test
-    void findPostWithDetails() {
+    @Transactional
+    void findPostById() {
+        Post post = postRepository.findById(101L).get();
+
+        System.out.println(post);
+        System.out.println(post.getUser());
+    }
+
+    @Test
+    @Transactional
+    void findPostAndUserByPage() {
         Pageable pageable = PageRequest.of(0, 10, Sort.by("postNo").descending());
-        Page<Object[]> result = postRepository.findPostWithDetails(pageable);
+        Page<Object[]> result = postRepository.findPostAndUserByPage(pageable);
 
         result.get().forEach(row -> {
             Object[] arr = (Object[]) row;
             System.out.println(Arrays.toString(arr));
         });
-    }
-
-    @Test
-    void findPostByPostNo() {
-        Object result = postRepository.findPostByPostNo(100L);
-
-        Object[] arr = (Object[]) result;
-        System.out.println(Arrays.toString(arr));
     }
 
     @Test
@@ -130,9 +140,10 @@ class PostRepositoryTest {
     }
 
     @Test
+    @Transactional
     void findByTitleContaining() {
         Pageable pageable = PageRequest.of(0, 10, Sort.by("postNo").descending());
-        Page<Object[]> result = postRepository.findByTitleContaining("수정", pageable);
+        Page<Object[]> result = postRepository.findByTitleContaining("title", pageable);
 
         result.get().forEach(row -> {
             Object[] arr = (Object[]) row;
@@ -156,5 +167,6 @@ class PostRepositoryTest {
         System.out.println(result.getTotalElements());
         System.out.println(result.getTotalPages());
     }
+
 
 }

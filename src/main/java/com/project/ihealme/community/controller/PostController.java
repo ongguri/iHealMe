@@ -1,5 +1,6 @@
 package com.project.ihealme.community.controller;
 
+import com.project.ihealme.community.domain.Post;
 import com.project.ihealme.community.dto.*;
 import com.project.ihealme.community.service.PostService;
 import lombok.RequiredArgsConstructor;
@@ -25,16 +26,12 @@ public class PostController {
     }
 
     @GetMapping("/{postNo}")
-    public String post(@ModelAttribute PostPageRequestDTO postPageRequestDTO, @PathVariable Long postNo, Model model) {
+    public String post(@ModelAttribute PostPageRequestDTO postPageRequestDTO,
+                       @PathVariable Long postNo,
+                       Model model) {
+
         Map<String, Object> map = model.asMap();
-
-        boolean addHitCount = true;
-
-        for (String modelKey : map.keySet()) {
-            if (modelKey.equals("addHitCount")) {
-                addHitCount = (Boolean) map.get(modelKey);
-            }
-        }
+        boolean addHitCount = !map.containsKey("hitCountNotChanged");
 
         PostResponseDTO postResponseDTO = postService.getPost(postNo, addHitCount);
         model.addAttribute("dto", postResponseDTO);
@@ -48,15 +45,18 @@ public class PostController {
     }
 
     @PostMapping("/write")
-    public String writePost(@ModelAttribute InsertPostRequestDTO insertPostRequestDTO, RedirectAttributes redirectAttributes) {
-        Long postNo = postService.writePost(insertPostRequestDTO);
+    public String writePost(@ModelAttribute PostWriteRequestDTO postWriteRequestDTO, RedirectAttributes redirectAttributes) {
+        Long postNo = postService.writePost(postWriteRequestDTO);
         redirectAttributes.addAttribute("postNo", postNo);
+        redirectAttributes.addFlashAttribute("hitCountNotChanged", true);
+        redirectAttributes.addFlashAttribute("message", "게시글을 작성하였습니다.");
+
         return "redirect:/community/{postNo}";
     }
 
     @GetMapping("/{postNo}/edit")
     public String editForm(@PathVariable Long postNo, @ModelAttribute PostPageRequestDTO postPageRequestDTO, Model model) {
-        PostResponseDTO postResponseDTO = postService.getPost(postNo, false);
+        PostResponseDTO postResponseDTO = postService.getPost(postNo);
         model.addAttribute("dto", postResponseDTO);
 
         return "community/editPost";
@@ -64,18 +64,19 @@ public class PostController {
 
     @PostMapping("/{postNo}/edit")
     public String editPost(@PathVariable Long postNo,
-                           @ModelAttribute EditPostRequestDTO editPostRequestDTO,
+                           @ModelAttribute PostEditRequestDTO postEditRequestDTO,
                            @ModelAttribute PostPageRequestDTO postPageRequestDTO,
                            RedirectAttributes redirectAttributes) {
 
-        editPostRequestDTO.setPostNo(postNo);
-        postService.edit(editPostRequestDTO);
+        postEditRequestDTO.setPostNo(postNo);
+        postService.edit(postEditRequestDTO);
 
         redirectAttributes.addAttribute("postNo", postNo);
         redirectAttributes.addAttribute("page", postPageRequestDTO.getPage());
         redirectAttributes.addAttribute("type", postPageRequestDTO.getType());
         redirectAttributes.addAttribute("keyword", postPageRequestDTO.getKeyword());
-        redirectAttributes.addFlashAttribute("addHitCount", false);
+        redirectAttributes.addFlashAttribute("hitCountNotChanged", true);
+        redirectAttributes.addFlashAttribute("message", "게시글을 수정하였습니다.");
 
         return "redirect:/community/{postNo}";
     }
@@ -90,13 +91,14 @@ public class PostController {
     @PostMapping("/report")
     public String report(@RequestParam Long postNo, @ModelAttribute PostPageRequestDTO postPageRequestDTO, RedirectAttributes redirectAttributes) {
 
-        postService.addReport(postNo);
+        Post post = postService.addReport(postNo);
 
-        redirectAttributes.addAttribute("postNo", postNo);
+        redirectAttributes.addAttribute("postNo", post.getPostNo());
         redirectAttributes.addAttribute("page", postPageRequestDTO.getPage());
         redirectAttributes.addAttribute("type", postPageRequestDTO.getType());
         redirectAttributes.addAttribute("keyword", postPageRequestDTO.getKeyword());
-        redirectAttributes.addFlashAttribute("addHitCount", false);
+        redirectAttributes.addFlashAttribute("hitCountNotChanged", true);
+        redirectAttributes.addFlashAttribute("message", "게시글을 신고하였습니다.");
 
         return "redirect:/community/{postNo}";
     }

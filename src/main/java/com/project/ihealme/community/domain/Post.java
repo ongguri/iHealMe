@@ -1,6 +1,6 @@
 package com.project.ihealme.community.domain;
 
-import com.project.ihealme.community.dto.PostResponseDTO;
+import com.project.ihealme.community.dto.PostWriteRequestDTO;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 
@@ -49,7 +49,7 @@ public class Post extends BaseTimeEntity {
     @Column(nullable = false, length = 100)
     private String title;
 
-    @Lob
+    @Column(length = 4000)
     private String content;
 
     @ColumnDefault("0")
@@ -58,11 +58,23 @@ public class Post extends BaseTimeEntity {
     @ColumnDefault("0")
     private int report;
 
-    public void changeTitle(String title) {
-        this.title = title;
+    @OneToMany(mappedBy = "post", orphanRemoval = true)
+    private List<Comment> comments = new ArrayList<>();
+
+    public static Post create(PostWriteRequestDTO postWriteRequestDTO, User user) {
+        Post post = Post.builder()
+                .user(user)
+                .resNo(postWriteRequestDTO.getResNo())
+                .hptName(postWriteRequestDTO.getHptName())
+                .title(postWriteRequestDTO.getTitle())
+                .content(postWriteRequestDTO.getContent())
+                .build();
+
+        return post;
     }
 
-    public void changeContent(String content) {
+    public void edit(String title, String content) {
+        this.title = title;
         this.content = content;
     }
 

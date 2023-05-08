@@ -9,7 +9,9 @@
     <link rel="stylesheet" th:href="@{/css/community/common.css}" href="../../css/community/common.css">
 </head>
 <body>
+
 <div class="container">
+    <h2 th:text="${message}"></h2>
 
     <div class="post">
         <h2 class="post-title" th:text="|[${dto.hptName}] ${dto.title}|">[병원명] 제목</h2>

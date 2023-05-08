@@ -13,7 +13,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -24,15 +23,19 @@ public class PostService {
     private final CommentRepository commentRepository;
     private final UserRepository userRepository;
 
-    public Long writePost(InsertPostRequestDTO insertPostRequestDTO) {
-        User user = userRepository.findByUserEmail(insertPostRequestDTO.getUserEmail());
+    @Transactional
+    public Long writePost(PostWriteRequestDTO postWriteRequestDTO) {
+        Long userId = postWriteRequestDTO.getUserId();
+        User user = userRepository.findById(userId)
+                .orElseThrow(()-> new IllegalArgumentException("해당 유저가 없습니다. userId =" + userId));
 
-        Post post = insertPostRequestDTO.toEntity(user);
+        Post post = postWriteRequestDTO.toEntity(user);
         Post savedPost = postRepository.save(post);
 
         return savedPost.getPostNo();
     }
 
+    @Transactional
     public PostPageResponseDTO getPostList(PostPageRequestDTO postPageRequestDTO) {
         Page<Object[]> result = null;
 
@@ -40,7 +43,7 @@ public class PostService {
         Pageable pageable = postPageRequestDTO.getPageable(Sort.by("postNo").descending());
 
         if (type == null || type.equals("")) {
-            result = postRepository.findPostWithDetails(pageable);
+            result = postRepository.findPostAndUserByPage(pageable);
         } else {
             String keyword = postPageRequestDTO.getKeyword();
 
@@ -57,36 +60,33 @@ public class PostService {
             }
         }
 
-        List<Integer> commentCountList = new ArrayList<>();
-
-        result.get().forEach(row -> {
-            Object[] arr = (Object[]) row;
-            Post post = (Post) arr[0];
-
-            Integer commentCount = commentRepository.countByPost(post);
-            commentCountList.add(commentCount);
-        });
-
-        return new PostPageResponseDTO(result, commentCountList);
+        return new PostPageResponseDTO(result);
     }
 
-    public PostResponseDTO getPost(Long postNo, Boolean addHitCount) {
-        Object result = postRepository.findPostByPostNo(postNo);
-        Object[] arr = (Object[]) result;
-        Post post = (Post) arr[0];
-        User user = (User) arr[1];
+    public PostResponseDTO getPost(Long postNo) {
+        return getPost(postNo, false);
+    }
+
+    @Transactional
+    public PostResponseDTO getPost(Long postNo, boolean addHitCount) {
+        List<Object[]> results = postRepository.findPostAndUserByPostNo(postNo);
+
+        Post post = null;
+        User user = null;
+
+        for (Object[] result : results) {
+            post = (Post) result[0];
+            user = (User) result[1];
+        }
 
         if (addHitCount) {
             post.addHitCount();
         }
-        Post savedPost = postRepository.save(post);
-        Integer commentCount = commentRepository.countByPost(savedPost);
 
-        PostResponseDTO postResponseDTO = new PostResponseDTO(savedPost, user, commentCount);
+        PostResponseDTO postResponseDTO = new PostResponseDTO(post, user, post.getComments().size());
 
         return postResponseDTO;
     }
-
 
     @Transactional
     public void deleteWithReplies(Long postNo) {
@@ -94,18 +94,21 @@ public class PostService {
         postRepository.deleteById(postNo);
     }
 
-    public void edit(EditPostRequestDTO editPostRequestDTO) {
-        Post post = postRepository.findById(editPostRequestDTO.getPostNo()).get();
-        post.changeTitle(editPostRequestDTO.getTitle());
-        post.changeContent(editPostRequestDTO.getContent());
+    @Transactional
+    public void edit(PostEditRequestDTO postEditRequestDTO) {
+        Long postNo = postEditRequestDTO.getPostNo();
+        Post post = postRepository.findById(postNo)
+                .orElseThrow(()-> new IllegalArgumentException(postNo + "번 게시글이 없습니다."));
 
-        postRepository.save(post);
+        post.edit(postEditRequestDTO.getTitle(), postEditRequestDTO.getContent());
     }
 
-    public void addReport(Long postNo) {
+    public Post addReport(Long postNo) {
         Post post = postRepository.findById(postNo).get();
         post.addReportCount();
 
-        postRepository.save(post);
+        Post savedPost = postRepository.save(post);
+
+        return savedPost;
     }
 }

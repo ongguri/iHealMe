@@ -16,14 +16,14 @@ class PostServiceTest {
 
     @Test
     void write() {
-        InsertPostRequestDTO insertPostRequestDTO = InsertPostRequestDTO.builder()
+        PostWriteRequestDTO postWriteRequestDTO = PostWriteRequestDTO.builder()
                 .hptName("이지소아청소년과의원")
                 .title("title 테스트2")
                 .content("content 테스트2")
-                .userEmail("user60@naver.com")
+                .userId(60L)
                 .build();
 
-        Long postNo = postService.writePost(insertPostRequestDTO);
+        Long postNo = postService.writePost(postWriteRequestDTO);
         assertThat(postNo).isEqualTo(104);
     }
 
@@ -80,13 +80,13 @@ class PostServiceTest {
 
     @Test
     void modify() {
-        EditPostRequestDTO editPostRequestDTO = EditPostRequestDTO.builder()
+        PostEditRequestDTO postEditRequestDTO = PostEditRequestDTO.builder()
                 .postNo(99L)
                 .title("title 수정")
                 .content("content 수정")
                 .build();
 
-        postService.edit(editPostRequestDTO);
+        postService.edit(postEditRequestDTO);
     }
 
 }
