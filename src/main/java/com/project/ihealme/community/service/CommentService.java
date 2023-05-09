@@ -2,7 +2,6 @@ package com.project.ihealme.community.service;
 
 import com.project.ihealme.community.domain.Comment;
 import com.project.ihealme.community.domain.Post;
-import com.project.ihealme.community.domain.User;
 import com.project.ihealme.community.dto.CommentDto;
 
 import java.util.List;

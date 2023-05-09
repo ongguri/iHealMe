@@ -1,6 +1,5 @@
 package com.project.ihealme.community.dto;
 
-import com.project.ihealme.community.domain.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

@@ -1,8 +1,6 @@
 package com.project.ihealme.community.dto;
 
 import com.project.ihealme.community.domain.Post;
-import com.project.ihealme.community.domain.User;
-import com.project.ihealme.userReservation.domain.UserReservation;
 import lombok.Getter;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

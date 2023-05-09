@@ -1,6 +1,5 @@
 package com.project.ihealme.community.dto;
 
-import com.project.ihealme.community.domain.User;
 import com.project.ihealme.community.domain.Post;
 import com.project.ihealme.userReservation.domain.UserReservation;
 import com.querydsl.core.annotations.QueryProjection;
