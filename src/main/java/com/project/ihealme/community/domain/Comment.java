@@ -9,9 +9,12 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @NoArgsConstructor
-@Data
+@Builder
+@AllArgsConstructor
+@Getter
+@ToString(exclude = "post")
+@Table(name = "COMMENTS")
 @Entity
-@Table(name = "COMENTS")
 public class Comment {
 
     @Id
@@ -23,7 +26,7 @@ public class Comment {
     private String content;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "USERNO", nullable = false)
+    @JoinColumn(name = "USERID", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private User user;
 
@@ -35,11 +38,10 @@ public class Comment {
     @CreatedDate
     private LocalDateTime regDate;
 
-    public Comment(String content, User user, Post post, LocalDateTime regDate) {
+    public Comment(String content, User user, Post post) {
         this.content = content;
         this.user = user;
         this.post = post;
-        this.regDate = regDate;
     }
 
 

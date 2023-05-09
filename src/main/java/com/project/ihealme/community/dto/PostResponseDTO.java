@@ -1,7 +1,7 @@
 package com.project.ihealme.community.dto;
 
-import com.project.ihealme.community.domain.User;
 import com.project.ihealme.community.domain.Post;
+import com.project.ihealme.community.domain.User;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -14,7 +14,6 @@ import java.time.LocalDateTime;
 public class PostResponseDTO {
 
     private Long postNo;
-    private int resNo;
     private String hptName;
     private String title;
     private String content;
@@ -24,10 +23,25 @@ public class PostResponseDTO {
     private int report;
     private int commentCount;
 
+    public PostResponseDTO(Post post, User user, int commentCount) {
+        this.postNo = post.getPostNo();
+        this.hptName = post.getHptName();
+        this.title = post.getTitle();
+        this.content = post.getContent();
+        this.regDate = post.getRegdate();
+        this.hit = post.getHit();
+        this.report = post.getReport();
+        this.userEmail = encodeUserEmail(user);
+        this.commentCount = commentCount;
+    }
+
+    public PostResponseDTO(Post post, User user) {
+        this(post, user, 0);
+    }
+
     public Post toEntity(PostResponseDTO postResponseDTO, User user) {
         Post post = Post.builder()
                 .postNo(postResponseDTO.getPostNo())
-                .resNo(postResponseDTO.getResNo())
                 .user(user)
                 .hptName(postResponseDTO.getHptName())
                 .title(postResponseDTO.getTitle())
@@ -37,5 +51,9 @@ public class PostResponseDTO {
                 .build();
 
         return post;
+    }
+
+    private String encodeUserEmail(User user) {
+        return user.getUserEmail().substring(0, 3).concat("****");
     }
 }

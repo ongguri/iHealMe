@@ -1,6 +1,9 @@
 package com.project.ihealme.community.controller;
 
-import com.project.ihealme.community.dto.*;
+import com.project.ihealme.community.dto.EditPostRequestDTO;
+import com.project.ihealme.community.dto.InsertPostRequestDTO;
+import com.project.ihealme.community.dto.PageRequestDTO;
+import com.project.ihealme.community.dto.PostResponseDTO;
 import com.project.ihealme.community.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -26,6 +29,8 @@ public class PostController {
     public String post(@ModelAttribute PageRequestDTO pageRequestDTO, @PathVariable Long postNo, Model model) {
         PostResponseDTO postResponseDTO = postService.get(postNo);
         model.addAttribute("dto", postResponseDTO);
+
+
 
         return "community/post";
     }

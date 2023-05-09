@@ -1,13 +1,24 @@
 package com.project.ihealme.community.dto;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
+@Builder
+@AllArgsConstructor
 @Getter @Setter
-@NoArgsConstructor
-public class EditPostRequestDto {
+@ToString
+public class EditPostRequestDTO {
 
+    private Long postNo;
     private String title;
     private String content;
+
+    /*public Post toEntity() {
+        Post post = Post.builder()
+                .postNo(postNo)
+                .title(title)
+                .content(content)
+                .build();
+
+        return post;
+    }*/
 }
