@@ -1,6 +1,5 @@
 package com.project.ihealme.community.controller;
 
-import com.project.ihealme.community.dto.EditPostRequestDTO;
 import com.project.ihealme.community.dto.InsertPostRequestDTO;
 import com.project.ihealme.community.dto.PageRequestDTO;
 import com.project.ihealme.community.dto.PostResponseDTO;
