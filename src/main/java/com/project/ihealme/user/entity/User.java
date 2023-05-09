@@ -16,8 +16,9 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
+@Table(name = "USERS")
 @Entity
-public class UserEntity implements UserDetails {
+public class User implements UserDetails {
 
     // 이름, 이메일, 연락처, 생년월일, 성별, 비밀번호, 질문, 답
 
@@ -67,7 +68,7 @@ public class UserEntity implements UserDetails {
     private String hptPhoneNum;
 
     @Builder
-    private UserEntity(String password, UserRole userRole, String email) {
+    private User(String password, UserRole userRole, String email) {
         this.password = password;
         this.userRole = userRole;
         this.email = email;
