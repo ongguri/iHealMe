@@ -16,21 +16,20 @@ class PostServiceTest {
 
     @Test
     void write() {
-        InsertPostRequestDTO insertPostRequestDTO = InsertPostRequestDTO.builder()
-                .hptName("이지소아청소년과의원")
+        PostWriteRequestDTO postWriteRequestDTO = PostWriteRequestDTO.builder()
                 .title("title 테스트2")
                 .content("content 테스트2")
-                .userEmail("user60@naver.com")
+                .userId(60L)
                 .build();
 
-        Long postNo = postService.write(insertPostRequestDTO);
+        Long postNo = postService.writePost(postWriteRequestDTO);
         assertThat(postNo).isEqualTo(104);
     }
 
     @Test
     void getList1() {
-        PageRequestDTO pageRequestDTO = new PageRequestDTO();
-        PageResultDTO<PostResponseDTO, Object[]> result = postService.getList(pageRequestDTO);
+        PostPageRequestDTO postPageRequestDTO = new PostPageRequestDTO();
+        PostPageResponseDTO result = postService.getPostList(postPageRequestDTO);
 
         for (PostResponseDTO postResponseDTO : result.getDtoList()) {
             System.out.println(postResponseDTO);
@@ -40,10 +39,10 @@ class PostServiceTest {
     @Test
     @DisplayName("병원명 검색1")
     void getList2() {
-        PageRequestDTO pageRequestDTO = new PageRequestDTO();
-        pageRequestDTO.setType("h");
-        pageRequestDTO.setKeyword("이지");
-        PageResultDTO<PostResponseDTO, Object[]> result = postService.getList(pageRequestDTO);
+        PostPageRequestDTO postPageRequestDTO = new PostPageRequestDTO();
+        postPageRequestDTO.setType("h");
+        postPageRequestDTO.setKeyword("이지");
+        PostPageResponseDTO result = postService.getPostList(postPageRequestDTO);
 
         for (PostResponseDTO postResponseDTO : result.getDtoList()) {
             System.out.println(postResponseDTO);
@@ -53,11 +52,11 @@ class PostServiceTest {
     @Test
     @DisplayName("병원명 검색2")
     void getList3() {
-        PageRequestDTO pageRequestDTO = new PageRequestDTO();
-        pageRequestDTO.setPage(11);
-        pageRequestDTO.setType("h");
-        pageRequestDTO.setKeyword("새롬");
-        PageResultDTO<PostResponseDTO, Object[]> result = postService.getList(pageRequestDTO);
+        PostPageRequestDTO postPageRequestDTO = new PostPageRequestDTO();
+        postPageRequestDTO.setPage(11);
+        postPageRequestDTO.setType("h");
+        postPageRequestDTO.setKeyword("새롬");
+        PostPageResponseDTO result = postService.getPostList(postPageRequestDTO);
 
         for (PostResponseDTO postResponseDTO : result.getDtoList()) {
             System.out.println(postResponseDTO);
@@ -69,7 +68,7 @@ class PostServiceTest {
 
     @Test
     void get() {
-        PostResponseDTO postResponseDTO = postService.get(37L);
+        PostResponseDTO postResponseDTO = postService.getPost(37L, true);
         System.out.println(postResponseDTO);
     }
 
@@ -80,13 +79,13 @@ class PostServiceTest {
 
     @Test
     void modify() {
-        EditPostRequestDTO editPostRequestDTO = EditPostRequestDTO.builder()
+        PostEditRequestDTO postEditRequestDTO = PostEditRequestDTO.builder()
                 .postNo(99L)
                 .title("title 수정")
                 .content("content 수정")
                 .build();
 
-        postService.edit(editPostRequestDTO);
+        postService.edit(postEditRequestDTO);
     }
 
 }

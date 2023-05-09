@@ -9,7 +9,7 @@ import org.springframework.data.domain.Sort;
 @AllArgsConstructor
 @Getter @Setter
 @ToString
-public class PageRequestDTO {
+public class PostPageRequestDTO {
 
     private int page; //현재 페이지
     private int size; //현재 페이지 게시글 개수
@@ -19,7 +19,7 @@ public class PageRequestDTO {
     /**
      * 1페이지, 10개 게시글로 초기화
      */
-    public PageRequestDTO() {
+    public PostPageRequestDTO() {
         this.page = 1;
         this.size = 10;
     }
