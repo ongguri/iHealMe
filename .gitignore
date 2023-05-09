@@ -19,6 +19,8 @@ bin/
 !**/src/test/**/bin/
 
 ### IntelliJ IDEA ###
+application-ihealme.properties
+
 .idea
 *.iws
 *.iml
@@ -36,5 +38,3 @@ out/
 
 ### VS Code ###
 .vscode/
-
-/src/main/resources/application.properties
