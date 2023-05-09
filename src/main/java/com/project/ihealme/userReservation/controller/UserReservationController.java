@@ -34,9 +34,16 @@ public class UserReservationController {
         return "redirect:/userReservation";
     }
 
-    @GetMapping("/community/writePost")
+    /*@GetMapping("/community/writePost")
     public String writePostPage() {
         return "community/writePost";
-    }
+    }*/
 
+    @GetMapping("/community/writePost")
+    public String writePostPage(Model model) {
+        model.addAttribute("userId", 1);
+        model.addAttribute("resNo", 3);
+
+        return "community/writePost";
+    }
 }

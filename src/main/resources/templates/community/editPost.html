@@ -12,14 +12,15 @@
 
 <div class="container">
     <form action="post.html" th:action method="post">
-        <input type="hidden" name="page" th:value="${pageRequestDTO.page}" value="1">
+        <input type="hidden" name="page" th:value="${postPageRequestDTO.page}" value="1">
+        <input type="hidden" name="hitCountNotChanged" th:value="true" value="true">
 
         <h4 class="head">후기 수정</h4>
         <div class="buttons">
-            <button type="submit" class="btn btn-secondary btn-md">수정</button>
-            <button type="button" class="btn btn-secondary btn-md"
+            <button type="submit" class="btn btn-secondary btn-md editBtn">수정</button>
+            <button type="button" class="btn btn-secondary btn-md cancelBtn"
                     onclick="location.href='posts.html'"
-                    th:onclick="|location.href='@{/community/{postNo}(postNo=${dto.postNo},page=${pageRequestDTO.page},type=${pageRequestDTO.type},keyword=${pageRequestDTO.keyword})}'|">취소</button>
+                    th:onclick="|location.href='@{/community/{postNo}(postNo=${dto.postNo},page=${postPageRequestDTO.page},type=${postPageRequestDTO.type},keyword=${postPageRequestDTO.keyword})}'|">취소</button>
         </div>
         <hr>
         <div class="mb-3">
