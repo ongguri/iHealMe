@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface ReservationRepository extends JpaRepository<UserReservation, Long> {
 
-    UserReservation findByEmailAndCurrentStatus(String userEmail, String currentStatus);
+    UserReservation findByEmailAndCurrentStatus(String Email, String currentStatus);
 }
