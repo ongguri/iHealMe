@@ -26,7 +26,7 @@
                 <td th:text="${dto.postNo}">게시글 번호</td>
                 <td th:text="${dto.hptName}">병원명</td>
                 <td><a href="post.html"
-                       th:href="@{/community/{postNo}(postNo=${dto.postNo},page=${pageRequestDTO.page},type=${pageRequestDTO.type},keyword=${pageRequestDTO.keyword})}"
+                       th:href="@{/community/{postNo}(postNo=${dto.postNo},page=${postPageRequestDTO.page},type=${postPageRequestDTO.type},keyword=${postPageRequestDTO.keyword})}"
                        th:text="${dto.title}">제목</a>
                     <span th:text="|[${dto.commentCount}]|" style="color: red">[댓글수]</span>
                 </td>
@@ -42,16 +42,16 @@
         <li class="page-item" th:if="${result.prev}">
             <a class="page-link"
                th:href="@{/community(page=${result.start - 1},
-                   type=${pageRequestDTO.type},
-                   keyword=${pageRequestDTO.keyword})}" tabindex="-1">이전</a>
+                   type=${postPageRequestDTO.type},
+                   keyword=${postPageRequestDTO.keyword})}" tabindex="-1">이전</a>
         </li>
 
         <li th:class="'page-item ' + ${result.currentPage == page ? 'active' : ''}"
             th:each="page : ${result.pageList}">
             <a class="page-link"
                th:href="@{/community(page=${page},
-                   type=${pageRequestDTO.type},
-                   keyword=${pageRequestDTO.keyword})}">
+                   type=${postPageRequestDTO.type},
+                   keyword=${postPageRequestDTO.keyword})}">
                 [[${page}]]
             </a>
         </li>
@@ -59,8 +59,8 @@
         <li class="page-item" th:if="${result.next}">
             <a class="page-link"
                th:href="@{/community(page = ${result.end + 1},
-                   type=${pageRequestDTO.type},
-                   keyword=${pageRequestDTO.keyword})}">다음</a>
+                   type=${postPageRequestDTO.type},
+                   keyword=${postPageRequestDTO.keyword})}">다음</a>
         </li>
     </ul>
     <!-- 페이징 -->
@@ -69,12 +69,12 @@
     <form>
         <input type="hidden" name="page" value="1">
         <select class="form-select" aria-label="Default select example" name="type">
-            <option value="" th:selected="${pageRequestDTO.type == null}">------</option>
-            <option value="h" th:selected="${pageRequestDTO.type == 'h'}">병원명</option>
-            <option value="t" th:selected="${pageRequestDTO.type == 't'}">제목</option>
-            <option value="u" th:selected="${pageRequestDTO.type == 'u'}">작성자</option>
+            <!--<option value="" th:selected="${postPageRequestDTO.type == null}">&#45;&#45;&#45;&#45;&#45;&#45;</option>-->
+            <option value="h" th:selected="${postPageRequestDTO.type == 'h' || postPageRequestDTO.type == null}">병원명</option>
+            <option value="t" th:selected="${postPageRequestDTO.type == 't'}">제목</option>
+            <option value="u" th:selected="${postPageRequestDTO.type == 'u'}">작성자</option>
         </select>
-        <input type="text" class="form-control" name="keyword" th:value="${pageRequestDTO.keyword}" placeholder="검색어를 입력하세요.">
+        <input type="text" class="form-control" name="keyword" th:value="${postPageRequestDTO.keyword}" placeholder="검색어를 입력하세요.">
         <button type="submit" class="btn btn-secondary btn-sm">검색하기</button>
     </form>
     <!-- 검색 -->

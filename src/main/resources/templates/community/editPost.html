@@ -12,14 +12,18 @@
 
 <div class="container">
     <form action="post.html" th:action method="post">
-        <input type="hidden" name="page" th:value="${pageRequestDTO.page}" value="1">
+        <input type="hidden" name="page" th:value="${postPageRequestDTO.page}" value="1">
 
         <h4 class="head">후기 수정</h4>
         <div class="buttons">
             <button type="submit" class="btn btn-secondary btn-md">수정</button>
             <button type="button" class="btn btn-secondary btn-md"
                     onclick="location.href='posts.html'"
-                    th:onclick="|location.href='@{/community/{postNo}(postNo=${dto.postNo},page=${pageRequestDTO.page},type=${pageRequestDTO.type},keyword=${pageRequestDTO.keyword})}'|">취소</button>
+                    th:onclick="|location.href='@{/community/{postNo}(postNo=${dto.postNo},page=${postPageRequestDTO.page},type=${postPageRequestDTO.type},keyword=${postPageRequestDTO.keyword})}'|">취소</button>
+            <!--<button type="button" class="btn btn-secondary btn-md"
+                    onclick="submitFormWithParam()"
+                    th:onclick="submitFormWithParam([[${dto.postNo}]], [[${postPageRequestDTO.page}]], , )">취소</button>
+                    &lt;!&ndash;th:onclick="[[|submitFormWithParam(${dto.postNo}, ${postPageRequestDTO.page}, ${postPageRequestDTO.type}, ${postPageRequestDTO.keyword})|]]">취소</button>&ndash;&gt;-->
         </div>
         <hr>
         <div class="mb-3">
@@ -31,5 +35,33 @@
         </div>
     </form>
 </div>
+
+<!--<script>
+    function submitFormWithParam() {
+        var postNo = arguments[0];
+        var page = arguments[1];
+        var type = arguments[2];
+        var keyword = arguments[3];
+
+        // Create a new form element
+        var form = document.createElement("form");
+        form.setAttribute("method", "POST");
+        form.setAttribute("action", "/cancel");
+
+        // Create a hidden input field for the parameter value
+        var input = document.createElement("input");
+        input.setAttribute("type", "hidden");
+        input.setAttribute("name", "hitCountNotChanged");
+        input.setAttribute("value", "true");
+
+        // Add the input field to the form
+        form.appendChild(input);
+
+        // Submit the form
+        document.body.appendChild(form);
+        form.submit();
+    }
+</script>-->
+
 </body>
 </html>

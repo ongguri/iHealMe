@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+  <script th:src="@{/js/comment.js}"></script>
+</head>
+<body>
+<th:block th:replace="~{/layout/basic :: setContent(~{this::content} )}">
+  <th:block th:fragment="content">
+    <div class="comment">
+      <h4 class="comment-title">댓글<span class="comment-count">(7)</span></h4>
+      <h5><span class="badge badge-info addComment">댓글 등록하기</span></h5>
+      <hr>
+      <div class="commentList">
+
+      </div>
+
+      <hr>
+
+      <div class="modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Modal title</h5>
+
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true"></span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <div class="form-group">
+                <label>
+                  <input class="form-control"  type="text" name="commentContent" placeholder="댓글을 입력해보세요.">
+                  <input type="hidden" name="commNo" >
+                </label>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary btn-danger commentDelete">Remove</button>
+              <button type="button" class="btn btn-secondary btn-warning commentUpdate">Modify</button>
+              <button type="button" class="btn btn-secondary btn-primary commentSave">Save</button>
+              <button type="button" class="btn btn-secondary btn-outline-secondary commentClose" data-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!--<form class="comment-form">
+          <label for="comment-content"></label>
+          <textarea id="comment-content" class="comment-content" rows="2" cols="60%" required
+                    placeholder="댓글을 입력해보세요."></textarea> &nbsp;&nbsp;
+          <button type="button" id="btn-comment-save" class="btn btn-secondary btn-sm"
+                  onclick="saveComment();">등록
+          </button>
+          <input type="hidden" id="postNo" th:value="${dto.postNo}"/>
+      </form>-->
+    </div>
+    <hr>
+
+  </th:block>
+</th:block>
+</body>
+</html>

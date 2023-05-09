@@ -1,20 +1,20 @@
 package com.project.ihealme.community.dto;
 
-import com.project.ihealme.community.domain.User;
 import com.project.ihealme.community.domain.Post;
+import com.project.ihealme.user.entity.User;
+import com.project.ihealme.userReservation.domain.UserReservation;
+import com.querydsl.core.annotations.QueryProjection;
 import lombok.*;
 
 import java.time.LocalDateTime;
 
 @Builder
 @NoArgsConstructor
-@AllArgsConstructor
 @Getter @Setter
 @ToString
 public class PostResponseDTO {
 
     private Long postNo;
-    private int resNo;
     private String hptName;
     private String title;
     private String content;
@@ -24,18 +24,56 @@ public class PostResponseDTO {
     private int report;
     private int commentCount;
 
-    public Post toEntity(PostResponseDTO postResponseDTO, User user) {
-        Post post = Post.builder()
-                .postNo(postResponseDTO.getPostNo())
-                .resNo(postResponseDTO.getResNo())
-                .user(user)
-                .hptName(postResponseDTO.getHptName())
-                .title(postResponseDTO.getTitle())
-                .content(postResponseDTO.getContent())
-                .hit(postResponseDTO.getHit())
-                .report(postResponseDTO.getReport())
-                .build();
+/*    public PostResponseDTO(Post post, User user, UserReservation userReservation, int commentCount) {
+        this.postNo = post.getPostNo();
+        this.hptName = userReservation.getHptName();
+        this.title = post.getTitle();
+        this.content = post.getContent();
+        this.regDate = post.getRegdate();
+        this.hit = post.getHit();
+        this.report = post.getReport();
+        this.userEmail = encodeUserEmail(user);
+        this.commentCount = commentCount;
+    }*/
 
-        return post;
+    public PostResponseDTO(Post post, User user, UserReservation userReservation) {
+        this.postNo = post.getPostNo();
+        this.hptName = userReservation.getName();
+        this.title = post.getTitle();
+        this.content = post.getContent();
+        this.regDate = post.getRegdate();
+        this.hit = post.getHit();
+        this.report = post.getReport();
+        this.userEmail = encodeUserEmail(user);
+        this.commentCount = post.getComments().size();
+    }
+
+    public PostResponseDTO(Post post) {
+        this.postNo = post.getPostNo();
+        this.hptName = post.getUserReservation().getName();
+        this.title = post.getTitle();
+        this.content = post.getContent();
+        this.regDate = post.getRegdate();
+        this.hit = post.getHit();
+        this.report = post.getReport();
+        this.userEmail = encodeUserEmail(post.getUser());
+        this.commentCount = post.getComments().size();
+    }
+
+    @QueryProjection
+    public PostResponseDTO(Long postNo, String hptName, String title, String content, String userEmail, LocalDateTime regDate, int hit, int report, int commentCount) {
+        this.postNo = postNo;
+        this.hptName = hptName;
+        this.title = title;
+        this.content = content;
+        this.userEmail = userEmail;
+        this.regDate = regDate;
+        this.hit = hit;
+        this.report = report;
+        this.commentCount = commentCount;
+    }
+
+    private String encodeUserEmail(User user) {
+        return user.getEmail().substring(0, 3).concat("****");
     }
 }

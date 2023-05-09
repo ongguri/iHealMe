@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
@@ -26,15 +27,23 @@ public class UserReservationController {
         return "reservation/userReservation";
     }
 
-    @GetMapping("/userResCancelUpdate")
+    @PostMapping("/userResCancelUpdate")
     public String userResUpdate(UserReservation userReservation) {
         Long user = userReservationService.updateStatus(userReservation);
 //        System.out.println("user = " + user);
         return "redirect:/userReservation";
     }
 
-    @GetMapping("/community/writePost")
+    /*@GetMapping("/community/writePost")
     public String writePostPage() {
+        return "community/writePost";
+    }*/
+
+    @GetMapping("/community/writePost")
+    public String writePostPage(Model model) {
+        model.addAttribute("userId", 1);
+        model.addAttribute("resNo", 3);
+
         return "community/writePost";
     }
 }

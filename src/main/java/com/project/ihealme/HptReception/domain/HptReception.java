@@ -15,8 +15,8 @@ public class HptReception {
         @GeneratedValue(strategy = GenerationType.SEQUENCE)
         private int resNo;
 
-        @Column(name = "REPEMAIL", length = 50)
-        private String repEmail;
+        @Column(name = "EMAIL", length = 50)
+        private String email;
 
         @Column(name = "PNAME", length = 20)
         private String pName;
