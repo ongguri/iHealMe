@@ -103,6 +103,5 @@ configurations {
     }
     querydsl.extendsFrom compileClasspath
 }
-
 targetCompatibility = JavaVersion.VERSION_11
 
