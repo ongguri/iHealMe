@@ -21,7 +21,7 @@ class PostRepositoryTest {
     private PostRepository postRepository;
 
     @Autowired
-    private UserRepository userRepository;
+    private UserTempRepository userTempRepository;
 
     @Test
     void insertPosts() {
@@ -30,7 +30,7 @@ class PostRepositoryTest {
                     .userEmail("user" + i + "@naver.com")
                     .build();
 
-            userRepository.save(user);
+            userTempRepository.save(user);
         });
 
         LongStream.rangeClosed(1L, 101L).forEach(i -> {

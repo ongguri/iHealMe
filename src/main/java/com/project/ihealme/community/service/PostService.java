@@ -4,7 +4,7 @@ import com.project.ihealme.community.domain.User;
 import com.project.ihealme.community.domain.Post;
 import com.project.ihealme.community.dto.*;
 import com.project.ihealme.community.repository.PostRepository;
-import com.project.ihealme.community.repository.UserRepository;
+import com.project.ihealme.community.repository.UserTempRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -19,10 +19,10 @@ import java.util.function.Function;
 public class PostService {
 
     private final PostRepository postRepository;
-    private final UserRepository userRepository;
+    private final UserTempRepository userTempRepository;
 
     public Long write(InsertPostRequestDTO insertPostRequestDTO) {
-        User user = userRepository.findByUserEmail(insertPostRequestDTO.getUserEmail());
+        User user = userTempRepository.findByUserEmail(insertPostRequestDTO.getUserEmail());
 
         Post post = insertPostRequestDTO.toEntity(user);
         Post savedPost = postRepository.save(post);

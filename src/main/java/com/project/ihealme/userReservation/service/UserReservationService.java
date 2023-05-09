@@ -20,15 +20,15 @@ public class UserReservationService {
 
     public Long updateStatus(UserReservation userReservation) {
 
-        userReservation.setUserEmail("longlee@daum.net");
+        userReservation.setEmail("longlee@daum.net");
         userReservation.setCurrentStatus("진료 전");
         // test를 위해 값을 임의로 넣음. 원래대로라면 이메일은 로그인 정보를 가져옴
 
         UserReservation userRes = reservationRepository.findByUserEmailAndCurrentStatus(
-                userReservation.getUserEmail(), userReservation.getCurrentStatus());
+                userReservation.getEmail(), userReservation.getCurrentStatus());
 
         reservationRepository.save(userRes.toEntity(userRes));
 
-        return userRes.getResNo();
+        return userRes.getNo();
     }
 }

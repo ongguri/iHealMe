@@ -18,7 +18,7 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     Object findPostWithUser(@Param("postNo") Long postNo);
 
     /**
-     * 임시 화면에 필요한 데이터: Post, User
+     * 임시 화면에 필요한 데이터: Post, UserEntity
      */
     @Query(value = "select p, u from Post p left join p.user u",
             countQuery = "select count(p) from Post p")
@@ -43,7 +43,7 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 
 
     /**
-     * 나중에 사용할 목록 화면에 필요한 데이터: Post, User, Comment
+     * 나중에 사용할 목록 화면에 필요한 데이터: Post, UserEntity, Comment
      */
     /*@Query(value = "select p, u, count(c) from Post p " +
             "left join p.user u " +
