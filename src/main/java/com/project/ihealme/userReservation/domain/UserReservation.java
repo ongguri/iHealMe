@@ -17,17 +17,17 @@ public class UserReservation extends BaseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "RESNO_GEN")
     @SequenceGenerator(sequenceName = "USERRESERVATION_NO_SEQ", name = "RESNO_GEN", allocationSize = 1)
-    @Column(name = "RESNO")
-    private Long resNo;
+    @Column(name = "NO")
+    private Long no;
 
-    @Column(name = "USEREMAIL", updatable=false)
-    private String userEmail;
+    @Column(name = "EMAIL", updatable=false)
+    private String email;
 
-    @Column(name = "HPTNAME", updatable=false)
-    private String hptName;
+    @Column(name = "NAME", updatable=false)
+    private String name;
 
-    @Column(name = "TXLIST", updatable=false)
-    private String txList;
+    @Column(name = "LIST", updatable=false)
+    private String list;
 
     @Column(name = "CURRENTSTATUS")
     @ColumnDefault("'접수 대기'")
@@ -35,7 +35,7 @@ public class UserReservation extends BaseEntity{
 
     public UserReservation toEntity(UserReservation userRes) {
         UserReservation userReservation = userRes.builder()
-                .resNo(resNo)
+                .no(no)
                 .currentStatus("접수 취소")
                 .build();
         return userReservation;

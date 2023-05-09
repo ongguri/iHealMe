@@ -25,9 +25,9 @@
                 </thead>
                 <tbody>
                 <tr th:each="reservationInfo : ${session.userReservationList}">
-                            <td th:text="${reservationInfo.resNo}"></td>
-                            <td th:text="${reservationInfo.hptName}"></td>
-                            <td th:text="${reservationInfo.txList}"></td>
+                            <td th:text="${reservationInfo.no}"></td>
+                            <td th:text="${reservationInfo.name}"></td>
+                            <td th:text="${reservationInfo.list}"></td>
                             <td th:text="${#temporals.format(reservationInfo.regdate, 'yyyy-MM-dd HH:mm:ss')}"></td>
                             <td th:text="${reservationInfo.currentStatus}"></td>
                             <td>
