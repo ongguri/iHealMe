@@ -37,7 +37,7 @@
     margin: 0 30px;
   }
 
-  .user-button,
+  .userEntity-button,
   .hospital-button {
     display: flex;
     flex-direction: column;
@@ -52,19 +52,19 @@
     transition: all 0.3s ease-in-out;
   }
 
-  .user-button:hover,
+  .userEntity-button:hover,
   .hospital-button:hover {
     background-color: skyblue;
     transform: scale(1.1);
   }
 
-  .user-button img,
+  .userEntity-button img,
   .hospital-button img {
     width: 100px;
     height: 100px;
   }
 
-  .user-button span,
+  .userEntity-button span,
   .hospital-button span {
     font-size: 2rem;
     margin-top: 20px;
@@ -81,16 +81,16 @@
   <h1>회원가입</h1>
   <div class="center">
     <div class="button-container">
-      <button  th:onclick="|location.href='@{signupuser}'|" class="user-button">
-        <img src="user-image.jpg" alt="user">
+      <button  th:onclick="|location.href='@{signupuser}'|" class="userEntity-button">
+        <img src="userEntity-image.jpg" alt="userEntity">
         <span>User</span>
       </button>
       <div class="description">
-        <p>Click here to register as a user.</p>
+        <p>Click here to register as a userEntity.</p>
       </div>
     </div>
     <div class="button-container">
-      <button  th:onclick="|location.href='@{signuphospital}'|" class="user-button">
+      <button  th:onclick="|location.href='@{signuphospital}'|" class="userEntity-button">
         <img src="hospital-image.jpg" alt="hospital">
         <span>Hospital</span>
       </button>

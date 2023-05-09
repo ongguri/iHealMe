@@ -5,7 +5,7 @@ import com.project.ihealme.community.domain.Post;
 import com.project.ihealme.community.dto.*;
 import com.project.ihealme.community.repository.CommentRepository;
 import com.project.ihealme.community.repository.PostRepository;
-import com.project.ihealme.community.repository.UserRepository;
+import com.project.ihealme.community.repository.UserTempRepository;
 import com.project.ihealme.userReservation.domain.UserReservation;
 import com.project.ihealme.userReservation.repository.ReservationRepository;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +21,7 @@ public class PostService {
 
     private final PostRepository postRepository;
     private final CommentRepository commentRepository;
-    private final UserRepository userRepository;
+    private final UserTempRepository userRepository;
     private final ReservationRepository userReservationRepository;
 
     @Transactional

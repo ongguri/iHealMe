@@ -1,12 +1,12 @@
 package com.project.ihealme.user.repository;
 
-import com.project.ihealme.user.entity.User;
+import com.project.ihealme.user.entity.UserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface UserRepository extends JpaRepository<User, Long> {
-    User findByEmail(String email);
+public interface UserRepository extends JpaRepository<UserEntity, Long> {
+    UserEntity findByEmail(String email);
 
-    User findByEmailAndPassword(String email, String password);
+    UserEntity findByEmailAndPassword(String email, String password);
 }

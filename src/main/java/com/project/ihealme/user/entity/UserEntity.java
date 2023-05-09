@@ -17,13 +17,13 @@ import java.util.Set;
 @AllArgsConstructor
 @Getter
 @Entity
-public class User implements UserDetails {
+public class UserEntity implements UserDetails {
 
     // 이름, 이메일, 연락처, 생년월일, 성별, 비밀번호, 질문, 답
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column
+    @Id @Column
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "USER_GEN")
+    @SequenceGenerator(sequenceName = "USER_USERNO_SEQ", name = "USER_GEN", allocationSize = 1)
     private Long userId;
 
     @Column
@@ -67,7 +67,7 @@ public class User implements UserDetails {
     private String hptPhoneNum;
 
     @Builder
-    private User(String password, UserRole userRole, String email) {
+    private UserEntity(String password, UserRole userRole, String email) {
         this.password = password;
         this.userRole = userRole;
         this.email = email;
