@@ -77,4 +77,5 @@ public class KakaoMapsController {
         return "maps/maps1";
         //return resultMap;
     }
+
 }

@@ -19,4 +19,5 @@ public class KakaoMapsDto {
     private String categoryGroupName;
     private String x;
     private String y;
+
 }

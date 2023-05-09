@@ -53,3 +53,4 @@ public class KakaoMapsEntity {
     @Column(name = "y", length = 30, nullable = false)
     private String y;
 }
+
