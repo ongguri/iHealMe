@@ -1,20 +1,16 @@
 package com.project.ihealme.userReservation.repository;
 
 import com.project.ihealme.userReservation.domain.UserReservation;
-
-import javax.persistence.EntityManager;
+import org.springframework.beans.factory.annotation.Autowired;
 import java.util.List;
 
-public class UserReservationRepository implements ReservationRepository{
+public class UserReservationRepository {
 
-    private final EntityManager em;
+//    @Autowired
+//    private ReservationRepository reservationRepository;
+//
+//    public List<UserReservation> getUserReservation() {
+//        return reservationRepository.findAll();
+//    }
 
-    public UserReservationRepository(EntityManager em) {
-        this.em = em;
-    }
-
-    @Override
-    public List<UserReservation> findAll() {
-        return em.createQuery("SELECT u FROM UserReservation u", UserReservation.class).getResultList();
-    }
 }
