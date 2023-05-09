@@ -6,14 +6,14 @@ import com.project.ihealme.community.dto.*;
 import com.project.ihealme.community.repository.CommentRepository;
 import com.project.ihealme.community.repository.PostRepository;
 import com.project.ihealme.community.repository.UserRepository;
+import com.project.ihealme.userReservation.domain.UserReservation;
+import com.project.ihealme.userReservation.repository.ReservationRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -22,28 +22,33 @@ public class PostService {
     private final PostRepository postRepository;
     private final CommentRepository commentRepository;
     private final UserRepository userRepository;
+    private final ReservationRepository userReservationRepository;
 
     @Transactional
     public Long writePost(PostWriteRequestDTO postWriteRequestDTO) {
         Long userId = postWriteRequestDTO.getUserId();
+        Long resNo = postWriteRequestDTO.getResNo();
+
         User user = userRepository.findById(userId)
                 .orElseThrow(()-> new IllegalArgumentException("해당 유저가 없습니다. userId =" + userId));
 
-        Post post = postWriteRequestDTO.toEntity(user);
+        UserReservation userReservation = userReservationRepository.findById(resNo)
+                .orElseThrow(()-> new IllegalArgumentException("해당 접수가 없습니다. resNo =" + resNo));
+
+        Post post = Post.create(postWriteRequestDTO, user, userReservation);
         Post savedPost = postRepository.save(post);
 
         return savedPost.getPostNo();
     }
 
-    @Transactional
     public PostPageResponseDTO getPostList(PostPageRequestDTO postPageRequestDTO) {
-        Page<Object[]> result = null;
+        Page<Post> result = null;
 
         String type = postPageRequestDTO.getType();
         Pageable pageable = postPageRequestDTO.getPageable(Sort.by("postNo").descending());
 
         if (type == null || type.equals("")) {
-            result = postRepository.findPostAndUserByPage(pageable);
+            result = postRepository.findAllByPage(pageable);
         } else {
             String keyword = postPageRequestDTO.getKeyword();
 
@@ -69,21 +74,13 @@ public class PostService {
 
     @Transactional
     public PostResponseDTO getPost(Long postNo, boolean addHitCount) {
-        List<Object[]> results = postRepository.findPostAndUserByPostNo(postNo);
-
-        Post post = null;
-        User user = null;
-
-        for (Object[] result : results) {
-            post = (Post) result[0];
-            user = (User) result[1];
-        }
+        Post post = postRepository.findByPostNo(postNo);
 
         if (addHitCount) {
             post.addHitCount();
         }
 
-        PostResponseDTO postResponseDTO = new PostResponseDTO(post, user, post.getComments().size());
+        PostResponseDTO postResponseDTO = new PostResponseDTO(post);
 
         return postResponseDTO;
     }

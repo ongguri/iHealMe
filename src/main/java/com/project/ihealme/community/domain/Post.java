@@ -1,6 +1,7 @@
 package com.project.ihealme.community.domain;
 
 import com.project.ihealme.community.dto.PostWriteRequestDTO;
+import com.project.ihealme.userReservation.domain.UserReservation;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 
@@ -12,9 +13,9 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString(exclude = "user")
+@ToString/*(exclude = {"user", "userReservation"})*/
 @Entity
-public class Post extends BaseTimeEntity {
+public class Post extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "POSTNO_GEN")
@@ -22,34 +23,18 @@ public class Post extends BaseTimeEntity {
     @Column(name = "POSTNO")
     private Long postNo;
 
-//    @OneToOne(fetch = FetchType.LAZY)
-//    @JoinColumns({
-//            @JoinColumn(name = "resNo", referencedColumnName = "resNo"),
-//            @JoinColumn(name = "hptName", referencedColumnName = "hptName")
-//    })
-//    private UserReservation userReservation;
-
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "userId")
+    @JoinColumn(name = "USERID")
     private User user;
 
-//    @OneToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "resNo")
-//    private Reservation reservation;
-
-    @Column(name = "RESNO", nullable = false)
-    private int resNo;
-
-    @Column(name = "HPTNAME", nullable = false)
-    private String hptName;
-
-//    @Column(nullable = false)
-//    private String userEmail;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "RESNO")
+    private UserReservation userReservation;
 
     @Column(nullable = false, length = 100)
     private String title;
 
-    @Column(length = 4000)
+    @Lob
     private String content;
 
     @ColumnDefault("0")
@@ -58,14 +43,13 @@ public class Post extends BaseTimeEntity {
     @ColumnDefault("0")
     private int report;
 
-    @OneToMany(mappedBy = "post", orphanRemoval = true)
+    @OneToMany(mappedBy = "post", orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Comment> comments = new ArrayList<>();
 
-    public static Post create(PostWriteRequestDTO postWriteRequestDTO, User user) {
+    public static Post create(PostWriteRequestDTO postWriteRequestDTO, User user, UserReservation userReservation) {
         Post post = Post.builder()
                 .user(user)
-                .resNo(postWriteRequestDTO.getResNo())
-                .hptName(postWriteRequestDTO.getHptName())
+                .userReservation(userReservation)
                 .title(postWriteRequestDTO.getTitle())
                 .content(postWriteRequestDTO.getContent())
                 .build();

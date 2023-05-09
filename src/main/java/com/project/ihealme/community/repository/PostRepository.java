@@ -13,25 +13,45 @@ import java.util.List;
 @Repository
 public interface PostRepository extends JpaRepository<Post, Long> {
 
-    @Query("select distinct p, u from Post p " +
-            "left join p.user u " +
+    @Query("SELECT DISTINCT p FROM Post p "
+            + "LEFT JOIN FETCH p.userReservation "
+            + "LEFT JOIN FETCH p.user "
+            + "LEFT JOIN FETCH p.comments " +
             "where p.postNo =:postNo")
-    List<Object[]> findPostAndUserByPostNo(@Param("postNo") Long postNo);
+    Post findByPostNo(@Param("postNo") Long postNo);
 
-    @Query("select distinct p, u from Post p " +
-            "left join p.user u ")
-    Page<Object[]> findPostAndUserByPage(Pageable pageable);
+    @Query(value = "SELECT DISTINCT p FROM Post p "
+            + "LEFT JOIN FETCH p.userReservation "
+            + "LEFT JOIN FETCH p.user "
+            + "LEFT JOIN FETCH p.comments ",
+            countQuery = "select count(p) from Post p")
+    Page<Post> findAllByPage(Pageable pageable);
 
     /**
      * 검색
      */
-    @Query("select p, u from Post p left join p.user u where p.hptName like %:hptName%")
-    Page<Object[]> findByHptNameContaining(@Param("hptName") String hptName, Pageable pageable);
+    @Query(value = "SELECT DISTINCT p FROM Post p "
+            + "LEFT JOIN FETCH p.userReservation r "
+            + "LEFT JOIN FETCH p.user "
+            + "LEFT JOIN FETCH p.comments "
+            + "WHERE r.hptName like %:hptName%",
+            countQuery = "select count(p) from Post p")
+    Page<Post> findByHptNameContaining(@Param("hptName") String hptName, Pageable pageable);
 
-    @Query("select p, u from Post p left join p.user u where p.title like %:title%")
-    Page<Object[]> findByTitleContaining(@Param("title") String title, Pageable pageable);
+    @Query(value = "SELECT DISTINCT p FROM Post p "
+            + "LEFT JOIN FETCH p.userReservation "
+            + "LEFT JOIN FETCH p.user "
+            + "LEFT JOIN FETCH p.comments "
+            + "WHERE p.title like %:title%",
+            countQuery = "select count(p) from Post p")
+    Page<Post> findByTitleContaining(@Param("title") String title, Pageable pageable);
 
-    @Query("select p, u from Post p left join p.user u where u.userEmail like %:userEmail%")
-    Page<Object[]> findByUserEmailContaining(@Param("userEmail") String userEmail, Pageable pageable);
+    @Query(value = "SELECT DISTINCT p FROM Post p "
+            + "LEFT JOIN FETCH p.userReservation "
+            + "LEFT JOIN FETCH p.user u "
+            + "LEFT JOIN FETCH p.comments "
+            + "WHERE u.userEmail like %:userEmail%",
+            countQuery = "select count(p) from Post p")
+    Page<Post> findByUserEmailContaining(@Param("userEmail") String userEmail, Pageable pageable);
 
 }

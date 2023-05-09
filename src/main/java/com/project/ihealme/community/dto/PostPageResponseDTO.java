@@ -2,6 +2,7 @@ package com.project.ihealme.community.dto;
 
 import com.project.ihealme.community.domain.Post;
 import com.project.ihealme.community.domain.User;
+import com.project.ihealme.userReservation.domain.UserReservation;
 import lombok.Getter;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -23,9 +24,9 @@ public class PostPageResponseDTO {
     private boolean prev, next; //이전, 다음
     private List<Integer> pageList; //페이지 번호 목록
 
-    public PostPageResponseDTO(Page<Object[]> result) {
-        Function<Object[], PostResponseDTO> fn
-                = (en -> new PostResponseDTO((Post) en[0], (User) en[1]));
+    public PostPageResponseDTO(Page<Post> result) {
+        Function<Post, PostResponseDTO> fn
+                = (en -> new PostResponseDTO(en));
         dtoList = result.stream().map(fn).collect(Collectors.toList());
 
         totalPage = result.getTotalPages();

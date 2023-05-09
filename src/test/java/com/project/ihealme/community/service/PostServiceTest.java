@@ -17,7 +17,6 @@ class PostServiceTest {
     @Test
     void write() {
         PostWriteRequestDTO postWriteRequestDTO = PostWriteRequestDTO.builder()
-                .hptName("이지소아청소년과의원")
                 .title("title 테스트2")
                 .content("content 테스트2")
                 .userId(60L)

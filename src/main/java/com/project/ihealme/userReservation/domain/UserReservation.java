@@ -12,7 +12,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Getter @Setter
 @Table(name="USERRESERVATION")
-public class UserReservation extends BaseEntity{
+public class UserReservation extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "RESNO_GEN")

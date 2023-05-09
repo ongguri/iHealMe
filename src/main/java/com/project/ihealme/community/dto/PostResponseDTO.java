@@ -2,6 +2,7 @@ package com.project.ihealme.community.dto;
 
 import com.project.ihealme.community.domain.User;
 import com.project.ihealme.community.domain.Post;
+import com.project.ihealme.userReservation.domain.UserReservation;
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.*;
 
@@ -23,9 +24,9 @@ public class PostResponseDTO {
     private int report;
     private int commentCount;
 
-    public PostResponseDTO(Post post, User user, int commentCount) {
+/*    public PostResponseDTO(Post post, User user, UserReservation userReservation, int commentCount) {
         this.postNo = post.getPostNo();
-        this.hptName = post.getHptName();
+        this.hptName = userReservation.getHptName();
         this.title = post.getTitle();
         this.content = post.getContent();
         this.regDate = post.getRegdate();
@@ -33,17 +34,29 @@ public class PostResponseDTO {
         this.report = post.getReport();
         this.userEmail = encodeUserEmail(user);
         this.commentCount = commentCount;
-    }
+    }*/
 
-    public PostResponseDTO(Post post, User user) {
+    public PostResponseDTO(Post post, User user, UserReservation userReservation) {
         this.postNo = post.getPostNo();
-        this.hptName = post.getHptName();
+        this.hptName = userReservation.getHptName();
         this.title = post.getTitle();
         this.content = post.getContent();
         this.regDate = post.getRegdate();
         this.hit = post.getHit();
         this.report = post.getReport();
         this.userEmail = encodeUserEmail(user);
+        this.commentCount = post.getComments().size();
+    }
+
+    public PostResponseDTO(Post post) {
+        this.postNo = post.getPostNo();
+        this.hptName = post.getUserReservation().getHptName();
+        this.title = post.getTitle();
+        this.content = post.getContent();
+        this.regDate = post.getRegdate();
+        this.hit = post.getHit();
+        this.report = post.getReport();
+        this.userEmail = encodeUserEmail(post.getUser());
         this.commentCount = post.getComments().size();
     }
 

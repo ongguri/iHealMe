@@ -39,10 +39,10 @@ public class PostController {
         return "community/post";
     }
 
-    @GetMapping("/write")
+   /* @GetMapping("/write")
     public String writeForm() {
         return "community/writePost";
-    }
+    }*/
 
     @PostMapping("/write")
     public String writePost(@ModelAttribute PostWriteRequestDTO postWriteRequestDTO, RedirectAttributes redirectAttributes) {
@@ -97,6 +97,7 @@ public class PostController {
         redirectAttributes.addAttribute("page", postPageRequestDTO.getPage());
         redirectAttributes.addAttribute("type", postPageRequestDTO.getType());
         redirectAttributes.addAttribute("keyword", postPageRequestDTO.getKeyword());
+        redirectAttributes.addAttribute(postPageRequestDTO);
         redirectAttributes.addFlashAttribute("hitCountNotChanged", true);
         redirectAttributes.addFlashAttribute("message", "게시글을 신고하였습니다.");
 

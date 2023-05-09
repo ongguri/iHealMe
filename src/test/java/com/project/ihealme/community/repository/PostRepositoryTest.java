@@ -11,8 +11,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.stream.IntStream;
 import java.util.stream.LongStream;
 
@@ -40,8 +38,6 @@ class PostRepositoryTest {
 
             Post post = Post.builder()
                     .title("title" + i)
-                    .resNo((int) i)
-                    .hptName("새롬소아청소년과의원")
                     .user(user)
                     .content("content" + i)
                     .build();
@@ -49,23 +45,6 @@ class PostRepositoryTest {
             postRepository.save(post);
         });
 
-        /**
-         * INSERT INTO userreservation(useremail, hptname, txlist)
-         * VALUES ('longlee@daum.net', '새롬소아청년과의원', '영유아 검진');
-         *
-         *
-         * INSERT INTO userreservation(resno, useremail, hptname, txlist)
-         * VALUES (userreservation_no_seq.nextval, 'longlee@daum.net', '새롬소아청년과의원', '영유아 검진');
-         *
-         * INSERT INTO userreservation(resno, useremail, hptname, txlist, currentStatus)
-         * VALUES (userreservation_no_seq.nextval, 'longlee@daum.net', '새롬소아청년과의원', '영유아 검진', '진료 전');
-         *
-         * INSERT INTO userreservation(resno, useremail, hptname, txlist, currentStatus)
-         * VALUES (userreservation_no_seq.nextval, 'longlee@daum.net', '새롬소아청년과의원', '영유아 검진', '진료 완료');
-         *
-         * INSERT INTO userreservation(resno, useremail, hptname, txlist, currentStatus)
-         * VALUES (userreservation_no_seq.nextval, 'longlee@daum.net', '새롬소아청년과의원', '영유아 검진', '후기작성완료');
-         */
     }
 
     @Test
@@ -74,8 +53,6 @@ class PostRepositoryTest {
 
         Post post = Post.builder()
                 .title("제목")
-                .resNo((int) 103)
-                .hptName("새롬소아청소년과의원")
                 .user(user)
                 .content("내용용")
                 .build();
@@ -85,22 +62,12 @@ class PostRepositoryTest {
     }
 
     @Test
-    @Transactional
-    void findPostAndUserByPostNo() {
-        List<Object[]> results = postRepository.findPostAndUserByPostNo(101L);
-
-        Post post = null;
-        User user = null;
-
-        for (Object[] result : results) {
-            post = (Post) result[0];
-            user = (User) result[1];
-        }
+    void findByPostNo() {
+        Post post = postRepository.findByPostNo(3L);
 
         System.out.println(post);
-        System.out.println(user);
+        System.out.println(post.getUser());
     }
-
 
     @Test
     @Transactional
@@ -112,61 +79,58 @@ class PostRepositoryTest {
     }
 
     @Test
-    @Transactional
-    void findPostAndUserByPage() {
+    void findAllByPage() {
         Pageable pageable = PageRequest.of(0, 10, Sort.by("postNo").descending());
-        Page<Object[]> result = postRepository.findPostAndUserByPage(pageable);
+        Page<Post> result = postRepository.findAllByPage(pageable);
 
         result.get().forEach(row -> {
-            Object[] arr = (Object[]) row;
-            System.out.println(Arrays.toString(arr));
+            System.out.println(row);
+            System.out.println(row.getUser());
         });
+
+        System.out.println(result.getTotalElements());
+        System.out.println(result.getTotalPages());
     }
 
     @Test
     void findByHptNameContaining() {
         Pageable pageable = PageRequest.of(0, 10, Sort.by("postNo").descending());
-        Page<Object[]> result = postRepository.findByHptNameContaining("새롬", pageable);
+        Page<Post> result = postRepository.findByHptNameContaining("새롬", pageable);
 
         result.get().forEach(row -> {
-            Object[] arr = (Object[]) row;
-            System.out.println(Arrays.toString(arr));
+            System.out.println(row);
+            System.out.println(row.getUser());
         });
 
-        System.out.println(result.getTotalElements());
-        System.out.println(result.getTotalPages());
-//        assertThat(result.getTotalElements()).isEqualTo(100);
-//        assertThat(result.getTotalPages()).isEqualTo(10);
+        System.out.println("개수: " + result.getTotalElements());
+        System.out.println("페이지 수: " + result.getTotalPages());
     }
 
     @Test
-    @Transactional
     void findByTitleContaining() {
         Pageable pageable = PageRequest.of(0, 10, Sort.by("postNo").descending());
-        Page<Object[]> result = postRepository.findByTitleContaining("title", pageable);
+        Page<Post> result = postRepository.findByTitleContaining("1", pageable);
 
         result.get().forEach(row -> {
-            Object[] arr = (Object[]) row;
-            System.out.println(Arrays.toString(arr));
+            System.out.println(row);
+            System.out.println(row.getUser());
         });
 
-        System.out.println(result.getTotalElements());
-        System.out.println(result.getTotalPages());
+        System.out.println("개수: " + result.getTotalElements());
+        System.out.println("페이지 수: " + result.getTotalPages());
     }
 
     @Test
     void findByUserEmailContaining() {
         Pageable pageable = PageRequest.of(0, 10, Sort.by("postNo").descending());
-        Page<Object[]> result = postRepository.findByUserEmailContaining("55", pageable);
+        Page<Post> result = postRepository.findByUserEmailContaining("long", pageable);
 
         result.get().forEach(row -> {
-            Object[] arr = (Object[]) row;
-            System.out.println(Arrays.toString(arr));
+            System.out.println(row);
+            System.out.println(row.getUser());
         });
 
-        System.out.println(result.getTotalElements());
-        System.out.println(result.getTotalPages());
+        System.out.println("개수: " + result.getTotalElements());
+        System.out.println("페이지 수: " + result.getTotalPages());
     }
-
-
 }
