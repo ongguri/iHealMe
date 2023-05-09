@@ -17,8 +17,8 @@ public class KakaoMapsEntity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private String id;
 
-    @Column(name = "rep_Email", length = 50, nullable = false)
-    private String repEmail;
+    @Column(name = "email", length = 50, nullable = false)
+    private String email;
 
     @Column(name = "place_name", length = 100, nullable = false)
     private String placeName;

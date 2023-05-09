@@ -2,11 +2,12 @@ package com.project.ihealme.kakaoMaps.dto;
 
 import lombok.Data;
 
+
 @Data
 public class KakaoMapsDto {
 
     private String id;
-    private String repEmail;
+    private String email;
     private String placeName;
     private String distance;
     private String placeUrl;
