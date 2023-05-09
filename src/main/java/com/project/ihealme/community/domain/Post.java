@@ -29,7 +29,7 @@ public class Post extends BaseEntity {
     private User user;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "RESNO")
+    @JoinColumn(name = "RESNO", unique = true, nullable = false)
     private UserReservation userReservation;
 
     @Column(nullable = false, length = 100)
@@ -65,9 +65,5 @@ public class Post extends BaseEntity {
 
     public void addHitCount() {
         hit++;
-    }
-
-    public void addReportCount() {
-        report++;
     }
 }
