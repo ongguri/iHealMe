@@ -4,6 +4,7 @@ import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.data.annotation.CreatedDate;
+import com.project.ihealme.user.entity.User;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
