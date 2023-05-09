@@ -1,7 +1,7 @@
 package com.project.ihealme.community.dto;
 
-import com.project.ihealme.community.domain.User;
 import com.project.ihealme.community.domain.Post;
+import com.project.ihealme.user.entity.User;
 import com.project.ihealme.userReservation.domain.UserReservation;
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.*;
@@ -38,7 +38,7 @@ public class PostResponseDTO {
 
     public PostResponseDTO(Post post, User user, UserReservation userReservation) {
         this.postNo = post.getPostNo();
-        this.hptName = userReservation.getHptName();
+        this.hptName = userReservation.getName();
         this.title = post.getTitle();
         this.content = post.getContent();
         this.regDate = post.getRegdate();
@@ -50,7 +50,7 @@ public class PostResponseDTO {
 
     public PostResponseDTO(Post post) {
         this.postNo = post.getPostNo();
-        this.hptName = post.getUserReservation().getHptName();
+        this.hptName = post.getUserReservation().getName();
         this.title = post.getTitle();
         this.content = post.getContent();
         this.regDate = post.getRegdate();
@@ -74,6 +74,6 @@ public class PostResponseDTO {
     }
 
     private String encodeUserEmail(User user) {
-        return user.getUserEmail().substring(0, 3).concat("****");
+        return user.getEmail().substring(0, 3).concat("****");
     }
 }

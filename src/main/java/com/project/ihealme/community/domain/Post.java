@@ -1,6 +1,7 @@
 package com.project.ihealme.community.domain;
 
 import com.project.ihealme.community.dto.PostWriteRequestDTO;
+import com.project.ihealme.user.entity.User;
 import com.project.ihealme.userReservation.domain.UserReservation;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
@@ -13,7 +14,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString/*(exclude = {"user", "userReservation"})*/
+@ToString(exclude = {"user", "userReservation"})
 @Entity
 public class Post extends BaseEntity {
 

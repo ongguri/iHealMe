@@ -39,11 +39,6 @@ public class PostController {
         return "community/post";
     }
 
-   /* @GetMapping("/write")
-    public String writeForm() {
-        return "community/writePost";
-    }*/
-
     @PostMapping("/write")
     public String writePost(@ModelAttribute PostWriteRequestDTO postWriteRequestDTO, RedirectAttributes redirectAttributes) {
         Long postNo = postService.writePost(postWriteRequestDTO);
@@ -79,6 +74,13 @@ public class PostController {
         redirectAttributes.addFlashAttribute("message", "게시글을 수정하였습니다.");
 
         return "redirect:/community/{postNo}";
+    }
+
+    @PostMapping("/cancel")
+    public String cancel() {
+        System.out.println("cancel");
+
+        return "redirect:/community";
     }
 
     @PostMapping("/delete")

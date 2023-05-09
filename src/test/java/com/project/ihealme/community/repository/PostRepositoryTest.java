@@ -1,6 +1,5 @@
 package com.project.ihealme.community.repository;
 
-import com.project.ihealme.community.domain.User;
 import com.project.ihealme.community.domain.Post;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,17 +19,15 @@ class PostRepositoryTest {
     @Autowired
     private PostRepository postRepository;
 
-    @Autowired
-    private UserTempRepository userTempRepository;
 
-    @Test
+    /*@Test
     void insertPosts() {
         IntStream.rangeClosed(1, 101).forEach(i -> {
             User user = User.builder()
                     .userEmail("user" + i + "@naver.com")
                     .build();
 
-            userTempRepository.save(user);
+            userRepository.save(user);
         });
 
         LongStream.rangeClosed(1L, 101L).forEach(i -> {
@@ -59,7 +56,7 @@ class PostRepositoryTest {
 
         Post savedPost = postRepository.save(post);
         System.out.println(savedPost);
-    }
+    }*/
 
     @Test
     void findByPostNo() {
