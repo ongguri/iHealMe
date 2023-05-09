@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 @Controller
@@ -24,22 +25,22 @@ public class UserController {
 
     @GetMapping("login")
     public String login() {
-        return "users/login";
+        return "/users/login";
     }
 
     @GetMapping("type")
     public String chooseType() {
-        return "users/usertype";
+        return "/users/usertype";
     }
 
     @GetMapping("signupuser")
     public String signupUser() {
-        return "users/signupuser";
+        return "/users/signupuser";
     }
 
     @GetMapping("signuphospital")
     public String signupHospital() {
-        return "users/signuphospital";
+        return "/users/signuphospital";
     }
 
     @PostMapping("/signup")
@@ -64,7 +65,7 @@ public class UserController {
     @PostMapping("/login")
     public String login(UserRequest userRequest) {
         UserDTO users = usersService.findByEmailAndPassword(userRequest.getEmail(), userRequest.getPassword());
-        return jwtConfig.createToken(users.getEmail(), Arrays.asList(users.getUserRole().getValue()));
+        return jwtConfig.createToken(users.getEmail(), Collections.singletonList(users.getUserRole().getValue()));
     }
 
 }

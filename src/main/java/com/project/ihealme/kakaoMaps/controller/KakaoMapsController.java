@@ -31,9 +31,8 @@ public class KakaoMapsController {
     // @RequestBody : JSON 데이터를 전송하는 경우
 
     @GetMapping("/")
-    @ResponseBody
     public String Maps() {
-        return "maps/maps";
+        return "maps/kakaoMaps";
     }
 
     /*@GetMapping("/maps")
