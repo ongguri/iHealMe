@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>커뮤니티</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet"
-          integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+    integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
     <link rel="stylesheet" th:href="@{/css/community/posts.css}" href="../../css/community/posts.css">
     <link rel="stylesheet" th:href="@{/css/community/common.css}" href="../../css/community/common.css">
 </head>
@@ -12,28 +12,28 @@
 <div class="container">
     <table class="table table-striped">
         <thead>
-        <tr>
-            <th>No</th>
-            <th>병원명</th>
-            <th>제목</th>
-            <th>작성자</th>
-            <th>등록일</th>
-            <th>조회수</th>
-        </tr>
+            <tr>
+                <th>No</th>
+                <th>병원명</th>
+                <th>제목</th>
+                <th>작성자</th>
+                <th>등록일</th>
+                <th>조회수</th>
+            </tr>
         </thead>
         <tbody>
-        <tr th:each="dto : ${result.dtoList}">
-            <td th:text="${dto.postNo}">게시글 번호</td>
-            <td th:text="${dto.hptName}">병원명</td>
-            <td><a href="post.html"
-                   th:href="@{/community/{postNo}(postNo=${dto.postNo},page=${postPageRequestDTO.page},type=${postPageRequestDTO.type},keyword=${postPageRequestDTO.keyword})}"
-                   th:text="${dto.title}">제목</a>
-                <span th:text="|[${dto.commentCount}]|" style="color: red">[댓글수]</span>
-            </td>
-            <td th:text="${dto.userEmail}">작성자 이메일</td>
-            <td th:text="${#temporals.format(dto.regDate, 'yyyy/MM/dd')}">작성일</td>
-            <td th:text="${dto.hit}">조회수</td>
-        </tr>
+            <tr th:each="dto : ${result.dtoList}">
+                <td th:text="${dto.postNo}">게시글 번호</td>
+                <td th:text="${dto.hptName}">병원명</td>
+                <td><a href="post.html"
+                       th:href="@{/community/{postNo}(postNo=${dto.postNo},page=${postPageRequestDTO.page},type=${postPageRequestDTO.type},keyword=${postPageRequestDTO.keyword})}"
+                       th:text="${dto.title}">제목</a>
+                    <span th:text="|[${dto.commentCount}]|" style="color: red">[댓글수]</span>
+                </td>
+                <td th:text="${dto.userEmail}">작성자 이메일</td>
+                <td th:text="${#temporals.format(dto.regDate, 'yyyy/MM/dd')}">작성일</td>
+                <td th:text="${dto.hit}">조회수</td>
+            </tr>
         </tbody>
     </table>
 

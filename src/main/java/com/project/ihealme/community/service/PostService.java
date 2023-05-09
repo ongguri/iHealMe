@@ -3,8 +3,11 @@ package com.project.ihealme.community.service;
 import com.project.ihealme.community.domain.User;
 import com.project.ihealme.community.domain.Post;
 import com.project.ihealme.community.dto.*;
+import com.project.ihealme.community.repository.CommentRepository;
 import com.project.ihealme.community.repository.PostRepository;
 import com.project.ihealme.community.repository.UserRepository;
+import com.project.ihealme.userReservation.domain.UserReservation;
+import com.project.ihealme.userReservation.repository.ReservationRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -12,38 +15,42 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.function.Function;
-
 @Service
 @RequiredArgsConstructor
 public class PostService {
 
     private final PostRepository postRepository;
+    private final CommentRepository commentRepository;
     private final UserRepository userRepository;
+    private final ReservationRepository userReservationRepository;
 
-    public Long write(InsertPostRequestDTO insertPostRequestDTO) {
-        User user = userRepository.findByUserEmail(insertPostRequestDTO.getUserEmail());
+    @Transactional
+    public Long writePost(PostWriteRequestDTO postWriteRequestDTO) {
+        Long userId = postWriteRequestDTO.getUserId();
+        Long resNo = postWriteRequestDTO.getResNo();
 
-        Post post = insertPostRequestDTO.toEntity(user);
+        User user = userRepository.findById(userId)
+                .orElseThrow(()-> new IllegalArgumentException("해당 유저가 없습니다. userId =" + userId));
+
+        UserReservation userReservation = userReservationRepository.findById(resNo)
+                .orElseThrow(()-> new IllegalArgumentException("해당 접수가 없습니다. resNo =" + resNo));
+
+        Post post = Post.create(postWriteRequestDTO, user, userReservation);
         Post savedPost = postRepository.save(post);
 
         return savedPost.getPostNo();
     }
 
-    public PageResultDTO<PostResponseDTO, Object[]> getList(PageRequestDTO pageRequestDTO) {
+    public PostPageResponseDTO getPostList(PostPageRequestDTO postPageRequestDTO) {
+        Page<Post> result = null;
 
-        Function<Object[], PostResponseDTO> fn
-                = (en -> entityToDTO((Post) en[0], (User) en[1], 0)); //(int) en[2]
-
-        Page<Object[]> result = null;
-
-        String type = pageRequestDTO.getType();
-        Pageable pageable = pageRequestDTO.getPageable(Sort.by("postNo").descending());
+        String type = postPageRequestDTO.getType();
+        Pageable pageable = postPageRequestDTO.getPageable(Sort.by("postNo").descending());
 
         if (type == null || type.equals("")) {
-            result = postRepository.findPostWithUser(pageable);
+            result = postRepository.findAllByPage(pageable);
         } else {
-            String keyword = pageRequestDTO.getKeyword();
+            String keyword = postPageRequestDTO.getKeyword();
 
             switch (type) {
                 case "h":
@@ -58,26 +65,23 @@ public class PostService {
             }
         }
 
-        return new PageResultDTO<>(result, fn);
+        return new PostPageResponseDTO(result);
     }
 
-    public PostResponseDTO get(Long postNo) {
-        Object result = postRepository.findPostByPostNo(postNo);
-        Object[] arr = (Object[]) result;
-        Post post = (Post) arr[0];
-
-        post.addHitCount();
-        Post savedPost = postRepository.save(post);
-
-        PostResponseDTO postResponseDTO = entityToDTO(savedPost, (User) arr[1], 0); //(int) arr[2]
-
-        return postResponseDTO;
+    public PostResponseDTO getPost(Long postNo) {
+        return getPost(postNo, false);
     }
 
-    private PostResponseDTO entityToDTO(Post post, User user, int commentCount) {
-        PostResponseDTO postResponseDTO = post.toPostResponseDTO();
-        postResponseDTO.setUserEmail(user.getUserEmail());
-        postResponseDTO.setCommentCount(commentCount);
+    @Transactional
+    public PostResponseDTO getPost(Long postNo, boolean addHitCount) {
+        Post post = postRepository.findByPostNo(postNo);
+
+        if (addHitCount) {
+            post.addHitCount();
+        }
+
+        PostResponseDTO postResponseDTO = new PostResponseDTO(post);
+
         return postResponseDTO;
     }
 
@@ -87,18 +91,21 @@ public class PostService {
         postRepository.deleteById(postNo);
     }
 
-    public void edit(EditPostRequestDTO editPostRequestDTO) {
-        Post post = postRepository.findById(editPostRequestDTO.getPostNo()).get();
-        post.changeTitle(editPostRequestDTO.getTitle());
-        post.changeContent(editPostRequestDTO.getContent());
+    @Transactional
+    public void edit(PostEditRequestDTO postEditRequestDTO) {
+        Long postNo = postEditRequestDTO.getPostNo();
+        Post post = postRepository.findById(postNo)
+                .orElseThrow(()-> new IllegalArgumentException(postNo + "번 게시글이 없습니다."));
 
-        postRepository.save(post);
+        post.edit(postEditRequestDTO.getTitle(), postEditRequestDTO.getContent());
     }
 
-    public void addReport(Long postNo) {
+    public Post addReport(Long postNo) {
         Post post = postRepository.findById(postNo).get();
         post.addReportCount();
 
-        postRepository.save(post);
+        Post savedPost = postRepository.save(post);
+
+        return savedPost;
     }
 }
