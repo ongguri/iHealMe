@@ -34,9 +34,9 @@ public interface PostRepository extends JpaRepository<Post, Long> {
             + "LEFT JOIN FETCH p.userReservation r "
             + "LEFT JOIN FETCH p.user "
             + "LEFT JOIN FETCH p.comments "
-            + "WHERE r.hptName like %:hptName%",
+            + "WHERE r.name like %:name%",
             countQuery = "select count(p) from Post p")
-    Page<Post> findByHptNameContaining(@Param("hptName") String hptName, Pageable pageable);
+    Page<Post> findByHptNameContaining(@Param("name") String hptName, Pageable pageable);
 
     @Query(value = "SELECT DISTINCT p FROM Post p "
             + "LEFT JOIN FETCH p.userReservation "
@@ -50,8 +50,8 @@ public interface PostRepository extends JpaRepository<Post, Long> {
             + "LEFT JOIN FETCH p.userReservation "
             + "LEFT JOIN FETCH p.user u "
             + "LEFT JOIN FETCH p.comments "
-            + "WHERE u.userEmail like %:userEmail%",
+            + "WHERE u.email like %:email%",
             countQuery = "select count(p) from Post p")
-    Page<Post> findByUserEmailContaining(@Param("userEmail") String userEmail, Pageable pageable);
+    Page<Post> findByUserEmailContaining(@Param("email") String userEmail, Pageable pageable);
 
 }

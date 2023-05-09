@@ -10,6 +10,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
@@ -18,8 +19,8 @@ import org.springframework.web.reactive.function.client.WebClient;
 import java.util.HashMap;
 import java.util.Map;
 
-@RestController
-//@Controller
+//@RestController
+@Controller
 @RequiredArgsConstructor
 public class KakaoMapsController {
 
@@ -30,9 +31,8 @@ public class KakaoMapsController {
     // @RequestBody : JSON 데이터를 전송하는 경우
 
     @GetMapping("/")
-    @ResponseBody
     public String Maps() {
-        return "maps/maps";
+        return "maps/kakaoMaps";
     }
 
     /*@GetMapping("/maps")
