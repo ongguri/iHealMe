@@ -24,7 +24,7 @@ public class UserReservationService {
         userReservation.setCurrentStatus("진료 전");
         // test를 위해 값을 임의로 넣음. 원래대로라면 이메일은 로그인 정보를 가져옴
 
-        UserReservation userRes = reservationRepository.findByEmailAndCurrentStatus(
+        UserReservation userRes = reservationRepository.findByUserEmailAndCurrentStatus(
                 userReservation.getEmail(), userReservation.getCurrentStatus());
 
         reservationRepository.save(userRes.toEntity(userRes));

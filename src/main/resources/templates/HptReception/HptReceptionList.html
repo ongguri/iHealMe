@@ -42,7 +42,6 @@
                 <td>
                     <a th:if="${hptReception.currentStatus == '접수대기'}"
                        th:href="@{/HptReception/HptReceptionList/updateCurrentStatusToAccept(resNo=${hptReception.resNo})}"
-                       th:method="post"
                        onclick="acceptReception()">접수</a>
 
                     <a th:if="${hptReception.currentStatus == '접수대기'}"

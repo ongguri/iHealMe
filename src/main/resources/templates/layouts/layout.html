@@ -21,8 +21,8 @@
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 	
-	<th:block layout:fragment="script"></th:block>
 	<th:block layout:fragment="css"></th:block>
+	<th:block layout:fragment="script"></th:block>
 </head>
 <body>
 	<!-- th:replace 속성은 해당 속성이 선언된 html 태그를 다른 html 파일로 치환해주는 기능을 제공 fragments/header -> fragments/header.html에 있는 "th:fragment=header" 영역을 가져온다.  -->
@@ -32,6 +32,5 @@
 	<th:block layout:fragment="content" class="content">
 	
 	</th:block>
-
 </body>
 </html>

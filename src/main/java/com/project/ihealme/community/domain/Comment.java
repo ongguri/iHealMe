@@ -4,43 +4,47 @@ import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.data.annotation.CreatedDate;
+import com.project.ihealme.user.entity.User;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @NoArgsConstructor
+@Builder
+@AllArgsConstructor
 @Getter
-@Entity
+@ToString(exclude = "post")
 @Table(name = "COMMENTS")
+@Entity
 public class Comment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "COMMNO_GEN")
     @SequenceGenerator(sequenceName = "COMMENT_COMMNO_SEQ", name = "COMMNO_GEN", allocationSize = 1)
-    private Long commno;
+    private Long commNo;
 
     @Column(nullable = false, length = 600)
     private String content;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "userEmail", nullable = false)
+    @JoinColumn(name = "USERID", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "postNo", nullable = false)
+    @JoinColumn(name = "POSTNO", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Post post;
 
     @CreatedDate
-    private LocalDateTime regdate;
+    private LocalDateTime regDate;
 
-    public Comment(String content, User user, Post post, LocalDateTime regdate) {
+    public Comment(String content, User user, Post post) {
         this.content = content;
         this.user = user;
         this.post = post;
-        this.regdate = regdate;
     }
+
 
     public boolean isOwnComment(User user){
         return this.user.equals(user);

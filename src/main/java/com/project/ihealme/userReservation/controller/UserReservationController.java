@@ -27,16 +27,23 @@ public class UserReservationController {
         return "reservation/userReservation";
     }
 
-//    @PostMapping("/userResCancelUpdate")
-//    public String userResUpdate(UserReservation userReservation) {
-//        Long user = userReservationService.updateStatus(userReservation);
-////        System.out.println("user = " + user);
-//        return "redirect:/userReservation";
-//    }
-
-    @GetMapping("/community/writePost")
-    public String writePostPage() {
-        return "community/write";
+    @PostMapping("/userResCancelUpdate")
+    public String userResUpdate(UserReservation userReservation) {
+        Long user = userReservationService.updateStatus(userReservation);
+//        System.out.println("user = " + user);
+        return "redirect:/userReservation";
     }
 
+    /*@GetMapping("/community/writePost")
+    public String writePostPage() {
+        return "community/writePost";
+    }*/
+
+    @GetMapping("/community/writePost")
+    public String writePostPage(Model model) {
+        model.addAttribute("userId", 1);
+        model.addAttribute("resNo", 3);
+
+        return "community/writePost";
+    }
 }
