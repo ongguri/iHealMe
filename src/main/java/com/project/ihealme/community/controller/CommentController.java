@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RequiredArgsConstructor
-@RequestMapping("/comments/")
+@RequestMapping("/community")
 @Log4j2
 @RestController
 public class CommentController {
@@ -26,7 +26,7 @@ public class CommentController {
         return new ResponseEntity<>(commentService.getList(postNo), HttpStatus.OK);
     }
 
-    @PostMapping("")
+    @PostMapping("/post/{postNo}")
     public ResponseEntity<Long> save(@RequestBody CommentDto commentDto){
         log.info(commentDto);
         Long commNo = commentService.save(commentDto);

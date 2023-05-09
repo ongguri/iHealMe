@@ -8,8 +8,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
-
 @Repository
 public interface PostRepository extends JpaRepository<Post, Long> {
 
@@ -34,7 +32,7 @@ public interface PostRepository extends JpaRepository<Post, Long> {
             + "LEFT JOIN FETCH p.userReservation r "
             + "LEFT JOIN FETCH p.user "
             + "LEFT JOIN FETCH p.comments "
-            + "WHERE r.hptName like %:hptName%",
+            + "WHERE r.name like %:hptName%",
             countQuery = "select count(p) from Post p")
     Page<Post> findByHptNameContaining(@Param("hptName") String hptName, Pageable pageable);
 
@@ -50,7 +48,7 @@ public interface PostRepository extends JpaRepository<Post, Long> {
             + "LEFT JOIN FETCH p.userReservation "
             + "LEFT JOIN FETCH p.user u "
             + "LEFT JOIN FETCH p.comments "
-            + "WHERE u.userEmail like %:userEmail%",
+            + "WHERE u.email like %:userEmail%",
             countQuery = "select count(p) from Post p")
     Page<Post> findByUserEmailContaining(@Param("userEmail") String userEmail, Pageable pageable);
 

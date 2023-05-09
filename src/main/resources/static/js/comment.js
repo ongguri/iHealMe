@@ -20,7 +20,7 @@ $(document).ready(function (){
 
     //특정 게시글의 댓글 처리
     function loadJSONData(){
-        $.getJSON('/comments/post/'+postNo, function (arr){
+        $.getJSON('/community/post/'+postNo, function (arr){
             console.log(arr);
 
             let str = "";
