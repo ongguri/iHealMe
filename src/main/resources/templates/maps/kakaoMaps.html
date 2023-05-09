@@ -47,7 +47,17 @@
 			#pagination {margin:10px auto;text-align: center;}
 			#pagination a {display:inline-block;margin-right:10px;}
 			#pagination .on {font-weight: bold; cursor: default;color:#777;}
+			
+			table {
+				border-collapse: collapse;
+			}
+			td {
+				border:1px solid black;
+			}
 		</style>
+	</th:block>
+	
+	<th:block layout:fragment="js">
 	</th:block>
 </head>
 
@@ -219,18 +229,18 @@
 				el.querySelector('.book_button').addEventListener('click', function() {
 					var popupHtml = '<div id="popup" style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: skyblue; border: 1px solid black; padding: 50px; text-align: center; z-index: 999;">' +
 							'<h3>접수하기</h3>' +
-								'<form>' +
-								'<label for="name">환자명:</label>' +
-								'<input type="text" id="name" name="name"><br><br>' +
-								'<label for="treatment">진료 항목:</label>' +
-								'<select id="treatment" name="treatment">' +
-									'<option value="1">소아진료</option>' +
-									'<option value="2">영유아검진</option>' +
-									'<option value="3">예방접종</option>' +
-								'</select><br><br>' +
-								'<input type="button" id="submitBtn" value="접수 신청">' +
-								'<input type="button" id="cancelBtn" value="취소">' +
-								'</form>' +
+							'<form>' +
+							'<label for="name">환자명:</label>' +
+							'<input type="text" id="name" name="name"><br><br>' +
+							'<label for="treatment">진료 항목:</label>' +
+							'<select id="treatment" name="treatment">' +
+							'<option value="1">소아진료</option>' +
+							'<option value="2">영유아검진</option>' +
+							'<option value="3">예방접종</option>' +
+							'</select><br><br>' +
+							'<input type="button" id="submitBtn" value="접수 신청">' +
+							'<input type="button" id="cancelBtn" value="취소">' +
+							'</form>' +
 							'</div>';
 					
 					var popup = document.createElement('div');

@@ -5,7 +5,7 @@
 	<nav class="py-2 bg-body-tertiary border-bottom">
 		<div class="container d-flex flex-row-reverse">
 			<ul class="nav">
-				<li class="nav-item"><a href="#" class="nav-link link-dark px-4">로그인</a></li>
+				<li class="nav-item"><a th:href="@{Login}" href="/Login" class="nav-link link-dark px-4">로그인</a></li>
 			</ul>
 		</div>
 	</nav>
@@ -16,10 +16,10 @@
 				<span class="fs-4">iHealMe</span>
 			</a>
 			<ul class="nav">
-				<li class="nav-item"><a href="/maps" class="nav-link link-dark px-3 active" aria-current="page">Home</a></li>
-				<li class="nav-item"><a href="#" class="nav-link link-dark px-3">접수 내역</a></li>
-				<li class="nav-item"><a href="#" class="nav-link link-dark px-3">커뮤니티</a></li>
-				<li class="nav-item"><a href="#" class="nav-link link-dark px-3">마이페이지</a></li>
+				<li class="nav-item"><a th:href="@{/}" href="/" class="nav-link link-dark px-3 active" aria-current="page">Home</a></li>
+				<li class="nav-item"><a th:href="@{/HptReception/HptReceptionList}" href="/HptReception/HptReceptionList" class="nav-link link-dark px-3">접수 내역</a></li>
+				<li class="nav-item"><a th:href="@{/community/posts}" href="/community/posts" class="nav-link link-dark px-3">커뮤니티</a></li>
+				<li class="nav-item"><a th:href="@{/reservation/userReservation}" href="/reservation/userReservation" class="nav-link link-dark px-3">마이페이지</a></li>
 			</ul>
 		</div>
 	</header>
