@@ -13,7 +13,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString/*(exclude = {"user", "userReservation"})*/
+@ToString(exclude = {"user", "userReservation"})
 @Entity
 public class Post extends BaseEntity {
 
