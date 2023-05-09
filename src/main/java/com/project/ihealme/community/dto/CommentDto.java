@@ -1,5 +1,6 @@
 package com.project.ihealme.community.dto;
 
+import com.project.ihealme.user.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,6 +20,6 @@ public class CommentDto {
     private Long postNo;
 
     private String encodeUserEmail(User user) {
-        return user.getUserEmail().substring(0, 3).concat("****");
+        return user.getEmail().substring(0, 3).concat("****");
     }
 }

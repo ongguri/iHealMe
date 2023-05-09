@@ -3,6 +3,7 @@ package com.project.ihealme.community.service;
 import com.project.ihealme.community.domain.Comment;
 import com.project.ihealme.community.domain.Post;
 import com.project.ihealme.community.dto.CommentDto;
+import com.project.ihealme.user.entity.User;
 
 import java.util.List;
 
@@ -18,7 +19,7 @@ public interface CommentService {
                 .build();
 
         User user = User.builder()
-                .userEmail(commentDto.getUserEmail())
+                .email(commentDto.getUserEmail())
                 .build();
 
         return Comment.builder()
@@ -34,7 +35,7 @@ public interface CommentService {
         return CommentDto.builder()
                 .commNo(comment.getCommNo())
                 .content(comment.getContent())
-                .userEmail(comment.getUser().getUserEmail())
+                .userEmail(comment.getUser().getEmail())
                 .regDate(comment.getRegDate())
                 .build();
     }
