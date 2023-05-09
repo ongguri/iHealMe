@@ -13,7 +13,6 @@ body {
 
 .post-title {
     font-size: 32px;
-    font-weight: bold;
     margin: 0;
     padding: 0;
 }
@@ -71,7 +70,7 @@ hr {
     font-weight: normal;
 }
 
-.comment-input{
+.comment-content{
     position: relative;
 }
 
