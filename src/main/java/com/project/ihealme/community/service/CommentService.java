@@ -8,10 +8,10 @@ import com.project.ihealme.user.entity.User;
 import java.util.List;
 
 public interface CommentService {
-    Long save(CommentDto commentDto);   //댓글 등록
-    List<CommentDto> getList(Long postNo);  //특정 게시글 댓글 불러오기
-    void update(CommentDto commentDto);     //댓글 수정
-    void delete(Long commNo);       //댓글 삭제
+    Long save(CommentDto commentDto); //댓글 등록
+    List<CommentDto> getList(Long postNo); //특정 게시글 댓글 불러오기
+    void update(CommentDto commentDto); //댓글 수정
+    void delete(Long commNo); //댓글 삭제
 
     default Comment toEntitiy(CommentDto commentDto){
         Post post = Post.builder()
@@ -19,7 +19,7 @@ public interface CommentService {
                 .build();
 
         User user = User.builder()
-                .email(commentDto.getUserEmail())
+                .email(commentDto.getEmail())
                 .build();
 
         return Comment.builder()
@@ -35,7 +35,7 @@ public interface CommentService {
         return CommentDto.builder()
                 .commNo(comment.getCommNo())
                 .content(comment.getContent())
-                .userEmail(comment.getUser().getEmail())
+                .email(comment.getUser().getEmail())
                 .regDate(comment.getRegDate())
                 .build();
     }
