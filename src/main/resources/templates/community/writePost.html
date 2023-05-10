@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout}">
 <head>
     <meta charset="UTF-8">
     <title>후기 작성</title>
@@ -8,28 +10,34 @@
     <link rel="stylesheet" th:href="@{/css/community/writePost.css}" href="../../css/community/writePost.css">
     <link rel="stylesheet" th:href="@{/css/community/common.css}" href="../../css/community/common.css">
 </head>
+
 <body>
 
-<div class="container">
-    <form action="post.html" th:action="@{/community/write}" method="post">
-        <input type="hidden" name="userId" th:value="${userId}">
-        <input type="hidden" name="resNo" th:value="${resNo}">
+<div layout:fragment="content">
+    <div class="container">
+        <form action="post.html" th:action method="post">
+            <input type="hidden" name="userId" th:value="${userId}">
+            <input type="hidden" name="resNo" th:value="${resNo}">
 
-        <h4 class="head">후기 작성</h4>
-        <div class="buttons">
-            <button type="submit" class="btn btn-secondary btn-md">등록</button>
-            <button type="button" class="btn btn-secondary btn-md"
-                    onclick="location.href='userReservation.html'"
-                    th:onclick="|location.href='@{/userReservation}'|">취소</button>
-        </div>
-        <hr>
-        <div class="mb-3">
-            <input type="text" class="form-control" name="title" placeholder="제목을 입력하세요.">
-        </div>
-        <div class="mb-3">
-            <textarea class="form-control" name="content" rows="15" placeholder="내용을 입력하세요."></textarea>
-        </div>
-    </form>
+            <h4 class="head">후기 작성</h4>
+            <div class="buttons">
+                <button type="submit" class="btn btn-secondary btn-md">등록</button>
+                <button type="button" class="btn btn-secondary btn-md"
+                        onclick="location.href='userReservation.html'"
+                        th:onclick="|location.href='@{/userReservation}'|">취소
+                </button>
+            </div>
+            <hr>
+            <!--<input type="text" class="form-control-plaintext" name="hptName" th:value="|[${dto.hptName}]|"
+                   value="[병원명]" readonly>-->
+            <div class="mb-3">
+                <input type="text" class="form-control" name="title" placeholder="제목을 입력하세요.">
+            </div>
+            <div class="mb-3">
+                <textarea class="form-control" name="content" rows="15" placeholder="내용을 입력하세요."></textarea>
+            </div>
+        </form>
+    </div>
 </div>
 </body>
 </html>

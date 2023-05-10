@@ -31,7 +31,7 @@ public class PostController {
                        Model model) {
 
         Map<String, Object> map = model.asMap();
-        boolean addHitCount = !map.containsKey("hitCountNotChanged");
+        boolean addHitCount = !map.containsKey("keepHitCount");
 
         PostResponseDTO postResponseDTO = postService.getPost(postNo, addHitCount);
         model.addAttribute("dto", postResponseDTO);
@@ -43,7 +43,7 @@ public class PostController {
     public String writePost(@ModelAttribute PostWriteRequestDTO postWriteRequestDTO, RedirectAttributes redirectAttributes) {
         Long postNo = postService.writePost(postWriteRequestDTO);
         redirectAttributes.addAttribute("postNo", postNo);
-        redirectAttributes.addFlashAttribute("hitCountNotChanged", true);
+        redirectAttributes.addFlashAttribute("keepHitCount", true);
         redirectAttributes.addFlashAttribute("message", "게시글을 작성하였습니다.");
 
         return "redirect:/community/{postNo}";
@@ -70,17 +70,10 @@ public class PostController {
         redirectAttributes.addAttribute("page", postPageRequestDTO.getPage());
         redirectAttributes.addAttribute("type", postPageRequestDTO.getType());
         redirectAttributes.addAttribute("keyword", postPageRequestDTO.getKeyword());
-        redirectAttributes.addFlashAttribute("hitCountNotChanged", true);
+        redirectAttributes.addFlashAttribute("keepHitCount", true);
         redirectAttributes.addFlashAttribute("message", "게시글을 수정하였습니다.");
 
         return "redirect:/community/{postNo}";
-    }
-
-    @PostMapping("/cancel")
-    public String cancel() {
-        System.out.println("cancel");
-
-        return "redirect:/community";
     }
 
     @PostMapping("/delete")
@@ -90,8 +83,8 @@ public class PostController {
         return "redirect:/community";
     }
 
-    @PostMapping("/report")
-    public String report(@RequestParam Long postNo, @ModelAttribute PostPageRequestDTO postPageRequestDTO, RedirectAttributes redirectAttributes) {
+    @PostMapping("/{postNo}/report")
+    public String report(@PathVariable Long postNo, @ModelAttribute PostPageRequestDTO postPageRequestDTO, RedirectAttributes redirectAttributes) {
 
         Post post = postService.addReport(postNo);
 
@@ -99,8 +92,7 @@ public class PostController {
         redirectAttributes.addAttribute("page", postPageRequestDTO.getPage());
         redirectAttributes.addAttribute("type", postPageRequestDTO.getType());
         redirectAttributes.addAttribute("keyword", postPageRequestDTO.getKeyword());
-        redirectAttributes.addAttribute(postPageRequestDTO);
-        redirectAttributes.addFlashAttribute("hitCountNotChanged", true);
+        redirectAttributes.addFlashAttribute("keepHitCount", true);
         redirectAttributes.addFlashAttribute("message", "게시글을 신고하였습니다.");
 
         return "redirect:/community/{postNo}";
