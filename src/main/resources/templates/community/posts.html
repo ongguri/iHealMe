@@ -29,8 +29,9 @@
             <tr th:each="dto : ${result.dtoList}">
                 <td th:text="${dto.postNo}">게시글 번호</td>
                 <td th:text="${dto.hptName}">병원명</td>
-                <td><a href="post.html"
-                       th:href="@{/community/{postNo}(postNo=${dto.postNo},page=${postPageRequestDTO.page},type=${postPageRequestDTO.type},keyword=${postPageRequestDTO.keyword})}"
+                <td>
+                    <a href="post.html"
+                       th:href="@{/community/{postNo}(postNo=${dto.postNo},page=${postPageRequestDTO.page},type=${postPageRequestDTO.type},keyword=${postPageRequestDTO.keyword},add=true)}"
                        th:text="${dto.title}">제목</a>
                     <span th:text="|[${dto.commentCount}]|" style="color: red">[댓글수]</span>
                 </td>
@@ -73,7 +74,6 @@
         <form>
             <input type="hidden" name="page" value="1">
             <select class="form-select" aria-label="Default select example" name="type">
-                <!--<option value="" th:selected="${postPageRequestDTO.type == null}">&#45;&#45;&#45;&#45;&#45;&#45;</option>-->
                 <option value="h" th:selected="${postPageRequestDTO.type == 'h' || postPageRequestDTO.type == null}">
                     병원명
                 </option>
@@ -82,10 +82,27 @@
             </select>
             <input type="text" class="form-control" name="keyword" th:value="${postPageRequestDTO.keyword}"
                    placeholder="검색어를 입력하세요.">
-            <button type="submit" class="btn btn-secondary btn-sm">검색하기</button>
+            <button type="button" class="btn btn-secondary btn-sm searchBtn">검색하기</button>
         </form>
         <!-- 검색 -->
     </div>
+
+    <script th:inline="javascript">
+        var actionForm = $("form");
+
+        $(".searchBtn").click(function(){
+
+            var keyword = $("input[name='keyword']");
+
+            if (keyword.val() === null || keyword.val() === "") {
+                alert("검색어를 입력해주세요.")
+                return;
+            }
+
+            actionForm.submit();
+        });
+
+    </script>
 </div>
 </body>
 </html>

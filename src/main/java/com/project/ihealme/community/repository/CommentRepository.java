@@ -14,7 +14,8 @@ import java.util.Optional;
 @Repository
 public interface CommentRepository extends JpaRepository<Comment, Long> {
 
-    List<Comment> findByPost(Post post);
+    @Query("select c from Comment c where c.post =:post order by c.commNo desc")
+    List<Comment> findByPost(@Param("post") Post post);
 
     @Override
     Optional<Comment> findById(Long commno);

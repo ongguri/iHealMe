@@ -12,11 +12,11 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Builder
 @AllArgsConstructor
-@Getter
-@ToString(exclude = "post")
+@Getter @Setter
+@ToString(exclude = {"post", "user"})
 @Table(name = "COMMENTS")
 @Entity
-public class Comment {
+public class Comment extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "COMMNO_GEN")
@@ -36,15 +36,15 @@ public class Comment {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Post post;
 
-    @CreatedDate
-    private LocalDateTime regDate;
-
     public Comment(String content, User user, Post post) {
         this.content = content;
         this.user = user;
         this.post = post;
     }
 
+    public void update(String content){
+        this.content = content;
+    }
 
     public boolean isOwnComment(User user){
         return this.user.equals(user);
