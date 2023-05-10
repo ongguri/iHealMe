@@ -83,8 +83,8 @@ $(document).ready(function () {
         // 댓글 입력 부분 초기화
         $('input[name="commentContent"]').val('');
 
-        $(".modal-footer .btn").hide();
-        $(".commentSave, .commentClose").show();
+        $(".modal-footer .btn").hide();     //모달 내 버튼 숨기기
+        $(".commentSave, .commentClose").show();    //필요한 버튼만 표시
     });
 
     $(".commentSave").click(function () {
