@@ -6,6 +6,7 @@ import com.project.ihealme.userReservation.service.UserReservationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.HandlerMapping;
 
 import javax.servlet.http.HttpServletRequest;
@@ -24,7 +25,7 @@ public class commonController {
     private UserReservationService userReservationService;
 
     @RequestMapping(value = {"/userResCancelUpdate", "/HptReception/HptReceptionList/updateCurrentStatusToReject"})
-    public String cancelReception(HttpServletRequest request, UserReservation userReservation) {
+    public String cancelReception(@RequestParam("resNo") int resNo, HttpServletRequest request, UserReservation userReservation) {
 
         String viewName = "";
         String requestUrl = (String) request.getAttribute(HandlerMapping.PATH_WITHIN_HANDLER_MAPPING_ATTRIBUTE);
@@ -37,7 +38,7 @@ public class commonController {
             viewName = "redirect:/HptReception/HptReceptionList";
         }
 
-        hptReceptionService.updateCurrentStatus(1, "접수취소", LocalDateTime.now());
+        hptReceptionService.updateCurrentStatus(resNo, "접수취소", LocalDateTime.now());
         userReservationService.updateStatus(userReservation);
 
         return viewName;
