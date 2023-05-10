@@ -22,7 +22,7 @@ public class PostService {
     private final PostRepository postRepository;
     private final CommentRepository commentRepository;
     private final UserRepository userRepository;
-    private final ReservationRepository userReservationRepository;
+    private final ReservationRepository reservationRepository;
 
     @Transactional
     public Long writePost(PostWriteRequestDTO postWriteRequestDTO) {
@@ -32,11 +32,13 @@ public class PostService {
         User user = userRepository.findById(userId)
                 .orElseThrow(()-> new IllegalArgumentException("해당 유저가 없습니다. userId =" + userId));
 
-        UserReservation userReservation = userReservationRepository.findById(resNo)
+        UserReservation userReservation = reservationRepository.findById(resNo)
                 .orElseThrow(()-> new IllegalArgumentException("해당 접수가 없습니다. resNo =" + resNo));
 
         Post post = Post.create(postWriteRequestDTO, user, userReservation);
+
         Post savedPost = postRepository.save(post);
+        userReservation.setCurrentStatus("후기작성완료");
 
         return savedPost.getPostNo();
     }
@@ -74,15 +76,16 @@ public class PostService {
 
     @Transactional
     public PostResponseDTO getPost(Long postNo, boolean addHitCount) {
-        Post post = postRepository.findByPostNo(postNo);
+        Post post = postRepository.findById(postNo)
+                .orElseThrow(()-> new IllegalArgumentException(postNo + "번 게시글이 없습니다."));
 
         if (addHitCount) {
-            post.addHitCount();
+            if (postRepository.updateHit(post.getPostNo()) == 1) {
+                post.addHitCount();
+            }
         }
 
-        PostResponseDTO postResponseDTO = new PostResponseDTO(post);
-
-        return postResponseDTO;
+        return new PostResponseDTO(post);
     }
 
     @Transactional
@@ -100,12 +103,14 @@ public class PostService {
         post.edit(postEditRequestDTO.getTitle(), postEditRequestDTO.getContent());
     }
 
+    @Transactional
     public Post addReport(Long postNo) {
-        Post post = postRepository.findById(postNo).get();
-        post.addReportCount();
+        Post post = postRepository.findById(postNo)
+                .orElseThrow(()-> new IllegalArgumentException(postNo + "번 게시글이 없습니다."));
 
-        Post savedPost = postRepository.save(post);
+        postRepository.updateReport(post.getPostNo());
+        post = postRepository.findByPostNo(post.getPostNo());
 
-        return savedPost;
+        return post;
     }
 }

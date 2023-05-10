@@ -3,6 +3,8 @@ package com.project.ihealme.kakaoMaps.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.project.ihealme.kakaoMaps.config.KakaoConfig;
+import com.project.ihealme.kakaoMaps.dto.KakaoMapsDto;
 import com.project.ihealme.kakaoMaps.service.KakaoMapsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -34,6 +37,14 @@ public class KakaoMapsController {
     public String Maps() {
         return "maps/kakaoMaps";
     }
+
+    /*@GetMapping("/")
+    public String Maps(@RequestParam String query) {
+        System.out.println("get/Maps 호출");
+        System.out.println("");
+        return "maps/maps1";
+        //return "maps/kakaoMaps";
+    }*/
 
     /*@GetMapping("/maps")
     public String Maps(@RequestParam String query) {
@@ -58,6 +69,7 @@ public class KakaoMapsController {
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", "KakaoAK " + appkey);
         HttpEntity<String> entity = new HttpEntity<>("documents", headers);
+
         RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<String> response = restTemplate.exchange(apiUrl, HttpMethod.GET, entity, String.class);
         String jsonData = response.getBody();
@@ -77,5 +89,6 @@ public class KakaoMapsController {
         return "maps/maps1";
         //return resultMap;
     }
+
 
 }

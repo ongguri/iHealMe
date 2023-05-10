@@ -20,7 +20,7 @@ $(document).ready(function (){
 
     //특정 게시글의 댓글 처리
     function loadJSONData(){
-        $.getJSON('/comments/post/'+postNo, function (arr){
+        $.getJSON('/community/post/'+postNo, function (arr){
             console.log(arr);
 
             let str = "";
@@ -59,7 +59,7 @@ $(document).ready(function (){
         };
         console.log(comment);
         $.ajax({
-            url: '/comments/',
+            url: '/community/post/' + postNo,
             method: 'post',
             data: JSON.stringify(comment),
             contentType: 'application/json; charset=utf-8',
@@ -89,7 +89,7 @@ $(document).ready(function (){
         const commNo = $("input[name='commNo']").val();
 
         $.ajax({
-            url: '/comments/' + commNo,
+            url: '/community/' + commNo,
             method: 'delete',
             success: function (result){
                 console.log("result: " + result);
@@ -113,7 +113,7 @@ $(document).ready(function (){
 
         console.log(comment);
         $.ajax({
-            url: '/comments/' + commNo,
+            url: '/community/' + commNo,
             method: 'put',
             data: JSON.stringify(comment),
             contentType: 'application/json; charset=utf-8',
