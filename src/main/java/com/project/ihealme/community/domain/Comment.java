@@ -12,8 +12,8 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Builder
 @AllArgsConstructor
-@Getter
-@ToString(exclude = "post")
+@Getter @Setter
+@ToString(exclude = {"post", "user"})
 @Table(name = "COMMENTS")
 @Entity
 public class Comment {
@@ -45,6 +45,9 @@ public class Comment {
         this.post = post;
     }
 
+    public void update(String content){
+        this.content = content;
+    }
 
     public boolean isOwnComment(User user){
         return this.user.equals(user);

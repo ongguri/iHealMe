@@ -13,30 +13,14 @@ public interface CommentService {
     void update(CommentDto commentDto); //댓글 수정
     void delete(Long commNo); //댓글 삭제
 
-    default Comment toEntitiy(CommentDto commentDto){
-        Post post = Post.builder()
-                .postNo(commentDto.getPostNo())
-                .build();
-
-        User user = User.builder()
-                .email(commentDto.getEmail())
-                .build();
-
-        return Comment.builder()
-                .commNo(commentDto.getCommNo())
-                .content(commentDto.getContent())
-                .user(user)
-                .post(post)
-                .build();
-    }
-
     default CommentDto toDto(Comment comment){
 
         return CommentDto.builder()
                 .commNo(comment.getCommNo())
+                .postNo(comment.getPost().getPostNo())
                 .content(comment.getContent())
-                .email(comment.getUser().getEmail())
-                .regDate(comment.getRegDate())
+                .email(comment.getUser().getEmail().substring(0, 3).concat("****"))
+                .regDate(comment.getRegdate())
                 .build();
     }
 }

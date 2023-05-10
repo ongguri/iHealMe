@@ -113,7 +113,7 @@ $(document).ready(function (){
 
         console.log(comment);
         $.ajax({
-            url: '/community/' + commNo,
+            url: '/community/comment/' + commNo,
             method: 'put',
             data: JSON.stringify(comment),
             contentType: 'application/json; charset=utf-8',
@@ -128,6 +128,10 @@ $(document).ready(function (){
             }
         })
     })
+
+    window.onload=function (){
+        loadJSONData();
+    };
 });
 
 
