@@ -19,14 +19,14 @@ public class CommentController {
 
     private final CommentService commentService;
 
-    @GetMapping(value = "/post/{postNo}", produces = MediaType.APPLICATION_JSON_VALUE)      //댓글 목록
+    @GetMapping(value = "/{postNo}", produces = MediaType.APPLICATION_JSON_VALUE)      //댓글 목록
     public ResponseEntity<List<CommentDto>> getListByPost(@PathVariable("postNo") Long postNo){
         log.info("postNo: " + postNo);
 
         return new ResponseEntity<>(commentService.getList(postNo), HttpStatus.OK);
     }
 
-    @PostMapping("/post/{postNo}")
+    @PostMapping("/{postNo}")
     public ResponseEntity<Long> save(@RequestBody CommentDto commentDto){
         log.info(commentDto);
         Long commNo = commentService.save(commentDto);
@@ -34,7 +34,7 @@ public class CommentController {
         return new ResponseEntity<>(commNo, HttpStatus.OK);
     }
 
-    @DeleteMapping("/{commNo}")
+    @DeleteMapping("/comment/{commNo}")
     public ResponseEntity<String> delete(@PathVariable("commNo")Long commNo){
         log.info("COMMNO: " + commNo);
         commentService.delete(commNo);
@@ -42,7 +42,7 @@ public class CommentController {
         return new ResponseEntity<>("success", HttpStatus.OK);
     }
 
-    @PutMapping("/{commNo}")
+    @PutMapping("/comment/{commNo}")
     public ResponseEntity<String> update(@RequestBody CommentDto commentDto){
         log.info(commentDto);
         commentService.update(commentDto);

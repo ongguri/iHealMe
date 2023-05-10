@@ -1,6 +1,5 @@
 package com.project.ihealme.community.controller;
 
-import com.project.ihealme.community.domain.Post;
 import com.project.ihealme.community.dto.*;
 import com.project.ihealme.community.service.PostService;
 import lombok.RequiredArgsConstructor;
@@ -8,8 +7,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
-import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor
@@ -26,12 +23,10 @@ public class PostController {
     }
 
     @GetMapping("/{postNo}")
-    public String post(@ModelAttribute PostPageRequestDTO postPageRequestDTO,
+    public String post(@RequestParam(name = "add", defaultValue = "false") boolean addHitCount,
+                       @ModelAttribute PostPageRequestDTO postPageRequestDTO,
                        @PathVariable Long postNo,
                        Model model) {
-
-        Map<String, Object> map = model.asMap();
-        boolean addHitCount = !map.containsKey("keepHitCount");
 
         PostResponseDTO postResponseDTO = postService.getPost(postNo, addHitCount);
         model.addAttribute("dto", postResponseDTO);
@@ -43,8 +38,6 @@ public class PostController {
     public String writePost(@ModelAttribute PostWriteRequestDTO postWriteRequestDTO, RedirectAttributes redirectAttributes) {
         Long postNo = postService.writePost(postWriteRequestDTO);
         redirectAttributes.addAttribute("postNo", postNo);
-        redirectAttributes.addFlashAttribute("keepHitCount", true);
-        redirectAttributes.addFlashAttribute("message", "게시글을 작성하였습니다.");
 
         return "redirect:/community/{postNo}";
     }
@@ -70,30 +63,29 @@ public class PostController {
         redirectAttributes.addAttribute("page", postPageRequestDTO.getPage());
         redirectAttributes.addAttribute("type", postPageRequestDTO.getType());
         redirectAttributes.addAttribute("keyword", postPageRequestDTO.getKeyword());
-        redirectAttributes.addFlashAttribute("keepHitCount", true);
-        redirectAttributes.addFlashAttribute("message", "게시글을 수정하였습니다.");
 
         return "redirect:/community/{postNo}";
     }
 
-    @PostMapping("/delete")
-    public String delete(@RequestParam Long postNo) {
+    @PostMapping("/{postNo}/delete")
+    public String delete(@PathVariable Long postNo) {
         postService.deleteWithReplies(postNo);
 
         return "redirect:/community";
     }
 
     @PostMapping("/{postNo}/report")
-    public String report(@PathVariable Long postNo, @ModelAttribute PostPageRequestDTO postPageRequestDTO, RedirectAttributes redirectAttributes) {
+    public String report(@PathVariable Long postNo,
+                         @ModelAttribute PostPageRequestDTO postPageRequestDTO,
+                         RedirectAttributes redirectAttributes) {
 
-        Post post = postService.addReport(postNo);
+        postService.addReport(postNo);
 
-        redirectAttributes.addAttribute("postNo", post.getPostNo());
+        redirectAttributes.addAttribute("postNo", postNo);
         redirectAttributes.addAttribute("page", postPageRequestDTO.getPage());
         redirectAttributes.addAttribute("type", postPageRequestDTO.getType());
         redirectAttributes.addAttribute("keyword", postPageRequestDTO.getKeyword());
-        redirectAttributes.addFlashAttribute("keepHitCount", true);
-        redirectAttributes.addFlashAttribute("message", "게시글을 신고하였습니다.");
+        redirectAttributes.addFlashAttribute("report", true);
 
         return "redirect:/community/{postNo}";
     }
