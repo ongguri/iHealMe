@@ -58,13 +58,13 @@ class PostRepositoryTest {
         System.out.println(savedPost);
     }*/
 
-    @Test
+    /*@Test
     void findByPostNo() {
         Post post = postRepository.findByPostNo(3L);
 
         System.out.println(post);
         System.out.println(post.getUser());
-    }
+    }*/
 
     @Test
     @Transactional

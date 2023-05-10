@@ -29,25 +29,28 @@
             </div>
             <hr>
 
-            <form th:action="@{/community/{postNo}/report(postNo=${dto.postNo})}" method="post">
+            <!--<form th:action="@{/community/{postNo}/report(postNo=${dto.postNo})}" method="post">
                 <input type="hidden" name="page" th:value="${postPageRequestDTO.page}">
                 <input type="hidden" name="type" th:value="${postPageRequestDTO.type}">
-                <input type="hidden" name="keyword" th:value="${postPageRequestDTO.keyword}">
+                <input type="hidden" name="keyword" th:value="${postPageRequestDTO.keyword}">-->
 
                 <div class="lbuttons">
-                    <button type="submit" class="btn btn-secondary btn-sm" th:text="|신고 (${dto.report})|">신고</button>
+                    <button type="submit" class="btn btn-secondary btn-sm reportBtn" th:text="|신고 (${dto.report})|">신고</button>
                 </div>
-            </form>
-            <form th:action="@{/community/delete}" method="post">
+            <!--</form>-->
+            <form th:action="@{/community/{postNo}/delete(postNo=${dto.postNo})}" method="post">
                 <div class="rbuttons">
                     <button type="button" class="btn btn-secondary btn-sm"
                             onclick="location.href='editPost.html'"
                             th:onclick="|location.href='@{/community/{postNo}/edit(postNo=${dto.postNo},page=${postPageRequestDTO.page},type=${postPageRequestDTO.type},keyword=${postPageRequestDTO.keyword})}'|">
                         수정
                     </button>
-
-                    <input type="hidden" name="postNo" th:value="${dto.postNo}">
-                    <button type="submit" class="btn btn-secondary btn-sm">삭제</button>
+                    <button type="button" class="btn btn-secondary btn-sm deleteBtn">삭제</button>
+                    <button type="button" class="btn btn-secondary btn-sm"
+                            onclick="location.href='posts.html'"
+                            th:onclick="|location.href='@{/community(page=${postPageRequestDTO.page},type=${postPageRequestDTO.type},keyword=${postPageRequestDTO.keyword})}'|">
+                        목록
+                    </button>
                 </div>
             </form>
             <br>
@@ -55,69 +58,96 @@
             <br>
             <br>
 
-
             <!-- 댓글 -->
-            <!--<th:block th:replace="~{/layout/basic :: setContent(~{this::content} )}">
-                <th:block th:fragment="content">
-                    <div class="comment">
-                        <h4 class="comment-title">댓글<span class="comment-count" th:text="|(${dto.commentCount})|">(7)</span></h4>
-                        <h5><span class="badge badge-info addComment">댓글 등록하기</span></h5>
-                        <hr>
-                        <div class="commentList">
+            <div class="comment">
+                <h4 class="comment-title">댓글<span class="comment-count" th:text="|(${dto.commentCount})|"></span>
+                </h4>
+                <button class="btn btn-secondary btn-sm addComment">댓글 쓰기</button>
+                <hr>
+                <div class="commentList">
 
-                        </div>
+                </div>
 
-                        <hr>
+                <hr>
 
-                        <div class="modal" tabindex="-1" role="dialog">
-                            <div class="modal-dialog" role="document">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title">Modal title</h5>
+                <div class="modal" tabindex="-1" role="dialog">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">댓글 입력 창</h5>
 
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true"></span>
-                                        </button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <div class="form-group">
-                                            <label>
-                                                <input class="form-control"  type="text" name="commentContent" placeholder="댓글을 입력해보세요.">
-                                                <input type="hidden" name="commNo" >
-                                            </label>
-                                        </div>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary btn-danger commentDelete">Remove</button>
-                                        <button type="button" class="btn btn-secondary btn-warning commentUpdate">Modify</button>
-                                        <button type="button" class="btn btn-secondary btn-primary commentSave">Save</button>
-                                        <button type="button" class="btn btn-secondary btn-outline-secondary commentClose" data-dismiss="modal">Close</button>
-                                    </div>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true"></span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="form-group">
+                                    <label>
+                                        <input class="form-control" type="text" name="commentContent"
+                                               placeholder="댓글을 입력해보세요.">
+                                        <input type="hidden" id="commNo" name="commNo">
+                                    </label>
                                 </div>
                             </div>
+                            <div class="modal-footer">
+                                <input type="hidden" id="postNo" name="postNo" th:value="${dto.postNo}">
+                                <button type="button" class="btn btn-secondary btn-danger commentDelete">Remove</button>
+                                <button type="button" class="btn btn-secondary btn-warning commentUpdate">Modify</button>
+                                <button type="button" class="btn btn-secondary btn-primary commentSave">Save</button>
+                                <button type="button" class="btn btn-secondary btn-outline-secondary commentClose"
+                                        data-dismiss="modal">Close
+                                </button>
+                            </div>
                         </div>
-
-                        &lt;!&ndash;<form class="comment-form">
-                            <label for="comment-content"></label>
-                            <textarea id="comment-content" class="comment-content" rows="2" cols="60%" required
-                                      placeholder="댓글을 입력해보세요."></textarea> &nbsp;&nbsp;
-                            <button type="button" id="btn-comment-save" class="btn btn-secondary btn-sm"
-                                    onclick="saveComment();">등록
-                            </button>
-                            <input type="hidden" id="postNo" th:value="${dto.postNo}"/>
-                        </form>&ndash;&gt;
                     </div>
-                    <hr>
+                </div>
+            </div>
 
-                </th:block>
-            </th:block>-->
-            <button type="button" class="btn btn-secondary btn-sm"
-                    onclick="location.href='posts.html'"
-                    th:onclick="|location.href='@{/community(page=${postPageRequestDTO.page},type=${postPageRequestDTO.type},keyword=${postPageRequestDTO.keyword})}'|">
-                목록으로 돌아가기
-            </button>
+
         </div>
     </div>
+
+    <script th:inline="javascript">
+        var actionForm = $("form");
+
+        $(".deleteBtn").click(function(){
+
+            if(!confirm("게시글을 삭제하시겠습니까?")){
+                return ;
+            }
+
+            actionForm
+                .attr("method","post")
+                .submit();
+        });
+
+        $(".reportBtn").click(function() {
+
+            if(!confirm("게시글을 신고하시겠습니까?")){
+                return;
+            }
+
+            var postNo = [[${dto.postNo}]];
+
+            actionForm.empty();
+
+            actionForm.append('<input type="hidden" name="page" value=[[${postPageRequestDTO.page}]]>');
+            actionForm.append('<input type="hidden" name="type" value=[[${postPageRequestDTO.type}]]>');
+            actionForm.append('<input type="hidden" name="keyword" value=[[${postPageRequestDTO.keyword}]]>');
+
+            actionForm
+                .attr("action", "/community/" + postNo + "/report")
+                .attr("method", "post");
+
+            actionForm.submit();
+        });
+
+        /*document.addEventListener("DOMContentLoaded", function() {
+            if ([[${report}]]) {
+                alert("게시글을 신고하였습니다.");
+            }
+        });*/
+    </script>
 </div>
 </body>
 </html>
