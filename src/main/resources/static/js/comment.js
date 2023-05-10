@@ -72,11 +72,11 @@ $(document).ready(function () {
         });
     }
 
-    $(".comment-count").click(function (){
+    $(".comment-count").click(function () {
         loadJSONData();
-    })  //end click
+    }) //end click
 
-    let modal = $('.modal');
+    var modal = $('.modal');
 
     $(".addComment").click(function () {
         modal.modal('show');
@@ -177,8 +177,3 @@ $(document).ready(function () {
         loadJSONData();
     };
 });
-
-
-
-
-
