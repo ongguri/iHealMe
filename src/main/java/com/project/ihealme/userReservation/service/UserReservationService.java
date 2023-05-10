@@ -3,6 +3,7 @@ package com.project.ihealme.userReservation.service;
 import com.project.ihealme.userReservation.domain.UserReservation;
 import com.project.ihealme.userReservation.repository.ReservationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -15,7 +16,7 @@ public class UserReservationService {
     private ReservationRepository reservationRepository;
 
     public List<UserReservation> getUserReservationList() {
-        return reservationRepository.findAll();
+        return reservationRepository.findAll(Sort.by(Sort.Direction.DESC, "resNo"));
     }
 
     public Long updateStatus(UserReservation userReservation) {
@@ -29,6 +30,6 @@ public class UserReservationService {
 
         reservationRepository.save(userRes.toEntity(userRes));
 
-        return userRes.getNo();
+        return userRes.getResNo();
     }
 }
