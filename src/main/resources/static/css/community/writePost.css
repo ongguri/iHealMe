@@ -1,5 +1,12 @@
+.fs-4 {
+    color: skyblue;
+}
+
 .container {
-    margin-top: 10px;
+    max-width: 800px;
+    margin: 10px auto;
+    padding: 20px;
+    box-sizing: border-box;
 }
 
 .head {

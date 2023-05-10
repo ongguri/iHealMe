@@ -17,8 +17,8 @@ public class UserReservation extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "RESNO_GEN")
     @SequenceGenerator(sequenceName = "USERRESERVATION_NO_SEQ", name = "RESNO_GEN", allocationSize = 1)
-    @Column(name = "NO")
-    private Long no;
+    @Column(name = "RESNO")
+    private Long resNo;
 
     @Column(name = "EMAIL", updatable=false)
     private String email;
@@ -35,8 +35,8 @@ public class UserReservation extends BaseEntity {
 
     public UserReservation toEntity(UserReservation userRes) {
         UserReservation userReservation = userRes.builder()
-                .no(no)
-                .currentStatus("접수 취소")
+                .resNo(resNo)
+                .currentStatus("접수취소")
                 .build();
         return userReservation;
     }

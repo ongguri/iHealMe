@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -30,6 +31,7 @@ public class CommentServiceImpl implements CommentService{
         Post post = postRepository.findByPostNo(commentDto.getPostNo())
                 .orElseThrow(()-> new IllegalArgumentException("해당 게시글이 없습니다."));
 
+//        user 완료되면 교체
 //        User user = userRepository.findByEmail(commentDto.getEmail());
         User user = userRepository.findById(1L)
                 .orElseThrow(()-> new IllegalArgumentException("해당 유저가 없습니다."));

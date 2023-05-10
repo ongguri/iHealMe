@@ -1,5 +1,4 @@
-/*
-let index= {
+/*let index= {
     init: function (){
         $("btn-comment-save").on("click", () => {
             this.commentSave();
@@ -27,13 +26,22 @@ let index= {
     }
 }
 
-index.init();
-*/
+index.init();*/
 
 
 $(document).ready(function () {
     let postNo = $("#postNo").val();
     const listGroup = $(".commentList");
+
+    function formatTime(str){
+        let date = new Date(str);
+
+        return date.getFullYear() + '/' +
+            (date.getMonth() + 1) + '/' +
+            date.getDate() + ' ' +
+            date.getHours() + ':' +
+            date.getMinutes();
+    }
 
 //특정 게시글의 댓글 처리
     function loadJSONData() {
@@ -43,12 +51,20 @@ $(document).ready(function () {
             let str = "";
             $('.comment-count').html(" ( " + arr.length + " )");
 
+            // 댓글이 없는 경우
+            if( !arr.length){
+                document.querySelector('.commentList').innerHTML = '<div class="comment-none"><p>등록된 댓글이 없습니다.</p></div>';
+                return false;
+            }
+
             $.each(arr, function (idx, comment) {
                 console.log(comment);
                 str += ' <div class="card-body" id="' + comment.commNo + '">';
-                str += ' <div class="card-subtitle mb-2 text-muted">' + comment.email + '</div>';
-                str += ' <div class="card-title">' + comment.content + '</div>';
-                str += ' <div class="card-text" th:text="${#temporals.format(comment.regDate, \'yyyy/MM/dd HH:mm\')}">' + comment.regDate + '</div>';
+                str += ' <table>';
+                str += ' <tr><td class="card-subtitle" rowspan="2"><span class="card-subtitle mb-2 text-muted">' + comment.email + '</span></td>';
+                str += ' <td><span class="card-title">' + comment.content + '</span></td></tr>';
+                str += ' <tr><td><span class="card-text">' + formatTime(comment.regDate) + '</span></td>';
+                str += ' </tr></table>';
                 str += ' </div>';
             })
 
@@ -56,19 +72,19 @@ $(document).ready(function () {
         });
     }
 
-    $(".comment-count").click(function () {
+    $(".comment-count").click(function (){
         loadJSONData();
-    }) //end click
+    })  //end click
 
-    var modal = $('.modal');
+    let modal = $('.modal');
 
     $(".addComment").click(function () {
         modal.modal('show');
         // 댓글 입력 부분 초기화
         $('input[name="commentContent"]').val('');
 
-        $(".modal-footer .btn").hide();     //모달 내 버튼 숨기기
-        $(".commentSave, .commentClose").show();    //필요한 버튼만 표시
+        $(".modal-footer .btn").hide();
+        $(".commentSave, .commentClose").show();
     });
 
     $(".commentSave").click(function () {
@@ -113,7 +129,7 @@ $(document).ready(function () {
     });
 
     $(".commentDelete").on("click", function () {
-        const commNo = this.id;
+        const commNo = $("input[name='commNo']").val();
 
         $.ajax({
             url: '/community/comment/' + commNo,
@@ -161,4 +177,8 @@ $(document).ready(function () {
         loadJSONData();
     };
 });
+
+
+
+
 

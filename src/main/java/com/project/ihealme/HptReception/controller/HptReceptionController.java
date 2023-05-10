@@ -49,12 +49,12 @@ public class HptReceptionController {
         return "redirect:/HptReception/HptReceptionList";
     }
 
-    @GetMapping("/HptReception/HptReceptionList/updateCurrentStatusToReject")
-    public String updateCurrentStatusToReject(@RequestParam("resNo") int resNo) {
-        hptReceptionService.updateCurrentStatus(resNo, "접수취소", LocalDateTime.now());
-
-        return "redirect:/HptReception/HptReceptionList";
-    }
+//    @GetMapping("/HptReception/HptReceptionList/updateCurrentStatusToReject")
+//    public String updateCurrentStatusToReject(@RequestParam("resNo") int resNo) {
+//        hptReceptionService.updateCurrentStatus(resNo, "접수취소", LocalDateTime.now());
+//
+//        return "redirect:/HptReception/HptReceptionList";
+//    }
 
     @GetMapping("/HptReception/HptReceptionList/updateCurrentStatusToComplete")
     public String updateCurrentStatusToComplete(@RequestParam("resNo") int resNo) {

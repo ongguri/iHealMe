@@ -2,6 +2,7 @@ package com.project.ihealme.community.dto;
 
 import com.project.ihealme.community.domain.Post;
 import com.project.ihealme.user.entity.User;
+import com.project.ihealme.userReservation.domain.UserReservation;
 import lombok.*;
 
 import java.time.LocalDateTime;
