@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 @ToString(exclude = {"post", "user"})
 @Table(name = "COMMENTS")
 @Entity
-public class Comment {
+public class Comment extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "COMMNO_GEN")
@@ -35,9 +35,6 @@ public class Comment {
     @JoinColumn(name = "POSTNO", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Post post;
-
-    @CreatedDate
-    private LocalDateTime regDate;
 
     public Comment(String content, User user, Post post) {
         this.content = content;
