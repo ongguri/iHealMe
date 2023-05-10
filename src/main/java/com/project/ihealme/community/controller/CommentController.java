@@ -26,7 +26,7 @@ public class CommentController {
         return new ResponseEntity<>(commentService.getList(postNo), HttpStatus.OK);
     }
 
-    @PostMapping("{postNo}")
+    @PostMapping("/{postNo}")
     public ResponseEntity<Long> save(@RequestBody CommentDto commentDto){
         log.info(commentDto);
         Long commNo = commentService.save(commentDto);
