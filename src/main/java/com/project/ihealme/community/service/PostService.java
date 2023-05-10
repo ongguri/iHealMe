@@ -81,7 +81,7 @@ public class PostService {
 
         if (addHitCount) {
             int updatedPost = postRepository.updateHit(post.getPostNo());
-            // 1이 아니면 예외
+// 1이 아니면 예외
             return new PostResponseDTO(post, post.getHit() + 1);
         }
 
@@ -111,6 +111,6 @@ public class PostService {
                 .orElseThrow(()-> new IllegalArgumentException(postNo + "번 게시글이 없습니다."));
 
         int updatedPost = postRepository.updateReport(post.getPostNo());
-        // 예외 던지기
+// 예외 던지기
     }
 }
