@@ -1,13 +1,22 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html>
 <head>
 	<meta charset="UTF-8">
 	<meta http-equiv="X-UA-Compatible" content="IE-edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum=1.0, user-scalable=no">
 	<title>카카오맵 API</title>
+	
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
 	<div id="map" style="width:100%;height:800px;position:relative;overflow:hidden;"></div>
+	
+	<div>
+		<input type="text" id="query" placeholder="검색어를 입력하세요." />
+		<button id="searchBtn">검색</button>
+	</div>
+	
+	<div id="placesList"></div>  <!-- 결과를 표시할 div 요소 -->
 	
 	<!-- 지도 표시와 services와 clusterer 라이브러리 불러오기 -->
 	<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=7c6d76e0c895a60f42aa8b0ef2c67d0a&libraries=services,clusterer"></script>
@@ -25,21 +34,35 @@
 		// 지도를 생성합니다
 		var map = new kakao.maps.Map(mapContainer, mapOption);
 		
-		const API_KEY = '0a931d3e53412cb779f034fc86ec4c96';
-		const keyword = '소아과'; // 검색할 키워드
-		const url = `https://dapi.kakao.com/v2/local/search/keyword.json?query=${keyword}&apikey=${API_KEY}`;
-		
-		$.ajax({
-			type: "GET",
-			url: "https://dapi.kakao.com/v2/local/search/keyword.json?query=" + keyword + "&" + "apikey=" + API_KEY,
-			dataType: "json",
-			data: {"key" : "value"},
-			contentType: "application/json",
-			success: function (query) {
-				console.log('통신결과');
-				console.log(query);
-			},
+		$(document).ready(function(){
+			$("#searchBtn").click(function(){
+				var query = $("#query").val();
+				$.ajax({
+					url: "/api",
+					type: "post",
+					dataType: "json",
+					data: {
+						query
+					},
+					success: function(data){
+						var placesList = $("#placesList");
+						placesList.empty();
+						$.each(data, function(index, item) {
+							var placeItem = $("<div>").addClass("placeItem");
+							var name = $("<div>").addClass("name").text(item.place_name);
+							var phone = $("<div>").addClass("phone").text(item.phone);
+							var address = $("<div>").addClass("address").text(item.road_address_name);
+							placeItem.append(name, phone, address);
+							placesList.append(placeItem);
+						});
+					},
+					error: function(){
+						alert("Error occurred while getting places data.");
+					}
+				});
+			});
 		});
+		
 	</script>
 </body>
 </html>
