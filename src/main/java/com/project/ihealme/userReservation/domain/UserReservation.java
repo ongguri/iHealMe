@@ -5,6 +5,7 @@ import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Builder
@@ -29,8 +30,12 @@ public class UserReservation extends BaseEntity {
     @Column(name = "LIST", updatable=false)
     private String list;
 
+//    @Column(name = "RDATE")
+//    @ColumnDefault("sysdate")
+//    private LocalDateTime rDate;
+
     @Column(name = "CURRENTSTATUS")
-    @ColumnDefault("'접수 대기'")
+    @ColumnDefault("'접수대기'")
     private String currentStatus;
 
 //    public UserReservation toEntity(UserReservation userRes) {

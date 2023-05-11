@@ -25,16 +25,20 @@
                 </thead>
                 <tbody>
                 <tr th:each="reservationInfo : ${session.userReservationList}">
-                            <td th:text="${reservationInfo.resNo}"></td>
-                            <td th:text="${reservationInfo.name}"></td>
-                            <td th:text="${reservationInfo.list}"></td>
-                            <td th:text="${#temporals.format(reservationInfo.regdate, 'yyyy-MM-dd HH:mm:ss')}"></td>
-                            <td th:text="${reservationInfo.currentStatus}"></td>
-                            <td>
-                                <a th:if="${reservationInfo.currentStatus == '진료 전'}" th:href="@{/userResCancelUpdate(resNo=${reservationInfo.resNo})}" onclick="return cancelReservation()">취소하기</a>
-                                <a th:if="${reservationInfo.currentStatus == '진료완료'}"
-                                   th:href="@{/community/write(resNo=${reservationInfo.resNo}, name=${reservationInfo.name})}">후기작성</a>
-                            </td>
+                    <td th:text="${reservationInfo.resNo}"></td>
+                    <td th:text="${reservationInfo.name}"></td>
+                    <td th:text="${reservationInfo.list}"></td>
+
+                    <td th:if="${reservationInfo.currentStatus == '접수대기'}"
+                        th:text="${#temporals.format(reservationInfo.regdate, 'yyyy-MM-dd HH:mm:ss')}"></td>
+                    <td th:if="${reservationInfo.currentStatus != '접수대기'}"
+                        th:text="${#temporals.format(reservationInfo.updateRegdate, 'yyyy-MM-dd HH:mm:ss')}"></td>
+                    <td th:text="${reservationInfo.currentStatus}"></td>
+                    <td>
+                        <a th:if="${reservationInfo.currentStatus == '진료 전'}" th:href="@{/userResCancelUpdate(resNo=${reservationInfo.resNo})}" onclick="return cancelReservation()">취소하기</a>
+                        <a th:if="${reservationInfo.currentStatus == '진료완료'}"
+                           th:href="@{/community/write(resNo=${reservationInfo.resNo}, name=${reservationInfo.name})}">후기작성</a>
+                    </td>
 
                 </tr>
                 </tbody>
