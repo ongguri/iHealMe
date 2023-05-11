@@ -6,8 +6,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class kakaoAPI {
 
-    @GetMapping("/maps")
+    /*@GetMapping("/maps")
     public String Maps() {
         return "maps/kakaoAPI";
-    }
+    }*/
 }

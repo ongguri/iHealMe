@@ -1,5 +1,7 @@
 package com.project.ihealme.userReservation.controller;
 
+import com.project.ihealme.HptReception.repository.HptReceptionRepository;
+import com.project.ihealme.HptReception.service.HptReceptionService;
 import com.project.ihealme.community.dto.PostWriteRequestDTO;
 import com.project.ihealme.userReservation.domain.UserReservation;
 import com.project.ihealme.userReservation.service.UserReservationService;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpSession;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Controller
@@ -19,6 +22,9 @@ public class UserReservationController {
     @Autowired
     private UserReservationService userReservationService;
 
+    @Autowired
+    private HptReceptionService hptReceptionService;
+
     @GetMapping("/userReservation")
     public String userRes(Model model, HttpSession session) {
 
@@ -26,6 +32,15 @@ public class UserReservationController {
 //        model.addAttribute("userReservationList", reservations);
         session.setAttribute("userReservationList", reservations);
         return "reservation/userReservation";
+    }
+
+    @GetMapping("/userResCancelUpdate")
+    public String updateCurrentStatusToComplete(@RequestParam("resNo") int resNo) {
+        userReservationService.updateCurrentStatus(resNo, "접수취소", LocalDateTime.now());
+        hptReceptionService.updateCurrentStatus(resNo, "접수취소", LocalDateTime.now());
+        hptReceptionService.decreaseRtCount(); // 대기자 수 -1
+
+        return "redirect:/userReservation";
     }
 
 //    @PostMapping("/userResCancelUpdate")

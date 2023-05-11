@@ -90,11 +90,11 @@
                             </div>
                             <div class="modal-footer">
                                 <input type="hidden" id="postNo" name="postNo" th:value="${post.postNo}">
-                                <button type="button" class="btn btn-secondary btn-danger commentDelete">Remove</button>
-                                <button type="button" class="btn btn-secondary btn-warning commentUpdate">Modify</button>
-                                <button type="button" class="btn btn-secondary btn-primary commentSave">Save</button>
+                                <button type="button" class="btn btn-secondary btn-danger commentDelete">삭제</button>
+                                <button type="button" class="btn btn-secondary btn-warning commentUpdate">수정</button>
+                                <button type="button" class="btn btn-secondary btn-primary commentSave">저장</button>
                                 <button type="button" class="btn btn-secondary btn-outline-secondary commentClose"
-                                        data-dismiss="modal">Close
+                                        data-dismiss="modal">닫기
                                 </button>
                             </div>
                         </div>
@@ -155,7 +155,6 @@
 
             actionForm.submit();
         });
-
 
         /*document.addEventListener("DOMContentLoaded", function() {
             if ([[${report}]]) {

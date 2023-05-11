@@ -2,11 +2,12 @@ package com.project.ihealme.user.service;
 
 import com.project.ihealme.user.dto.UserDTO;
 import com.project.ihealme.user.dto.UserRequest;
+import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
 public interface UsersService {
-    UserDTO createUser(UserRequest userRequest);
+    ResponseEntity<?> registerUser(UserRequest userRequest);
 
     UserDTO findUser(String email);
 

@@ -7,17 +7,16 @@ import lombok.Data;
 public class KakaoMapsDto {
 
     private String id;
-    private String email;
     private String placeName;
-    private String distance;
-    private String placeUrl;
     private String categoryName;
-    private String addressName;
-    private String roadAddressName;
-    private String phone;
     private String categoryGroupCode;
     private String categoryGroupName;
+    private String phone;
+    private String addressName;
+    private String roadAddressName;
     private String x;
     private String y;
+    private String placeUrl;
+    private String distance;
 
 }

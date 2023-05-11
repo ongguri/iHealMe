@@ -177,4 +177,3 @@ $(document).ready(function () {
         loadJSONData();
     };
 });
-
