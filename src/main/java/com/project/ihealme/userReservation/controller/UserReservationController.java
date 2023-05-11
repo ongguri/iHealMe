@@ -1,5 +1,6 @@
 package com.project.ihealme.userReservation.controller;
 
+import com.project.ihealme.community.dto.PostWriteRequestDTO;
 import com.project.ihealme.userReservation.domain.UserReservation;
 import com.project.ihealme.userReservation.service.UserReservationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,9 +41,11 @@ public class UserReservationController {
     }*/
 
     @GetMapping("/community/write")
-    public String writePostPage(Model model) {
-        model.addAttribute("userId", 1);
-        model.addAttribute("resNo", 3);
+    public String writePostPage(@RequestParam("resNo") Long resNo, @RequestParam("name") String hptName, Model model) {
+
+        model.addAttribute("postWriteReq", new PostWriteRequestDTO(1L, resNo, hptName));
+        /*model.addAttribute("resNo", resNo);
+        model.addAttribute("hptName", hptName);*/
 
         return "community/writePost";
     }

@@ -74,18 +74,11 @@ public class PostService {
         return getPost(postNo, false);
     }
 
-    @Transactional
     public PostResponseDTO getPost(Long postNo, boolean addHitCount) {
         Post post = postRepository.findByPostNo(postNo)
                 .orElseThrow(()-> new IllegalArgumentException(postNo + "번 게시글이 없습니다."));
 
-        if (addHitCount) {
-            int updatedPost = postRepository.updateHit(post.getPostNo());
-            // 1이 아니면 예외
-            return new PostResponseDTO(post, post.getHit() + 1);
-        }
-
-        return new PostResponseDTO(post);
+        return new PostResponseDTO(post, addHitCount ? post.getHit() + 1 : post.getHit());
     }
 
     @Transactional
@@ -112,5 +105,16 @@ public class PostService {
 
         int updatedPost = postRepository.updateReport(post.getPostNo());
         // 예외 던지기
+    }
+
+    @Transactional
+    public void addHitCount(Long postNo) {
+        Post post = postRepository.findByPostNo(postNo)
+                .orElseThrow(()-> new IllegalArgumentException(postNo + "번 게시글이 없습니다."));
+
+        int updatedPost = postRepository.updateHit(postNo);
+        if (updatedPost != 1) {
+            throw new IllegalArgumentException(postNo + "번 게시글의 조회수를 수정하지 못했습니다.");
+        }
     }
 }

@@ -36,7 +36,6 @@ public class Post extends BaseEntity {
     private UserReservation userReservation;
 
     @Column(nullable = false, length = 100)
-    @NotBlank(message = "제목은 필수 값입니다.")
     private String title;
 
     @Lob

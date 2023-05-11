@@ -31,7 +31,7 @@ class PostServiceTest {
         PostPageRequestDTO postPageRequestDTO = new PostPageRequestDTO();
         PostPageResponseDTO result = postService.getPostList(postPageRequestDTO);
 
-        for (PostResponseDTO postResponseDTO : result.getDtoList()) {
+        for (PostResponseDTO postResponseDTO : result.getPostList()) {
             System.out.println(postResponseDTO);
         }
     }
@@ -44,7 +44,7 @@ class PostServiceTest {
         postPageRequestDTO.setKeyword("이지");
         PostPageResponseDTO result = postService.getPostList(postPageRequestDTO);
 
-        for (PostResponseDTO postResponseDTO : result.getDtoList()) {
+        for (PostResponseDTO postResponseDTO : result.getPostList()) {
             System.out.println(postResponseDTO);
         }
     }
@@ -58,7 +58,7 @@ class PostServiceTest {
         postPageRequestDTO.setKeyword("새롬");
         PostPageResponseDTO result = postService.getPostList(postPageRequestDTO);
 
-        for (PostResponseDTO postResponseDTO : result.getDtoList()) {
+        for (PostResponseDTO postResponseDTO : result.getPostList()) {
             System.out.println(postResponseDTO);
         }
 
@@ -68,7 +68,7 @@ class PostServiceTest {
 
     @Test
     void get() {
-        PostResponseDTO postResponseDTO = postService.getPost(37L, true);
+        PostResponseDTO postResponseDTO = postService.getPost(37L);
         System.out.println(postResponseDTO);
     }
 
