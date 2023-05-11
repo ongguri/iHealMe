@@ -2,68 +2,40 @@ package com.project.ihealme.kakaoMaps.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.project.ihealme.kakaoMaps.config.KakaoConfig;
-import com.project.ihealme.kakaoMaps.dto.KakaoMapsDto;
+import com.project.ihealme.kakaoMaps.entity.KakaoMapsEntity;
 import com.project.ihealme.kakaoMaps.service.KakaoMapsService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Mono;
 
-import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 //@RestController
 @Controller
 @RequiredArgsConstructor
+@Slf4j
 public class KakaoMapsController {
 
     private final KakaoMapsService kakaoMapsService;
-
-    private final WebClient kakaoConfig;
-    // @RequestParam : 자바스크립트에서 GET 또는 POST 방식으로 데이터를 전송하는 경우
-    // @RequestBody : JSON 데이터를 전송하는 경우
-
-    @GetMapping("/")
-    public String Maps() {
-        return "maps/kakaoMaps";
-    }
-
-    /*@GetMapping("/")
-    public String Maps(@RequestParam String query) {
-        System.out.println("get/Maps 호출");
-        System.out.println("");
-        return "maps/maps1";
-        //return "maps/kakaoMaps";
-    }*/
-
-    /*@GetMapping("/maps")
-    public String Maps(@RequestParam String query) {
-        Mono<String> mono = kakaoConfig.get()
-                .uri(builder -> builder.path("/v2/local/search/keyword.json")
-                        .queryParam("query", query)
-                        .build()
-                )
-                .exchangeToMono(response -> {
-                    return response.bodyToMono(String.class);
-                });
-        return mono.block();
-    }*/
 
     @Value("${kakao.map.rest.api.key}")
     private String appkey;
 
     @GetMapping("/api")
-    public String Maps1(@RequestParam("query") String query, Model model) {
+    @ResponseBody
+    public List<Map<String, Object>> Maps1(@RequestParam String query) throws JsonProcessingException {
         // 카카오맵 API를 사용하여 JSON 데이터 받아오기
         String apiUrl = "https://dapi.kakao.com/v2/local/search/keyword.json?query=" + query;
         HttpHeaders headers = new HttpHeaders();
@@ -76,19 +48,22 @@ public class KakaoMapsController {
 
         // JSON 데이터를 Map 형태로 변환하여 반환
         ObjectMapper objectMapper = new ObjectMapper();
-        Map<String, Object> resultMap = new HashMap<>();
-
-        try {
-            resultMap = objectMapper.readValue(jsonData, new TypeReference<Map<String, Object>>() {});
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
+        JsonNode root = objectMapper.readTree(jsonData);
+        List<Map<String, Object>> resultList = new ArrayList<>();
+        if (root.has("documents")) {
+            JsonNode documents = root.get("documents");
+            for (JsonNode document : documents) {
+                Map<String, Object> resultMap = new HashMap<>();
+                resultMap.put("id", document.get("id").asText());
+                resultMap.put("place_name", document.get("place_name").asText());
+                resultMap.put("phone", document.get("phone").asText());
+                resultMap.put("road_address_name", document.get("road_address_name").asText());
+                resultMap.put("place_url", document.get("place_url").asText());
+                resultList.add(resultMap);
+            }
         }
+        //model.addAttribute("resultList", resultList);
 
-        model.addAttribute("resultMap", resultMap);
-        // HTMl 템플릿을 렌더링하여 반환
-        return "maps/maps1";
-        //return resultMap;
+        return resultList;
     }
-
-
 }
