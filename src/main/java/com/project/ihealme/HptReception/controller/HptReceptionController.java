@@ -46,7 +46,7 @@ public class HptReceptionController {
     @GetMapping("/HptReception/HptReceptionList/updateCurrentStatusToAccept")       // <a> 태그는 get 방식으로 요청한다.
     public String updateCurrentStatusToAccept(@RequestParam("resNo") int resNo) {
         hptReceptionService.updateCurrentStatus(resNo, "진료 전", LocalDateTime.now());
-        userReservationService.updateCurrentStatus(resNo, "진료 전", LocalDateTime.now());
+        userReservationService.updateCurrentStatus(resNo, "진료 전");
         hptReceptionService.increaseRtCount(); // 대기자 수 +1
 
         return "redirect:/HptReception/HptReceptionList";
@@ -55,14 +55,14 @@ public class HptReceptionController {
     @GetMapping("/HptReception/HptReceptionList/updateCurrentStatusToReject")
     public String updateCurrentStatusToReject(@RequestParam("resNo") int resNo) {
         hptReceptionService.updateCurrentStatus(resNo, "접수취소", LocalDateTime.now());
-        userReservationService.updateCurrentStatus(resNo, "접수취소", LocalDateTime.now());
+        userReservationService.updateCurrentStatus(resNo, "접수취소");
         return "redirect:/HptReception/HptReceptionList";
     }
 
     @GetMapping("/HptReception/HptReceptionList/updateCurrentStatusToComplete")
     public String updateCurrentStatusToComplete(@RequestParam("resNo") int resNo) {
         hptReceptionService.updateCurrentStatus(resNo, "진료완료", LocalDateTime.now());
-        userReservationService.updateCurrentStatus(resNo, "진료완료", LocalDateTime.now());
+        userReservationService.updateCurrentStatus(resNo, "진료완료");
         hptReceptionService.decreaseRtCount(); // 대기자 수 -1
 
         return "redirect:/HptReception/HptReceptionList";

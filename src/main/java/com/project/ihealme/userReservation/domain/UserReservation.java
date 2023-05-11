@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Getter @Setter
 @Table(name="USERRESERVATION")
-public class UserReservation {
+public class UserReservation extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "RESNO_GEN")
@@ -30,12 +30,12 @@ public class UserReservation {
     @Column(name = "LIST", updatable=false)
     private String list;
 
-    @Column(name = "RDATE")
-    @ColumnDefault("sysdate")
-    private LocalDateTime rDate;
+//    @Column(name = "RDATE")
+//    @ColumnDefault("sysdate")
+//    private LocalDateTime rDate;
 
     @Column(name = "CURRENTSTATUS")
-    @ColumnDefault("'접수 대기'")
+    @ColumnDefault("'접수대기'")
     private String currentStatus;
 
 //    public UserReservation toEntity(UserReservation userRes) {
