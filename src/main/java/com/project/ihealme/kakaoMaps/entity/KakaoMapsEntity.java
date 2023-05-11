@@ -1,5 +1,6 @@
 package com.project.ihealme.kakaoMaps.entity;
 
+import com.project.ihealme.kakaoMaps.dto.KakaoMapsDto;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -17,54 +18,24 @@ public class KakaoMapsEntity {
     @Column(name = "place_name", length = 100, nullable = false)
     private String placeName;
 
-    @Column(name = "category_name", length = 200, nullable = false)
-    private String categoryName;
-
-    @Column(name = "category_group_code", length = 10, nullable = false)
-    private String categoryGroupCode;
-
-    @Column(name = "category_group_name", length = 10, nullable = false)
-    private String categoryGroupName;
-
     @Column(name = "phone", length = 20, nullable = false)
     private String phone;
-
-    @Column(name = "address_name", length = 200, nullable = false)
-    private String addressName;
 
     @Column(name = "road_address_name", length = 200, nullable = false)
     private String roadAddressName;
 
-    @Column(name = "x", length = 30, nullable = false)
-    private String x;
-
-    @Column(name = "y", length = 30, nullable = false)
-    private String y;
-
     @Column(name = "place_url", length = 100, nullable = false)
     private String placeUrl;
-
-    @Column(name = "distance", length = 10, nullable = false)
-    private String distance;
 
     public KakaoMapsEntity() {
     }
 
-    public KakaoMapsEntity(String id, String placeName, String categoryName, String categoryGroupCode,
-                           String categoryGroupName, String phone, String addressName, String roadAddressName,
-                           String x, String y, String placeUrl, String distance) {
-        this.id = id;
-        this.placeName = placeName;
-        this.categoryName = categoryName;
-        this.categoryGroupCode = categoryGroupCode;
-        this.categoryGroupName = categoryGroupName;
-        this.phone = phone;
-        this.addressName = addressName;
-        this.roadAddressName = roadAddressName;
-        this.x = x;
-        this.y = y;
-        this.placeUrl = placeUrl;
-        this.distance = distance;
+    public void updateKakao(KakaoMapsDto kakaoMapsDto) {
+        this.id = kakaoMapsDto.getId();
+        this.placeName = kakaoMapsDto.getPlaceName();
+        this.phone = kakaoMapsDto.getPhone();
+        this.roadAddressName = kakaoMapsDto.getRoadAddressName();
+        this.placeUrl = kakaoMapsDto.getPlaceUrl();
     }
 
     public KakaoMapsEntity(String id, String placeName, String phone, String roadAddressName, String placeUrl) {
