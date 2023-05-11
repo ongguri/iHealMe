@@ -59,8 +59,6 @@ public class UserReservationController {
     public String writePostPage(@RequestParam("resNo") Long resNo, @RequestParam("name") String hptName, Model model) {
 
         model.addAttribute("postWriteReq", new PostWriteRequestDTO(1L, resNo, hptName));
-        /*model.addAttribute("resNo", resNo);
-        model.addAttribute("hptName", hptName);*/
 
         return "community/writePost";
     }
