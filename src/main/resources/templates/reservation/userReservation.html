@@ -28,7 +28,7 @@
                             <td th:text="${reservationInfo.resNo}"></td>
                             <td th:text="${reservationInfo.name}"></td>
                             <td th:text="${reservationInfo.list}"></td>
-                            <td th:text="${#temporals.format(reservationInfo.regdate, 'yyyy-MM-dd HH:mm:ss')}"></td>
+                            <td th:text="${#temporals.format(reservationInfo.rDate, 'yyyy-MM-dd HH:mm:ss')}"></td>
                             <td th:text="${reservationInfo.currentStatus}"></td>
                             <td>
                                 <a th:if="${reservationInfo.currentStatus == '진료 전'}" th:href="@{/userResCancelUpdate(resNo=${reservationInfo.resNo})}" onclick="return cancelReservation()">취소하기</a>

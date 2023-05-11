@@ -42,7 +42,7 @@ public class UserReservationService {
 
         userReservation.setCurrentStatus(newStatus);
 
-        userReservation.setRegdate(rDate);
+        userReservation.setRDate(rDate);
 
         reservationRepository.save(userReservation);
     }

@@ -5,6 +5,7 @@ import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Builder
@@ -12,7 +13,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Getter @Setter
 @Table(name="USERRESERVATION")
-public class UserReservation extends BaseEntity {
+public class UserReservation {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "RESNO_GEN")
@@ -28,6 +29,10 @@ public class UserReservation extends BaseEntity {
 
     @Column(name = "LIST", updatable=false)
     private String list;
+
+    @Column(name = "RDATE")
+    @ColumnDefault("sysdate")
+    private LocalDateTime rDate;
 
     @Column(name = "CURRENTSTATUS")
     @ColumnDefault("'접수 대기'")
