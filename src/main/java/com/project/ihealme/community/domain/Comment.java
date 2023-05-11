@@ -12,7 +12,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 @Getter @Setter
 @ToString(exclude = {"post", "user"})
-@Table(name = "COMMENTS")
+@Table(name = "COMMENTS", indexes = @Index(name = "idx_comment", columnList = "commNo, postNo"))
 @Entity
 public class Comment extends BaseEntity {
 

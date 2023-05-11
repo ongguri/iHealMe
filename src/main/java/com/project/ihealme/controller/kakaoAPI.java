@@ -10,4 +10,9 @@ public class kakaoAPI {
     public String Maps() {
         return "maps/kakaoAPI";
     }*/
+
+    @GetMapping("/")
+    public String maps1() {
+        return "maps/kakaoMaps";
+    }
 }
