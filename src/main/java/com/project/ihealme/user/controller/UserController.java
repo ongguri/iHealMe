@@ -11,8 +11,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -23,29 +23,30 @@ public class UserController {
     private final UserServiceImpl usersService;
     private final JwtConfig jwtConfig;
 
-    @GetMapping("login")
+    @GetMapping("/login")
     public String login() {
         return "/users/login";
     }
 
-    @GetMapping("type")
+    @GetMapping("/type")
     public String chooseType() {
         return "/users/usertype";
     }
 
-    @GetMapping("signupuser")
+    @GetMapping("/signupuser")
     public String signupUser() {
         return "/users/signupuser";
     }
 
-    @GetMapping("signuphospital")
+    @GetMapping("/signuphospital")
     public String signupHospital() {
         return "/users/signuphospital";
     }
 
-    @PostMapping("/signup")
-    public UserDTO createUser(UserRequest userRequest) {
-        return usersService.createUser(userRequest);
+    @PostMapping(value = "/registeruser")
+    public String registerUser(@RequestBody UserRequest userRequest) {
+        usersService.registerUser(userRequest);
+        return "redirect:/users/login";
     }
 
     @GetMapping("/my")
