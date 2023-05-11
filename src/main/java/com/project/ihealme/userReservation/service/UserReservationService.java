@@ -19,17 +19,29 @@ public class UserReservationService {
         return reservationRepository.findAll(Sort.by(Sort.Direction.DESC, "resNo"));
     }
 
-    public Long updateStatus(UserReservation userReservation) {
+//    public Long updateStatus(UserReservation userReservation) {
+//
+//        userReservation.setEmail("longlee@daum.net");
+//        userReservation.setCurrentStatus("진료 전");
+//        // test를 위해 값을 임의로 넣음. 원래대로라면 이메일은 로그인 정보를 가져옴
+//
+//        UserReservation userRes = reservationRepository.findByEmailAndCurrentStatus(
+//                userReservation.getEmail(), userReservation.getCurrentStatus());
+//
+//        reservationRepository.save(userRes.toEntity(userRes));
+//
+//        return userRes.getResNo();
+//    }
 
-        userReservation.setEmail("longlee@daum.net");
-        userReservation.setCurrentStatus("진료 전");
-        // test를 위해 값을 임의로 넣음. 원래대로라면 이메일은 로그인 정보를 가져옴
+    public void updateStatusToAccept(Long resNo) {
+        UserReservation userReservation = reservationRepository.findByResNo(resNo);
 
-        UserReservation userRes = reservationRepository.findByEmailAndCurrentStatus(
-                userReservation.getEmail(), userReservation.getCurrentStatus());
-
-        reservationRepository.save(userRes.toEntity(userRes));
-
-        return userRes.getResNo();
+        if (userReservation != null) {
+            userReservation.setCurrentStatus("진료 전");
+            reservationRepository.save(userReservation);
+        } else {
+            throw new RuntimeException("해당 접수번호에 대한 예약 정보가 존재하지 않습니다.");
+        }
     }
+
 }
