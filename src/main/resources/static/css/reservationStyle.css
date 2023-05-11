@@ -1,5 +1,10 @@
 @charset "UTF-8";
 
+/*.table-striped>tbody>tr:nth-child(odd)>td,*/
+/*.table-striped>tbody>tr:nth-child(odd)>th {*/
+/*	background-color: #deebf7;*/
+/*}*/
+
 body {
 	font-family: Arial, sans-serif;
 	margin: 0;
