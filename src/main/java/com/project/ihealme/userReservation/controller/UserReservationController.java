@@ -1,6 +1,5 @@
 package com.project.ihealme.userReservation.controller;
 
-import com.project.ihealme.HptReception.repository.HptReceptionRepository;
 import com.project.ihealme.HptReception.service.HptReceptionService;
 import com.project.ihealme.community.dto.PostWriteRequestDTO;
 import com.project.ihealme.userReservation.domain.UserReservation;
@@ -9,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpSession;
@@ -36,7 +34,7 @@ public class UserReservationController {
 
     @GetMapping("/userResCancelUpdate")
     public String updateCurrentStatusToComplete(@RequestParam("resNo") int resNo) {
-        userReservationService.updateCurrentStatus(resNo, "접수취소", LocalDateTime.now());
+        userReservationService.updateCurrentStatus(resNo, "접수취소");
         hptReceptionService.updateCurrentStatus(resNo, "접수취소", LocalDateTime.now());
         hptReceptionService.decreaseRtCount(); // 대기자 수 -1
 

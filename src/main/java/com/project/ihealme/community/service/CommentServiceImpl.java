@@ -1,8 +1,10 @@
 package com.project.ihealme.community.service;
 
 import com.project.ihealme.community.domain.Comment;
+import com.project.ihealme.community.domain.Criteria;
 import com.project.ihealme.community.domain.Post;
 import com.project.ihealme.community.dto.CommentDto;
+import com.project.ihealme.community.dto.CommentPageDto;
 import com.project.ihealme.community.repository.CommentRepository;
 import com.project.ihealme.community.repository.PostRepository;
 import com.project.ihealme.user.entity.User;
@@ -13,7 +15,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -60,6 +61,14 @@ public class CommentServiceImpl implements CommentService{
                 .map(this::toDto)
                 .collect(Collectors.toList());
     }
+
+//    @Override
+//    @Transactional
+//    public CommentPageDto getListPage(Criteria criteria, Long postNo){
+//        return new CommentPageDto(
+//                commentRepository.countByPostNo(postNo),
+//                commentRepository.getListWithPaging(criteria, postNo));
+//    }
 
     @Override
     @Transactional

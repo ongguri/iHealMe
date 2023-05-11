@@ -37,12 +37,10 @@ public class UserReservationService {
 //        return userRes.getResNo();
 //    }
 
-    public void updateCurrentStatus(int resNo, String newStatus, LocalDateTime rDate) {
+    public void updateCurrentStatus(int resNo, String newStatus) {
         UserReservation userReservation = reservationRepository.findByResNo((long) resNo);
 
         userReservation.setCurrentStatus(newStatus);
-
-        userReservation.setRegdate(rDate);
 
         reservationRepository.save(userReservation);
     }

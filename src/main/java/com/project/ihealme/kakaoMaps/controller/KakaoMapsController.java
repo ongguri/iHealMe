@@ -1,31 +1,22 @@
 package com.project.ihealme.kakaoMaps.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.ihealme.kakaoMaps.entity.KakaoMapsEntity;
+import com.project.ihealme.kakaoMaps.repository.KakaoMapsRepository;
 import com.project.ihealme.kakaoMaps.service.KakaoMapsService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
-import org.springframework.web.reactive.function.client.WebClient;
-import reactor.core.publisher.Mono;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-//@RestController
-@Controller
-@RequiredArgsConstructor
+@RestController
+//@Controller
 @Slf4j
+@RequiredArgsConstructor
 public class KakaoMapsController {
 
     private final KakaoMapsService kakaoMapsService;
@@ -33,9 +24,9 @@ public class KakaoMapsController {
     @Value("${kakao.map.rest.api.key}")
     private String appkey;
 
-    @GetMapping("/api")
+    /*@GetMapping("/api")
     @ResponseBody
-    public List<Map<String, Object>> Maps1(@RequestParam String query) throws JsonProcessingException {
+    public String Maps1(@RequestParam String query) throws JsonProcessingException {
         // 카카오맵 API를 사용하여 JSON 데이터 받아오기
         String apiUrl = "https://dapi.kakao.com/v2/local/search/keyword.json?query=" + query;
         HttpHeaders headers = new HttpHeaders();
@@ -65,5 +56,12 @@ public class KakaoMapsController {
         //model.addAttribute("resultList", resultList);
 
         return resultList;
+    }*/
+
+    @GetMapping("/api")
+    @ResponseBody
+    public ResponseEntity<List<KakaoMapsEntity>> maps(String query) throws JsonProcessingException {
+        List<KakaoMapsEntity> kakaoList = kakaoMapsService.selectKeyword(query);
+        return new ResponseEntity<>(kakaoList, HttpStatus.OK);
     }
 }
