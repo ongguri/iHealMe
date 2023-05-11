@@ -15,9 +15,9 @@
 
 <div layout:fragment="content">
     <div class="container">
-        <form action="post.html" th:action="@{/community/write}" method="post">
-            <input type="hidden" name="userId" th:value="1">
-            <input type="hidden" name="resNo" th:value="${resNo}">
+        <form action="post.html" th:action="@{/community/write}" th:object="${postWriteReq}" method="post">
+            <input type="hidden" th:field="*{userId}">
+            <input type="hidden" th:field="*{resNo}">
 
             <h4 class="head">후기 작성</h4>
             <div class="buttons">
@@ -28,13 +28,13 @@
                 </button>
             </div>
             <hr>
-            <input type="text" class="form-control-plaintext" name="hptName" th:value="|[${hptName}]|"
+            <input type="text" class="form-control-plaintext" name="hptName" th:value="|[${postWriteReq.hptName}]|"
                    value="[병원명]" readonly>
             <div class="mb-3">
-                <input type="text" class="form-control" name="title" placeholder="제목을 입력하세요." required>
+                <input type="text" class="form-control" th:field="*{title}" placeholder="제목을 입력하세요." required>
             </div>
             <div class="mb-3">
-                <textarea class="form-control" name="content" rows="15" placeholder="내용을 입력하세요."></textarea>
+                <textarea class="form-control" th:field="*{content}" rows="15" placeholder="내용을 입력하세요."></textarea>
             </div>
         </form>
     </div>

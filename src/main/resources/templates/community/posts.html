@@ -25,19 +25,20 @@
                 <th>조회수</th>
             </tr>
             </thead>
+
             <tbody>
-            <tr th:each="dto : ${result.dtoList}">
-                <td th:text="${dto.postNo}">게시글 번호</td>
-                <td th:text="${dto.hptName}">병원명</td>
+            <tr th:each="post : ${result.postList}">
+                <td th:text="${post.postNo}">게시글 번호</td>
+                <td th:text="${post.hptName}">병원명</td>
                 <td>
                     <a href="post.html"
-                       th:href="@{/community/{postNo}(postNo=${dto.postNo},page=${postPageRequestDTO.page},type=${postPageRequestDTO.type},keyword=${postPageRequestDTO.keyword},add=true)}"
-                       th:text="${dto.title}">제목</a>
-                    <span th:text="|[${dto.commentCount}]|" style="color: red">[댓글수]</span>
+                       th:href="@{/community/{postNo}(postNo=${post.postNo},page=${postPageRequestDTO.page},type=${postPageRequestDTO.type},keyword=${postPageRequestDTO.keyword})}"
+                       th:text="${post.title}">제목</a>
+                    <span th:text="|[${post.commentCount}]|" style="color: red">[댓글수]</span>
                 </td>
-                <td th:text="${dto.userEmail}">작성자 이메일</td>
-                <td th:text="${#temporals.format(dto.regDate, 'yyyy/MM/dd')}">작성일</td>
-                <td th:text="${dto.hit}">조회수</td>
+                <td th:text="${post.userEmail}">작성자 이메일</td>
+                <td th:text="${#temporals.format(post.regDate, 'yyyy/MM/dd')}">작성일</td>
+                <td th:text="${post.hit}">조회수</td>
             </tr>
             </tbody>
         </table>
@@ -51,7 +52,7 @@
                    keyword=${postPageRequestDTO.keyword})}" tabindex="-1">이전</a>
             </li>
 
-            <li th:class="'page-item ' + ${result.currentPage == page ? 'active' : ''}"
+            <li class="page-item" th:class="${result.currentPage == page} ? 'active' : _"
                 th:each="page : ${result.pageList}">
                 <a class="page-link"
                    th:href="@{/community(page=${page},
@@ -71,17 +72,19 @@
         <!-- 페이징 -->
 
         <!-- 검색 -->
-        <form>
+        <form th:object="${postPageRequestDTO}">
             <input type="hidden" name="page" value="1">
-            <select class="form-select" aria-label="Default select example" name="type">
-                <option value="h" th:selected="${postPageRequestDTO.type == 'h' || postPageRequestDTO.type == null}">
+            <select class="form-select" aria-label="Default select example" th:field="*{type}">
+                <option th:each="type : ${searchTypes}"
+                        th:value="${type.key}"
+                        th:text="${type.value}">검색 타입</option>
+                <!--<option value="h" th:selected="${postPageRequestDTO.type == 'h' || postPageRequestDTO.type == null}">
                     병원명
                 </option>
                 <option value="t" th:selected="${postPageRequestDTO.type == 't'}">제목</option>
-                <option value="u" th:selected="${postPageRequestDTO.type == 'u'}">작성자</option>
+                <option value="u" th:selected="${postPageRequestDTO.type == 'u'}">작성자</option>-->
             </select>
-            <input type="text" class="form-control" name="keyword" th:value="${postPageRequestDTO.keyword}"
-                   placeholder="검색어를 입력하세요.">
+            <input type="text" class="form-control" th:field="*{keyword}" placeholder="검색어를 입력하세요.">
             <button type="button" class="btn btn-secondary btn-sm searchBtn">검색하기</button>
         </form>
         <!-- 검색 -->
