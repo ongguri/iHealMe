@@ -31,9 +31,9 @@
                             <td th:text="${#temporals.format(reservationInfo.regdate, 'yyyy-MM-dd HH:mm:ss')}"></td>
                             <td th:text="${reservationInfo.currentStatus}"></td>
                             <td>
-                                <a th:if="${reservationInfo.currentStatus == '진료 전'}" th:href="@{/userResCancelUpdate(resNo=${reservationInfo.resNo})}" onclick="return cancelReservation()">취소 하기</a>
-                                <a th:if="${reservationInfo.currentStatus == '진료 완료'}"
-                                   th:href="@{/community/write(resNo=${reservationInfo.resNo}, name=${reservationInfo.name})}">후기 작성</a>
+                                <a th:if="${reservationInfo.currentStatus == '진료 전'}" th:href="@{/userResCancelUpdate(resNo=${reservationInfo.resNo})}" onclick="return cancelReservation()">취소하기</a>
+                                <a th:if="${reservationInfo.currentStatus == '진료완료'}"
+                                   th:href="@{/community/write(resNo=${reservationInfo.resNo}, name=${reservationInfo.name})}">후기작성</a>
                             </td>
 
                 </tr>
