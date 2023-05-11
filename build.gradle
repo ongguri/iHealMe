@@ -42,7 +42,7 @@ dependencies {
     runtimeOnly 'com.oracle.database.jdbc:ojdbc6:11.2.0.4'
     implementation 'com.oracle.database.security:oraclepki'
     implementation 'com.oracle.database.security:osdt_core'
-    implementation 'com.oracle.database.security:dsdt_cert'
+    implementation 'com.oracle.database.security:osdt_cert'
 //thymeleaf
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
     implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect'
@@ -105,3 +105,7 @@ configurations {
 }
 
 targetCompatibility = JavaVersion.VERSION_11
+
+bootJar {
+    duplicatesStrategy = 'exclude'
+}
