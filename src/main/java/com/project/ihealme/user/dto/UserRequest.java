@@ -1,11 +1,12 @@
 package com.project.ihealme.user.dto;
 
 import com.project.ihealme.user.entity.UserRole;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
-@Getter
-@Setter
+@Getter @Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class UserRequest {
 
     private String name;
@@ -19,6 +20,8 @@ public class UserRequest {
     private String gender;
 
     private String password;
+
+    private String confirmPassword;
 
     private String question;
 

@@ -76,13 +76,13 @@ public class PostService {
 
     @Transactional
     public PostResponseDTO getPost(Long postNo, boolean addHitCount) {
-        Post post = postRepository.findById(postNo)
+        Post post = postRepository.findByPostNo(postNo)
                 .orElseThrow(()-> new IllegalArgumentException(postNo + "번 게시글이 없습니다."));
 
         if (addHitCount) {
-            if (postRepository.updateHit(post.getPostNo()) == 1) {
-                post.addHitCount();
-            }
+            int updatedPost = postRepository.updateHit(post.getPostNo());
+// 1이 아니면 예외
+            return new PostResponseDTO(post, post.getHit() + 1);
         }
 
         return new PostResponseDTO(post);
@@ -90,27 +90,27 @@ public class PostService {
 
     @Transactional
     public void deleteWithReplies(Long postNo) {
-        // comment 삭제
+        System.out.println("commentRepository.deleteByPostNo(postNo)");
+        commentRepository.deleteByPostNo(postNo);
+        System.out.println("postRepository.deleteById(postNo)");
         postRepository.deleteById(postNo);
     }
 
     @Transactional
     public void edit(PostEditRequestDTO postEditRequestDTO) {
         Long postNo = postEditRequestDTO.getPostNo();
-        Post post = postRepository.findById(postNo)
+        Post post = postRepository.findByPostNo(postNo)
                 .orElseThrow(()-> new IllegalArgumentException(postNo + "번 게시글이 없습니다."));
 
         post.edit(postEditRequestDTO.getTitle(), postEditRequestDTO.getContent());
     }
 
     @Transactional
-    public Post addReport(Long postNo) {
-        Post post = postRepository.findById(postNo)
+    public void addReport(Long postNo) {
+        Post post = postRepository.findByPostNo(postNo)
                 .orElseThrow(()-> new IllegalArgumentException(postNo + "번 게시글이 없습니다."));
 
-        postRepository.updateReport(post.getPostNo());
-        post = postRepository.findByPostNo(post.getPostNo());
-
-        return post;
+        int updatedPost = postRepository.updateReport(post.getPostNo());
+// 예외 던지기
     }
 }

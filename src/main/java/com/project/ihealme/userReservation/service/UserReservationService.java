@@ -1,15 +1,19 @@
 package com.project.ihealme.userReservation.service;
 
+import com.project.ihealme.HptReception.domain.HptReception;
 import com.project.ihealme.userReservation.domain.UserReservation;
 import com.project.ihealme.userReservation.repository.ReservationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 //@Transactional
 @Transactional
+@Service
 public class UserReservationService {
 
     @Autowired
@@ -33,15 +37,13 @@ public class UserReservationService {
 //        return userRes.getResNo();
 //    }
 
-    public void updateStatusToAccept(Long resNo) {
-        UserReservation userReservation = reservationRepository.findByResNo(resNo);
+    public void updateCurrentStatus(int resNo, String newStatus, LocalDateTime rDate) {
+        UserReservation userReservation = reservationRepository.findByResNo((long) resNo);
 
-        if (userReservation != null) {
-            userReservation.setCurrentStatus("진료 전");
-            reservationRepository.save(userReservation);
-        } else {
-            throw new RuntimeException("해당 접수번호에 대한 예약 정보가 존재하지 않습니다.");
-        }
+        userReservation.setCurrentStatus(newStatus);
+
+        userReservation.setRegdate(rDate);
+
+        reservationRepository.save(userReservation);
     }
-
 }
