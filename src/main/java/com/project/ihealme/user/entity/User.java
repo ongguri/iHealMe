@@ -134,4 +134,13 @@ public class User implements UserDetails {
     public boolean isEnabled() {
         return true; // 계정의 활성화 여부 리턴
     }
+
+    //실험용,, 삭제 플리즈
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
 }

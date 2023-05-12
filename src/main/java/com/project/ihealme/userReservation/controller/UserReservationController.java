@@ -2,6 +2,7 @@ package com.project.ihealme.userReservation.controller;
 
 import com.project.ihealme.HptReception.service.HptReceptionService;
 import com.project.ihealme.community.dto.PostWriteRequestDTO;
+import com.project.ihealme.user.entity.User;
 import com.project.ihealme.userReservation.domain.UserReservation;
 import com.project.ihealme.userReservation.service.UserReservationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,10 +55,16 @@ public class UserReservationController {
     }*/
 
     @GetMapping("/community/write")
-    public String writePostPage(@RequestParam("resNo") Long resNo, @RequestParam("name") String hptName, Model model) {
+    public String writePostPage(@RequestParam("resNo") Long resNo,
+                                @RequestParam("name") String hptName,
+                                Model model) {
+        //임시 유저 -> 여기서도 유저 검증해야 함
+        User user = new User();
+        user.setUserId(1L);
+        user.setEmail("longlee@naver.com");
+        model.addAttribute("user", user);
 
-        model.addAttribute("postWriteReq", new PostWriteRequestDTO(1L, resNo, hptName));
-
+        model.addAttribute("postWriteReq", new PostWriteRequestDTO(user.getUserId(), resNo, hptName));
         return "community/writePost";
     }
 }
