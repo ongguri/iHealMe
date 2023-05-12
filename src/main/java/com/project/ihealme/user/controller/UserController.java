@@ -5,15 +5,13 @@ import com.project.ihealme.user.dto.UserRequest;
 import com.project.ihealme.user.jwt.JwtConfig;
 import com.project.ihealme.user.service.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.Arrays;
-import java.util.List;
+import java.util.Collections;
 
 @Controller
 @RequiredArgsConstructor
@@ -22,49 +20,52 @@ public class UserController {
     private final UserServiceImpl usersService;
     private final JwtConfig jwtConfig;
 
-    @GetMapping("login")
+    @GetMapping("/login")
     public String login() {
-        return "login";
+        return "/users/login";
     }
 
-    @GetMapping("type")
+    @GetMapping("/type")
     public String chooseType() {
-        return "usertype";
+        return "/users/usertype";
     }
 
-    @GetMapping("signupuser")
+    @GetMapping("/signupuser")
     public String signupUser() {
-        return "signupuser";
+        return "/users/signupuser";
     }
 
-    @GetMapping("signuphospital")
+    @GetMapping("/signuphospital")
     public String signupHospital() {
-        return "signuphospital";
+        return "/users/signuphospital";
     }
 
-    @PostMapping("/signup")
-    public UserDTO createUser(UserRequest userRequest) {
-        return usersService.createUser(userRequest);
-    }
-
-    @GetMapping("/my")
-    public UserDTO findUser(Authentication authentication) {
-        if (authentication == null) {
-            throw new BadCredentialsException("회원 정보를 찾을 수 없습니다.");
-        }
-        return usersService.findUser(authentication.getName());
-    }
-
-    @GetMapping("/admin")
-    @PreAuthorize("isAuthenticated() and hasRole('ROLE_ADMIN')")
-    public List<UserDTO> findAllUser() {
-        return usersService.findAll();
+    @PostMapping(value = "/registeruser")
+    public String registerUser(@RequestBody UserRequest userRequest) {
+        usersService.registerUser(userRequest);
+        return "redirect:/login";
     }
 
     @PostMapping("/login")
-    public String login(UserRequest userRequest) {
-        UserDTO users = usersService.findByEmailAndPassword(userRequest.getEmail(), userRequest.getPassword());
-        return jwtConfig.createToken(users.getEmail(), Arrays.asList(users.getUserRole().getValue()));
+    public String login(@RequestBody UserDTO userDTO, RedirectAttributes redirectAttributes) {
+        UserDTO user = usersService.findByEmailAndPassword(userDTO.getEmail(), userDTO.getPassword());
+        String token = jwtConfig.createToken(user.getEmail(), Collections.singletonList(user.getUserRole().getValue()));
+        redirectAttributes.addFlashAttribute("token",token);
+        return "redirect:/";
     }
+
+//    @GetMapping("/my")
+//    public UserDTO findUser(Authentication authentication) {
+//        if (authentication == null) {
+//            throw new BadCredentialsException("회원 정보를 찾을 수 없습니다.");
+//        }
+//        return usersService.findUser(authentication.getName());
+//    }
+
+//    @GetMapping("/admin")
+//    @PreAuthorize("isAuthenticated() and hasRole('ROLE_ADMIN')")
+//    public List<UserDTO> findAllUser() {
+//        return usersService.findAll();
+//    }
 
 }

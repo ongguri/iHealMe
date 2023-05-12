@@ -10,7 +10,6 @@ import org.springframework.web.reactive.function.client.WebClient;
 @RequiredArgsConstructor
 public class KakaoConfig {
 
-
     @Value("${kakao.map.rest.api.key}")
     private String appkey;
 
@@ -20,4 +19,5 @@ public class KakaoConfig {
                 .baseUrl("https://dapi.kakao.com")
                 .defaultHeader("Authorization", "KakaoAK " + appkey).build();
     }
+
 }

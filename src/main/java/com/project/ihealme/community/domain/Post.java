@@ -4,10 +4,11 @@ import com.project.ihealme.community.dto.PostWriteRequestDTO;
 import com.project.ihealme.user.entity.User;
 import com.project.ihealme.userReservation.domain.UserReservation;
 import lombok.*;
+import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
-import java.util.ArrayList;
+import javax.validation.constraints.NotBlank;
 import java.util.List;
 
 @Getter
@@ -29,7 +30,7 @@ public class Post extends BaseEntity {
     private User user;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "RESNO")
+    @JoinColumn(name = "RESNO", unique = true, nullable = false)
     private UserReservation userReservation;
 
     @Column(nullable = false, length = 100)
@@ -44,8 +45,10 @@ public class Post extends BaseEntity {
     @ColumnDefault("0")
     private int report;
 
-    @OneToMany(mappedBy = "post", orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<Comment> comments = new ArrayList<>();
+    @OneToMany(mappedBy = "post", fetch = FetchType.LAZY)
+    @BatchSize(size = 10)
+    @OrderBy("commNo desc")
+    private List<Comment> comments;
 
     public static Post create(PostWriteRequestDTO postWriteRequestDTO, User user, UserReservation userReservation) {
         Post post = Post.builder()
@@ -61,13 +64,5 @@ public class Post extends BaseEntity {
     public void edit(String title, String content) {
         this.title = title;
         this.content = content;
-    }
-
-    public void addHitCount() {
-        hit++;
-    }
-
-    public void addReportCount() {
-        report++;
     }
 }

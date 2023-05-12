@@ -22,6 +22,8 @@ public class PostPageRequestDTO {
     public PostPageRequestDTO() {
         this.page = 1;
         this.size = 10;
+        this.type = "";
+        this.keyword = "";
     }
 
     public Pageable getPageable(Sort sort) {

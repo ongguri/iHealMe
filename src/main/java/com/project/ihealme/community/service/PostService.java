@@ -22,7 +22,7 @@ public class PostService {
     private final PostRepository postRepository;
     private final CommentRepository commentRepository;
     private final UserRepository userRepository;
-    private final ReservationRepository userReservationRepository;
+    private final ReservationRepository reservationRepository;
 
     @Transactional
     public Long writePost(PostWriteRequestDTO postWriteRequestDTO) {
@@ -32,11 +32,13 @@ public class PostService {
         User user = userRepository.findById(userId)
                 .orElseThrow(()-> new IllegalArgumentException("해당 유저가 없습니다. userId =" + userId));
 
-        UserReservation userReservation = userReservationRepository.findById(resNo)
+        UserReservation userReservation = reservationRepository.findById(resNo)
                 .orElseThrow(()-> new IllegalArgumentException("해당 접수가 없습니다. resNo =" + resNo));
 
         Post post = Post.create(postWriteRequestDTO, user, userReservation);
+
         Post savedPost = postRepository.save(post);
+        userReservation.setCurrentStatus("후기작성완료");
 
         return savedPost.getPostNo();
     }
@@ -72,40 +74,47 @@ public class PostService {
         return getPost(postNo, false);
     }
 
-    @Transactional
     public PostResponseDTO getPost(Long postNo, boolean addHitCount) {
-        Post post = postRepository.findByPostNo(postNo);
+        Post post = postRepository.findByPostNo(postNo)
+                .orElseThrow(()-> new IllegalArgumentException(postNo + "번 게시글이 없습니다."));
 
-        if (addHitCount) {
-            post.addHitCount();
-        }
-
-        PostResponseDTO postResponseDTO = new PostResponseDTO(post);
-
-        return postResponseDTO;
+        return new PostResponseDTO(post, addHitCount ? post.getHit() + 1 : post.getHit());
     }
 
     @Transactional
     public void deleteWithReplies(Long postNo) {
-        // comment 삭제
+        System.out.println("commentRepository.deleteByPostNo(postNo)");
+        commentRepository.deleteByPostNo(postNo);
+        System.out.println("postRepository.deleteById(postNo)");
         postRepository.deleteById(postNo);
     }
 
     @Transactional
     public void edit(PostEditRequestDTO postEditRequestDTO) {
         Long postNo = postEditRequestDTO.getPostNo();
-        Post post = postRepository.findById(postNo)
+        Post post = postRepository.findByPostNo(postNo)
                 .orElseThrow(()-> new IllegalArgumentException(postNo + "번 게시글이 없습니다."));
 
         post.edit(postEditRequestDTO.getTitle(), postEditRequestDTO.getContent());
     }
 
-    public Post addReport(Long postNo) {
-        Post post = postRepository.findById(postNo).get();
-        post.addReportCount();
+    @Transactional
+    public void addReport(Long postNo) {
+        Post post = postRepository.findByPostNo(postNo)
+                .orElseThrow(()-> new IllegalArgumentException(postNo + "번 게시글이 없습니다."));
 
-        Post savedPost = postRepository.save(post);
+        int updatedPost = postRepository.updateReport(post.getPostNo());
+        // 예외 던지기
+    }
 
-        return savedPost;
+    @Transactional
+    public void addHitCount(Long postNo) {
+        Post post = postRepository.findByPostNo(postNo)
+                .orElseThrow(()-> new IllegalArgumentException(postNo + "번 게시글이 없습니다."));
+
+        int updatedPost = postRepository.updateHit(postNo);
+        if (updatedPost != 1) {
+            throw new IllegalArgumentException(postNo + "번 게시글의 조회수를 수정하지 못했습니다.");
+        }
     }
 }

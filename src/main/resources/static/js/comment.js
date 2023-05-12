@@ -1,16 +1,12 @@
-$(document).ready(function (){
-    const postNo = [[${dto.postNo}]];
+$(document).ready(function () {
+    let postNo = $("#postNo").val();
     const listGroup = $(".commentList");
+    const commentPageFooter = $(".commentFooter");
+    let pageNum = 1;
 
-    /*$(".comment-count").click(function (){
-        $.getJSON('/comments/post/' + postNo, function(arr){
-            console.log(arr);
-        })
-    })*/
+    function formatTime(str){
+        let date = new Date(str);
 
-    //날짜 처리
-    function  formatTime(str){
-        const date = new Date(str);
         return date.getFullYear() + '/' +
             (date.getMonth() + 1) + '/' +
             date.getDate() + ' ' +
@@ -18,63 +14,153 @@ $(document).ready(function (){
             date.getMinutes();
     }
 
-    //특정 게시글의 댓글 처리
-    function loadJSONData(){
-        $.getJSON('/comments/post/'+postNo, function (arr){
+    function getList(param, callback, error){
+        let page = param.page || 1;
+
+        $.getJSON('/community/' + postNo + "/" + page, function(data){
+            if(callback){
+                callback(data.commentCnt, data.list);
+            }
+        }).fail(function (xhr, status, err){
+            if(error){
+                error();
+            }
+        });
+    }
+
+    function showCommentPage(commentCnt){
+        let endNum = Math.ceil(pageNum / 3.0) * 3;
+        let startNum = endNum - 2;
+        let prev = startNum !== 1;
+        let next = false;
+
+        if(endNum * 3 >= commentCnt){
+            endNum = Math.ceil(commentCnt / 3.0);
+        }
+
+        if(endNum * 3 < commentCnt){
+            next = true;
+        }
+
+        let str = "<ul class='pagination pull-right'>";
+
+        if(prev){
+            str += "<li class='page-item'><a class='page-link' href='" + (startNum-1)+"'>이전</a></li> "
+        }
+        let active;
+        for (let i = startNum; i <= endNum; i++) {
+            active = pageNum == i ? "active" : "";
+            str += "<li class='page-item " + active + " '><a class='page-link' href='" + i + "'>" + i + "</a></li>";
+        }
+        if(next){
+            str += "<li class='page-item'><a class='page-link' href='" + (endNum + 1) + "'>다음</a></li>";
+        }
+        str += "</ul>";
+        commentPageFooter.html(str);
+    }
+
+
+
+//특정 게시글의 댓글 처리
+    function loadJSONData(page) {
+        getList({postNo, page : page||1}, function (commentCnt, arr) {
             console.log(arr);
 
-            let str = "";
-            $('.comment-count').html(" ( " + arr.length + " )");
+            if(page == -1){
+                pageNum = Math.ceil(commentCnt/3.0);
+                loadJSONData(pageNum);
+                return;
+            }
 
-            $.each(arr, function (idx, comment){
+            let str = "";
+            $('.comment-count').html(" ( " + commentCnt + " )");
+
+            // 댓글이 해당 페이지에 없는 경우
+            if( arr === null || !arr.length){
+                if(pageNum > 1){    //댓글 삭제했을 때
+                    pageNum -= 1;
+                    loadJSONData(pageNum);
+                }
+                document.querySelector('.commentList').innerHTML = '<div class="comment-none"><p>등록된 댓글이 없습니다.</p></div>';
+                return false;
+            }
+
+            $.each(arr, function (idx, comment) {
                 console.log(comment);
-                str += '    <div class="card-body" data-commNo=' + comment.commNo + '">' + comment.commNo;
-                str += '    <h5 class="card-title">' + comment.content + '</h5>';
-                str += '    <h6 class="card-subtitle mb-2 text-muted">' + comment.userEmail + '</h6>';
-                str += '    <p class="card-text">' + formatTime(comment.regDate) + '</p>';
-                str += '    </div>';
+                str += ' <div class="card-body" id="' + comment.commNo + '">';
+                str += ' <table>';
+                str += ' <tr><td class="card-subtitle" rowspan="2"><span class="card-subtitle mb-2 text-muted">' + comment.email + '</span></td>';
+                str += ' <td><span class="card-title">' + comment.content + '</span></td></tr>';
+                str += ' <tr><td><span class="card-text">' + formatTime(comment.regDate) + '</span></td>';
+                str += ' </tr></table>';
+                str += ' </div>';
             })
 
             listGroup.html(str);
+            showCommentPage(commentCnt);
         });
     }
-    $(".comment-count").click(function (){
-        loadJSONData();
-    })  //end click
 
-    let modal = $('.modal');
 
-    $(".addComment").click(function(){
-        modal('show');
+    commentPageFooter.on("click", "li a", function(e){
+        e.preventDefault();
+        console.log("page click");
+
+        let targetPageNum = $(this).attr("href");
+        console.log("targetPageNum: " + targetPageNum);
+        pageNum = targetPageNum;
+        loadJSONData(pageNum);
+    })
+
+
+    // $(".comment-count").click(function () {
+    //     loadJSONData(1);
+    // }) //end click
+
+    var modal = $('.modal');
+
+    $(".addComment").click(function () {
+        modal.modal('show');
+        // 댓글 입력 부분 초기화
         $('input[name="commentContent"]').val('');
 
-        $(".modal-footer .btn").hide();
-        $(".commentSave, .commentClose").show();
+        $(".modal-footer .btn").hide();     //모달 내 버튼 숨기기
+        $(".commentSave, .commentClose").show();    //필요한 버튼만 표시
     });
 
-    $(".commentSave").click(function (){
+    $(".commentSave").click(function () {
+        // 자바스크립트 객체 생성
         const comment = {
             postNo: postNo,
-            content: $('input[name="commentContent"]').val(),
+            content: $('input[name="commentContent"]').val()
         };
         console.log(comment);
+
+        // JSON 문자열로 바꿔서 전송
         $.ajax({
-            url: '/comments/',
+            url: '/community/' + postNo,
             method: 'post',
             data: JSON.stringify(comment),
             contentType: 'application/json; charset=utf-8',
             dataType: 'json',
-            success: function (data){
+            success: function (data) {
                 console.log(data);
                 alert("댓글이 등록되었습니다.")
-                modal('hide');
-                loadJSONData();
+                modal.modal('hide');
+                loadJSONData(pageNum);
             }
         })
     });
 
-    $('.commentList').on("click", ".card-body", function(){
-        const commNo = $(this).data("commNo");
+    $(".commentClose").click(function () {
+        modal.modal('hide');
+    });
+
+    $('.commentList').on("click", ".card-body", function () {
+        const commNo = this.id;
+        pageNum = $("li.active > a").html();
+
+        console.log(commNo);
 
         $("input[name='commentContent']").val($(this).find('.card-title').html());
         $("input[name='commNo']").val(commNo);
@@ -82,28 +168,29 @@ $(document).ready(function (){
         $(".modal-footer .btn").hide();
         $(".commentDelete, .commentUpdate, .commentClose").show();
 
-        modal('show');
+        modal.modal('show');
     });
 
-    $(".commentDelete").on("click", function (){
+    $(".commentDelete").on("click", function () {
         const commNo = $("input[name='commNo']").val();
 
         $.ajax({
-            url: '/comments/' + commNo,
+            url: '/community/comment/' + commNo,
             method: 'delete',
-            success: function (result){
+            success: function (result) {
                 console.log("result: " + result);
-                if(result ==='success'){
+                if (result === 'success') {
                     alert("댓글이 삭제되었습니다.");
-                    modal('hide');
-                    loadJSONData();
+                    modal.modal('hide');
+                    loadJSONData(pageNum);
                 }
             }
         })
     });
 
-    $(".commentUpdate").click(function(){
+    $(".commentUpdate").click(function () {
         const commNo = $("input[name='commNo']").val();
+        console.log(commNo);
 
         const comment = {
             commNo: commNo,
@@ -113,24 +200,25 @@ $(document).ready(function (){
 
         console.log(comment);
         $.ajax({
-            url: '/comments/' + commNo,
+            url: '/community/comment/' + commNo,
             method: 'put',
             data: JSON.stringify(comment),
             contentType: 'application/json; charset=utf-8',
-            success: function (result){
+            success: function (result) {
                 console.log("RESULT: " + result);
 
-                if(result === 'success'){
+                if (result === 'success') {
                     alert("댓글이 수정되었습니다.");
-                    modal('hide');
-                    loadJSONData();
+                    modal.modal('hide');
+                    loadJSONData(pageNum);
                 }
             }
         })
     })
+
+    window.onload=function (){
+        loadJSONData(pageNum);
+    };
 });
-
-
-
 
 

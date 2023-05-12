@@ -1,5 +1,6 @@
 package com.project.ihealme.user.entity;
 
+import com.project.ihealme.user.dto.UserRequest;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -21,7 +22,6 @@ import java.util.Set;
 public class User implements UserDetails {
 
     // 이름, 이메일, 연락처, 생년월일, 성별, 비밀번호, 질문, 답
-
     @Id @Column
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "USER_GEN")
     @SequenceGenerator(sequenceName = "USER_USERNO_SEQ", name = "USER_GEN", allocationSize = 1)
@@ -67,11 +67,34 @@ public class User implements UserDetails {
     @Column(unique = true)
     private String hptPhoneNum;
 
+    public User(UserRequest requestDto, String password) {
+        this.userRole = UserRole.USER;
+        this.name = requestDto.getName();
+        this.email = requestDto.getEmail();
+        this.phoneNum = requestDto.getPhoneNum();
+        this.password = password;
+        this.birthDate = requestDto.getBirthDate();
+        this.gender = requestDto.getGender();
+        this.question = requestDto.getQuestion();
+        this.answer = requestDto.getAnswer();
+        this.businessNum = "-";
+        this.hptName = "-";
+        this.hptAddress = "-";
+        this.phoneNum = "-";
+    }
+
     @Builder
     private User(String password, UserRole userRole, String email) {
         this.password = password;
         this.userRole = userRole;
         this.email = email;
+    }
+
+    @Builder
+    private User(UserRequest requestDto) {
+        this.password = requestDto.getPassword();
+        this.userRole = requestDto.getUserRole();
+        this.email = requestDto.getEmail();
     }
 
     @Override

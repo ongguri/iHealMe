@@ -1,94 +1,89 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html>
 <head>
 	<meta charset="UTF-8">
 	<meta http-equiv="X-UA-Compatible" content="IE-edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum=1.0, user-scalable=no">
 	<title>카카오맵 API</title>
+	
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
-		<h1>카카오맵 검색 결과</h1>
-		<table border="1">
-			<thead>
-				<tr>
-					<th>id</th>
-					<th>repEmail</th>
-					<th>placeName</th>
-					<th>distance</th>
-					<th>placeUrl</th>
-					<th>categoryName</th>
-					<th>addressName</th>
-					<th>roadAddressName</th>
-					<th>phone</th>
-					<th>categoryGroupCode</th>
-					<th>categoryGroupName</th>
-					<th>x</th>
-					<th>y</th>
-				</tr>
-			</thead>
-			<tbody>
-			<tr th:each="doc : ${documents}">
-				<td th:text="${doc.id}"></td>
-				<td th:text="${doc.rep_Email}"></td>
-				<td th:text="${doc.place_name}"></td>
-				<td th:text="${doc.distance}"></td>
-				<td th:text="${doc.place_url}"></td>
-				<td th:text="${doc.category_name}"></td>
-				<td th:text="${doc.address_name}"></td>
-				<td th:text="${doc.road_address_name}"></td>
-				<td th:text="${doc.phone}"></td>
-				<td th:text="${doc.category_group_code}"></td>
-				<td th:text="${doc.category_group_name}"></td>
-				<td th:text="${doc.x}"></td>
-				<td th:text="${doc.y}"></td>
-			</tr>
-			<!--<tr>
-				<td>${documents.id}</td>
-				<td>${documents.rep_Email}</td>
-				<td>${documents.place_name}</td>
-				<td>${documents.distance}</td>
-				<td>${documents.place_url}</td>
-				<td>${documents.category_name}</td>
-				<td>${documents.address_name}</td>
-				<td>${documents.road_address_name}</td>
-				<td>${documents.phone}</td>
-				<td>${documents.category_group_code}</td>
-				<td>${documents.category_group_name}</td>
-				<td>${documents.x}</td>
-				<td>${documents.y}</td>
-			</tr>
-			</#list>-->
-			</tbody>
-		</table>
 
-		<script>
-			function getPost() {
+	<form>
+		<label for="query">Search:</label>
+		<input type="text" id="query" name="query">
+		<button type="submit" id="searchBtn">Search</button>
+	</form>
+	
+	<div id="map" style="width:100%;height:800px;position:relative;overflow:hidden;"></div>
+	
+	<div id="placesList"></div>  <!-- 결과를 표시할 div 요소 -->
+	
+	<!-- 지도 표시와 services와 clusterer 라이브러리 불러오기 -->
+	<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=7c6d76e0c895a60f42aa8b0ef2c67d0a&libraries=services,clusterer"></script>
+	
+	<script>
+		
+		var markers = [];
+		
+		var mapContainer = document.getElementById('map'), // 지도를 표시할 div
+				mapOption = {
+					center: new kakao.maps.LatLng(37.477640999999934, 126.95956799999973), // 지도의 중심좌표
+					level: 3 // 지도의 확대 레벨
+				};
+		
+		// 지도를 생성합니다
+		var map = new kakao.maps.Map(mapContainer, mapOption);
+		
+		$(document).ready(function(){
+			$("#searchBtn").click(function(){
+				var query = $("#query").val();
 				$.ajax({
 					type: "GET",
-					url: "http://localhost/api",
-					data: {},
-					success: function (response) {
-						let rows = response['documents']['row']
-						for (let i = 0; i < rows.length; i++) {
-							let id = rows[i]['id']
-							let place_name = rows[i]['place_name']
-							let distance = rows[i]['distance']
-							let place_url = rows[i]['place_url']
-							let category_name = rows[i]['category_name']
-							let address_name = rows[i]['address_name']
-							let road_address_name = rows[i]['road_address_name']
-							let phone = rows[i]['phone']
-							let category_group_code = rows[i]['category_group_code']
-							let category_group_name = rows[i]['category_group_name']
-							let x = rows[i]['x']
-							let y = rows[i]['y']
-							console.log(id, place_name, distance, place_url, category_name, address_name, road_address_name,
-							phone, category_group_code, category_group_name, x, y)
-						}
-						console.log(response)
+					url: "/api",
+					data: {query},
+					success: function(data){
+						// 기존의 마커 삭제
+						deleteMarkers();
+						
+						// 장소 목록 삭제
+						var placesList = $("#placesList");
+						placesList.empty();
+						
+						$.each(data, function(index, item) {
+							// 마커 생성
+							var marker = addMarker(new kakao.maps.LatLng(item.y, item.x), item.place_name);
+							
+							// 마커 클릭 이벤트 등록
+							kakao.maps.event.addListener(marker, 'click', function() {
+								// 인포윈도우 생성
+								var infowindow = new kakao.maps.InfoWindow({
+									content: '<div style="padding:5px;font-size:12px;">' + item.place_name + '</div>'
+								});
+								
+								// 인포윈도우 열기
+								infowindow.open(map, marker);
+							});
+							
+							// 장소 목록에 추가
+							var placeItem = $("<div>").addClass("placeItem");
+							var id = $("<div>").addClass("id").text(item.id);
+							var name = $("<div>").addClass("name").text(item.place_name);
+							var phone = $("<div>").addClass("phone").text(item.phone);
+							var address = $("<div>").addClass("address").text(item.road_address_name);
+							var placeUrl = $("<div>").addClass("placeUrl").text(item.place_url);
+							placeItem.append(name, phone, address);
+							placesList.append(placeItem);
+						});
+					},
+					error: function(){
+						alert("Error occurred while getting places data.");
 					}
-				})
-			}
-		</script>
+				});
+			});
+		});
+		
+	</script>
 </body>
 </html>

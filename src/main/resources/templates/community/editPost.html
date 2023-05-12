@@ -1,8 +1,10 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout}">
 <head>
     <meta charset="UTF-8">
-    <title>후기 수정</title>
+    <title th:text="${post.title}">후기 수정</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
     <link rel="stylesheet" th:href="@{/css/community/editPost.css}" href="../../css/community/editPost.css">
@@ -10,58 +12,63 @@
 </head>
 <body>
 
-<div class="container">
-    <form action="post.html" th:action method="post">
-        <input type="hidden" name="page" th:value="${postPageRequestDTO.page}" value="1">
+<div layout:fragment="content">
+    <div class="container">
+        <form action="post.html" th:action th:object="${post}" method="post">
+            <input type="hidden" name="page" th:value="${postPageRequestDTO.page}" value="1">
 
-        <h4 class="head">후기 수정</h4>
-        <div class="buttons">
-            <button type="submit" class="btn btn-secondary btn-md">수정</button>
-            <button type="button" class="btn btn-secondary btn-md"
-                    onclick="location.href='posts.html'"
-                    th:onclick="|location.href='@{/community/{postNo}(postNo=${dto.postNo},page=${postPageRequestDTO.page},type=${postPageRequestDTO.type},keyword=${postPageRequestDTO.keyword})}'|">취소</button>
-            <!--<button type="button" class="btn btn-secondary btn-md"
-                    onclick="submitFormWithParam()"
-                    th:onclick="submitFormWithParam([[${dto.postNo}]], [[${postPageRequestDTO.page}]], , )">취소</button>
-                    &lt;!&ndash;th:onclick="[[|submitFormWithParam(${dto.postNo}, ${postPageRequestDTO.page}, ${postPageRequestDTO.type}, ${postPageRequestDTO.keyword})|]]">취소</button>&ndash;&gt;-->
-        </div>
-        <hr>
-        <div class="mb-3">
-            <input type="text" class="form-control-plaintext" name="hptName" th:value="|[${dto.hptName}]|" value="[병원명]" readonly>
-            <input type="text" class="form-control" name="title" th:value="${dto.title}" value="제목">
-        </div>
-        <div class="mb-3">
-            <textarea class="form-control" name="content" rows="15" th:text="${dto.content}">내용</textarea>
-        </div>
-    </form>
+            <h4 class="head">후기 수정</h4>
+            <div class="buttons">
+                <button type="button" class="btn btn-secondary btn-md editBtn">수정</button>
+                <button type="button" class="btn btn-secondary btn-md cancelBtn">취소</button>
+            </div>
+            <hr>
+            <div class="mb-3">
+                <input type="text" class="form-control-plaintext" name="hptName" th:value="|[${post.hptName}]|"
+                       value="[병원명]" readonly>
+                <input type="text" class="form-control" th:field="*{title}" value="제목">
+            </div>
+            <div class="mb-3">
+                <textarea class="form-control" th:field="*{content}" rows="15">내용</textarea>
+            </div>
+        </form>
+    </div>
+
+    <script th:inline="javascript">
+        var actionForm = $("form");
+
+        $(".editBtn").click(function() {
+
+            if(!confirm("게시글을 수정하시겠습니까?")){
+                return ;
+            }
+
+            actionForm
+                .attr("method","post")
+                .submit();
+        });
+
+        $(".cancelBtn").click(function() {
+
+            if(!confirm("게시글 수정을 취소하시겠습니까?")){
+                return;
+            }
+
+            var postNo = [[${post.postNo}]];
+
+            actionForm.empty();
+
+            actionForm.append('<input type="hidden" name="page" value=[[${postPageRequestDTO.page}]]>'); //목록 페이지 이동에 필요한 내용을 다시 추가
+            actionForm.append('<input type="hidden" name="type" value=[[${postPageRequestDTO.type}]]>');
+            actionForm.append('<input type="hidden" name="keyword" value=[[${postPageRequestDTO.keyword}]]>');
+
+            actionForm
+                .attr("action", "/community/" + postNo)
+                .attr("method", "get");
+
+            actionForm.submit();
+        })
+    </script>
 </div>
-
-<!--<script>
-    function submitFormWithParam() {
-        var postNo = arguments[0];
-        var page = arguments[1];
-        var type = arguments[2];
-        var keyword = arguments[3];
-
-        // Create a new form element
-        var form = document.createElement("form");
-        form.setAttribute("method", "POST");
-        form.setAttribute("action", "/cancel");
-
-        // Create a hidden input field for the parameter value
-        var input = document.createElement("input");
-        input.setAttribute("type", "hidden");
-        input.setAttribute("name", "hitCountNotChanged");
-        input.setAttribute("value", "true");
-
-        // Add the input field to the form
-        form.appendChild(input);
-
-        // Submit the form
-        document.body.appendChild(form);
-        form.submit();
-    }
-</script>-->
-
 </body>
 </html>

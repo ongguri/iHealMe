@@ -1,10 +1,10 @@
 package com.project.ihealme.community.dto;
 
+import com.project.ihealme.user.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import com.project.ihealme.user.entity.User;
 
 import java.time.LocalDateTime;
 
@@ -20,6 +20,7 @@ public class CommentDto {
     private Long postNo;
 
     private String encodeEmail(User user) {
-        return user.getEmail().substring(0, 3).concat("****");
+       return this.email = user.getEmail().substring(0, 3).concat("****");
     }
+
 }
