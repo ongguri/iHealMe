@@ -8,7 +8,8 @@ public enum ExceptionType {
     USER_NOT_MATCH_POST_WRITER("해당 게시글의 작성자가 아닙니다."),
     POST_WRITE_NOT_ALLOWED("게시글을 작성할 수 없습니다."),
     POST_EDIT_NOT_ALLOWED("게시글을 수정할 수 없습니다."),
-    POST_REPORT_NOT_ALLOWED("게시글을 수정할 수 없습니다.");
+    POST_REPORT_NOT_ALLOWED("게시글을 신고할 수 없습니다."),
+    INVALID_SEARCH_TYPE("유효하지 않은 검색 유형입니다.");
 
     private final String message;
 

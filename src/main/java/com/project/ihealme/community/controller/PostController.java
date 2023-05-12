@@ -1,5 +1,6 @@
 package com.project.ihealme.community.controller;
 
+import com.project.ihealme.community.domain.SearchType;
 import com.project.ihealme.community.dto.*;
 import com.project.ihealme.community.service.PostService;
 import com.project.ihealme.user.entity.User;
@@ -33,14 +34,11 @@ public class PostController {
     }
 
     @GetMapping
-    public String posts(@ModelAttribute("postPageReq") PostPageRequestDTO postPageRequestDTO, Model model) {
-        Map<String, String> searchTypes = new LinkedHashMap<>();
-        searchTypes.put("h", "병원명");
-        searchTypes.put("t", "제목");
-        searchTypes.put("u", "작성자");
+    public String posts(@ModelAttribute("postPageReq") PostPageRequestDTO postPageRequestDTO,
+                        Model model) {
 
-        model.addAttribute("result", postService.getPostList(postPageRequestDTO));
-        model.addAttribute("searchTypes", searchTypes);
+        model.addAttribute("postPageRes", postService.getPostList(postPageRequestDTO));
+        model.addAttribute("searchTypes", SearchType.values());
 
         return "community/posts";
     }
@@ -125,7 +123,7 @@ public class PostController {
     }
 
     private boolean updateHitCount(Long postNo, User user, Cookie postViewCookie, HttpServletResponse response) {
-        if (postService.checkUserOfPost(postNo, user)) {
+        if (postService.checkWriter(postNo, user)) {
             return false;
         }
 

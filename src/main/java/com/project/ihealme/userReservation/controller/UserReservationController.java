@@ -58,13 +58,15 @@ public class UserReservationController {
     public String writePostPage(@RequestParam("resNo") Long resNo,
                                 @RequestParam("name") String hptName,
                                 Model model) {
-        //임시 유저 -> 여기서도 유저 검증해야 함
+
+        //임시 유저 -> 여기서도 유저 검증해야 함: 로그인 한 일반유저만 write 페이지 접근 가능
         User user = new User();
         user.setUserId(1L);
         user.setEmail("longlee@naver.com");
         model.addAttribute("user", user);
 
         model.addAttribute("postWriteReq", new PostWriteRequestDTO(user.getUserId(), resNo, hptName));
+
         return "community/writePost";
     }
 }
