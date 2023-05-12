@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 public class HptReceptionController {
@@ -38,8 +39,12 @@ public class HptReceptionController {
 
     @PostMapping("/HptReception/HptReceptionList/subCounter")
     @ResponseBody
-    public String subCounter() {
-        hptReceptionService.decreaseRtCount();
+    public String subCounter(@RequestBody Map<String, Object> requestBody) {
+        int rtCount = (int) requestBody.get("rtCount");
+//        System.out.println("rtCount = " + rtCount);
+        if(rtCount > 0) {
+            hptReceptionService.decreaseRtCount();
+        }
         return "success";
     }
 
