@@ -7,8 +7,6 @@ import com.project.ihealme.kakaoMaps.dto.KakaoMapsDto;
 import com.project.ihealme.kakaoMaps.entity.KakaoMapsEntity;
 import com.project.ihealme.kakaoMaps.repository.KakaoMapsRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -21,24 +19,27 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-@Transactional
 @RequiredArgsConstructor
 public class KakaoMapsService {
 
     private final KakaoMapsRepository kakaoMapsRepository;
 
-    public List<KakaoMapsEntity> selectKeyword(String query) throws JsonProcessingException {
+    /*public List<KakaoMapsEntity> selectKeyword(String query) throws JsonProcessingException {
         List<KakaoMapsEntity> kakaoList = convertToKakaoMapsEntity(query);
         return kakaoList;
     }
 
-    public void saveKeyword(List<KakaoMapsEntity> kakaoList) {
+    public void saveKeyword(String query) throws JsonProcessingException {
+        List<KakaoMapsEntity> kakaoList = selectKeyword(query);
+        for (int i = 0; i < kakaoList.size(); i++) {
+
+        }
         kakaoMapsRepository.saveAll(kakaoList);
     }
 
     private List<KakaoMapsEntity> convertToKakaoMapsEntity(String query) throws JsonProcessingException {
         // 카카오 API 호출하여 검색 결과를 받아옴
-        String apiUrl = "https://dapi.kakao.com/v2/local/search/keyword.json?query=" + query;
+        String apiUrl = "https://dapi.kakao.com/v2/local/search/keyword.json?query=" + String.format("%s", "강남 소아과");
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", "KakaoAK 0a931d3e53412cb779f034fc86ec4c96");
@@ -62,5 +63,10 @@ public class KakaoMapsService {
             }
         }
         return kakaoList;
-    }
+    }*/
+
+   /* @Transactional
+    public String save(KakaoMapsDto kakaoMapsDto) {
+        return KakaoMapsRepository.save(kakaoMapsDto.toEntity()).getId();
+    }*/
 }
