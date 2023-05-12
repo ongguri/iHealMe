@@ -14,7 +14,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -68,7 +67,6 @@ public class CommentServiceImpl implements CommentService{
     public CommentPageDto getListPage(Criteria criteria, Long postNo){
         Post post = postRepository.findByPostNo(postNo)
                 .orElseThrow(()-> new IllegalArgumentException("해당 게시글이 없습니다."));
-        System.out.println("===============댓글 ㄹㅣ스트: " +commentRepository.getListWithPaging(criteria.getAmount(), criteria.getPageNum(), post));
         return CommentPageDto.createCommentPageDto(
                 commentRepository.countByPostNo(postNo),
                 commentRepository.getListWithPaging(criteria.getAmount(), criteria.getPageNum(), post));
@@ -89,49 +87,7 @@ public class CommentServiceImpl implements CommentService{
         commentRepository.deleteById(commNo);
     }
 
-
-  /*  private final CommentRepository commentRepository;
-    private final PostRepository postRepository;
-    private final UserRepository userRepository;
-
-    @Transactional
-    public List<CommentResponseDto> findAllComments(Long postNo){
-        Post post = postRepository.findById(postNo)
-                .orElseThrow(PostNotFoundException::new);
-        List<Comment> comments = commentRepository.findByPost(post);
-
-        return comments.stream()
-                .map(CommentResponseDto::new)
-                .collect(Collectors.toList());
-    }
-
-    @Transactional
-    public void saveComment(CommentRequestDto dto, Long postNo, User user){
-        Post post = postRepository.findById(postNo)
-                .orElseThrow(PostNotFoundException::new);
-
-        Comment comment = new Comment(dto.getContent(), user, post);
-        commentRepository.save(comment);
-    }
-
-    @Transactional
-    public void updateComment(Long commNo, User user, CommentRequestDto dto){
-        Comment comment = commentRepository.findById(commNo)
-                .orElseThrow(CommentNotFoundException::new);
-
-        validateComment(comment, user);
-        comment.setContent(dto.getContent());
-    }
-
-    @Transactional
-    public void deleteComment(Long commNo, User user) {
-        Comment comment = commentRepository.findById(commNo)
-                .orElseThrow(CommentNotFoundException::new);
-
-        validateComment(comment, user);
-        commentRepository.delete(comment);
-    }
-
+    /*
     private void validateComment(Comment comment, User user) {
         if (!comment.isOwnComment(user)) {
             throw new MemberNotEqualsException();

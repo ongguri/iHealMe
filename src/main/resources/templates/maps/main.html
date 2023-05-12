@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout}">
+<head>
+	<meta charset="UTF-8">
+	<title>iHealMe</title>
+	<th:block layout:fragment="css">
+		<link rel="stylesheet" type="text/css" href="../css/maps/search.css">
+	</th:block>
+	<th:block layout:fragment="js">
+	</th:block>
+</head>
+<body>
+	<div layout:fragment="content">
+		<form action="../maps/searchList.html" method="GET">
+			<input type="text" id="search" name="search" placeholder="ex) 강남 소아과">
+			<button type="submit" id="button">검색</button>
+		</form>
+	</div>
+</body>
+</html>

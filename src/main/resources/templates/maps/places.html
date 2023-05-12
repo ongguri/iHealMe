@@ -7,16 +7,20 @@
 	<meta http-equiv="X-UA-Compatible" content="IE-edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum=1.0, user-scalable=no">
 	<title>카카오맵 API</title>
-	
+
 </head>
 <body>
-	<div layout:fragment="content">
-		<h1>Places</h1>
-		<ul>
-			<#list places as place>
-			<li>${place.placeName} - ${place.roadAddressName}</li>
-		</#list>
-		</ul>
-	</div>
+<div layout:fragment="content">
+	<h1>Places</h1>
+	<ul>
+		<li th:each="place : ${places}">
+			<h3 th:text="${place.id}">Place ID</h3>
+			<p th:text="${place.placeName}">Place Name</p>
+			<p th:text="${place.phone}">Phone</p>
+			<p th:text="${place.roadAddressName}">Road Address Name</p>
+			<p th:text="${place.placeUrl}">Place URL</p>
+		</li>
+	</ul>
+</div>
 </body>
 </html>

@@ -2,7 +2,6 @@ package com.project.ihealme.community.repository;
 
 import com.project.ihealme.community.domain.Comment;
 import com.project.ihealme.community.domain.Post;
-import com.project.ihealme.community.dto.CommentDto;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -30,12 +29,12 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
             "AND ( " +
             "SELECT COUNT(c2) FROM Comment c2 " +
             "WHERE c2.post = :post " +
-            "AND c2.commNo <= c.commNo " + // Modify this condition
+            "AND c2.commNo <= c.commNo " +
             ") > (:pageNum - 1) * :amount " +
             "AND ( " +
             "SELECT COUNT(c2) FROM Comment c2 " +
             "WHERE c2.post = :post " +
-            "AND c2.commNo <= c.commNo " + // Modify this condition
+            "AND c2.commNo <= c.commNo " +
             ") <= :pageNum * :amount " +
             "ORDER BY c.commNo")
     List<Comment> getListWithPaging(@Param("amount")int amount, @Param("pageNum") int pageNum, @Param("post")Post post);

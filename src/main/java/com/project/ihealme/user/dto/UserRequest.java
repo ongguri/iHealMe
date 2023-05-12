@@ -4,8 +4,8 @@ import com.project.ihealme.user.entity.UserRole;
 import lombok.*;
 
 @Getter @Setter
-@NoArgsConstructor
 @AllArgsConstructor
+@RequiredArgsConstructor
 @Builder
 public class UserRequest {
 
