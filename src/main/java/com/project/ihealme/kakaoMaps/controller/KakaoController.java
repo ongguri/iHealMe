@@ -1,25 +1,22 @@
 package com.project.ihealme.kakaoMaps.controller;
 
 import com.project.ihealme.kakaoMaps.dto.KakaoMapsDto;
+import com.project.ihealme.kakaoMaps.entity.KakaoMapsEntity;
 import com.project.ihealme.kakaoMaps.service.KakaoMapsService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.reactive.function.BodyInserters;
+import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Mono;
+
+import java.util.Map;
 
 @Controller
-//@RestController
 @RequiredArgsConstructor
 public class KakaoController {
-
-    private final KakaoMapsService kakaoMapsService;
-
-    /*@PostMapping("/")
-    public String maps(@RequestBody KakaoMapsDto kakaoMapsDto) {
-        return kakaoMapsService.save(kakaoMapsDto);
-    }*/
 
     @GetMapping("/")
     public String maps() {
