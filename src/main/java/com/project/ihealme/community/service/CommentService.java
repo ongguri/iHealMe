@@ -1,7 +1,9 @@
 package com.project.ihealme.community.service;
 
 import com.project.ihealme.community.domain.Comment;
+import com.project.ihealme.community.domain.Criteria;
 import com.project.ihealme.community.dto.CommentDto;
+import com.project.ihealme.community.dto.CommentPageDto;
 
 import java.util.List;
 
@@ -10,7 +12,7 @@ public interface CommentService {
     List<CommentDto> getList(Long postNo); //특정 게시글 댓글 불러오기
     void update(CommentDto commentDto); //댓글 수정
     void delete(Long commNo); //댓글 삭제
-//    CommentPageDto getListPage(Criteria criteria, Long postNo);
+    CommentPageDto getListPage(Criteria criteria, Long postNo);
 
     default CommentDto toDto(Comment comment){
 
