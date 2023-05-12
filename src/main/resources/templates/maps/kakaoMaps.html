@@ -78,14 +78,6 @@
 		<!-- 지도 표시와 services와 clusterer 라이브러리 불러오기 -->
 		<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=7c6d76e0c895a60f42aa8b0ef2c67d0a&libraries=services,clusterer"></script>
 		
-		<script type="text/javascript">
-			$(document).ready(function(){
-				$(".searchbutton").click(function(){
-					alert("검색 성공");
-				});
-			});
-		</script>
-		
 		<script>
 			// 마커를 담을 배열입니다
 			var markers = [];
@@ -129,6 +121,30 @@
 					// 검색 목록과 마커를 표출합니다
 					displayPlaces(data)
 					console.log(data);
+					$.ajax({
+						url:"/api",
+						type:"POST",
+						data: data,
+						contentType: "application/json",
+						success: function(result) {
+							console.log(data);
+						},
+						error: function() {
+						}
+					})
+					
+					/*$(document).ready(function () {
+						jsonTest();
+					})
+					function jsonTest() {
+						for (key in data) {
+							console.log(data[key].id);
+							console.log(data[key].phone);
+							console.log(data[key].place_name);
+							console.log(data[key].place_url);
+							console.log(data[key].road_address_name);
+						}
+					}*/
 					
 					// 페이지 번호를 표출합니다
 					displayPagination(pagination);
@@ -209,19 +225,20 @@
 				var el = document.createElement('li'),
 						itemStr = '<span class="markerbg marker_' + (index+1) + '"></span>' +
 								'<div class="info">' +
-								'   <h5>' + places.place_name + '</h5>';
+								'<h5>' + places.place_name + '</h5>';
 				
 				if (places.road_address_name) {
-					itemStr += '    <span>' + places.road_address_name + '</span>' +
-							'   <span class="jibun gray">' +  places.address_name  + '</span>';
+					itemStr += '<span>' + places.road_address_name + '</span>' +
+							'<span class="jibun gray">' + places.address_name + '</span>';
 				} else {
-					itemStr += '    <span>' +  places.address_name  + '</span>';
+					itemStr += '<span>' +  places.address_name + '</span>';
 				}
 				
-				itemStr += '  <span class="tel">' + places.phone  + '</span>' +
-						'<span class="wait_count">실시간 대기자 수: ' + places.wait_count +
-						' <button class="book_button">예약하기</class>' +
+				itemStr += '<span class="tel">' + places.phone + '</span>' +
 						'</div>';
+				
+				itemStr += '<span class="wait_count">실시간 대기자 수 : ' + places.wait_count +
+						'<button class="book_button">예약하기</class>' + '</div>';
 				
 				el.innerHTML = itemStr;
 				el.className = 'item';
