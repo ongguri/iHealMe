@@ -12,6 +12,4 @@ public class KakaoController {
     public String maps() {
         return "maps/kakaoMaps";
     }
-
-
 }
