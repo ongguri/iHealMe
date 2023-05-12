@@ -28,6 +28,7 @@
 
 index.init();*/
 
+/*
 
 $(document).ready(function () {
     let postNo = $("#postNo").val();
@@ -177,16 +178,18 @@ $(document).ready(function () {
         loadJSONData();
     };
 });
+*/
 
 
 
 
 //refactoring
-/*
+
 $(document).ready(function () {
     let postNo = $("#postNo").val();
     const listGroup = $(".commentList");
     const commentPageFooter = $(".commentFooter");
+    let pageNum = 1;
 
     function formatTime(str){
         let date = new Date(str);
@@ -213,28 +216,32 @@ $(document).ready(function () {
     }
 
     function showCommentPage(commentCnt){
-        let endNum = Math.ceil(pageNum / 10.0) * 10;
-        const startNum = endNum - 9;
+        let endNum = Math.ceil(pageNum / 3.0) * 3;
+        const startNum = endNum - 2;
+
+        console.log("pageNum: " + pageNum);
+        console.log("startNum: " + startNum);
+        console.log("endNum: " + endNum);
 
         const prev = startNum !== 1;
         let next = false;
 
-        if(endNum * 10 >= commentCnt){
-            endNum = Math.ceil(commentCnt / 10.0);
+        if(endNum * 3 >= commentCnt){
+            endNum = Math.ceil(commentCnt / 3.0);
         }
 
-        if(endNum * 10 < commentCnt){
+        if(endNum * 3 < commentCnt){
             next = true;
         }
 
-        let str = "<ul class='pagination pul-right'>";
+        let str = "<ul class='pagination pull-right'>";
 
         if(prev){
             str += "<li class='page-item'><a class='page-link' href='" + (startNum-1)+"'>이전</a></li> "
         }
         for(let i = startNum; i <= endNum; i++){
-            let active = pageNum === i? "active":"";
-            str += "<li class='page-item" +active+ " '><a class='page-link' href='"+i+"'>"+i+"</a></li>";
+            let active = pageNum == i ? " active" : "";
+            str += "<li class='page-item" + active + " '><a class='page-link' href='"+i+"'>"+i+"</a></li>";
         }
         if(next){
             str += "<li class='page-item'><a class='page-link' href='" + (endNum + 1) + "'>다음</a></li>";
@@ -245,17 +252,17 @@ $(document).ready(function () {
 
 //특정 게시글의 댓글 처리
     function loadJSONData(page) {
-        getList({postNo, page : page || 1}, function (commentCnt, arr) {
+        getList({postNo, page : page|| 1}, function (commentCnt, arr) {
             console.log(arr);
 
             if(page === -1){
-                let pageNum = Math.ceil(commentCnt/10.0);
+                let pageNum = Math.ceil(commentCnt/3.0);
                 loadJSONData(pageNum);
                 return;
             }
 
             let str = "";
-            $('.comment-count').html(" ( " + arr.length + " )");
+            $('.comment-count').html(" ( " + commentCnt + " )");
 
             // 댓글이 없는 경우
             if( !arr.length){
@@ -292,7 +299,7 @@ $(document).ready(function () {
 
 
     $(".comment-count").click(function () {
-        loadJSONData(-1);
+        loadJSONData(1);
     }) //end click
 
     var modal = $('.modal');
@@ -325,7 +332,7 @@ $(document).ready(function () {
                 console.log(data);
                 alert("댓글이 등록되었습니다.")
                 modal.modal('hide');
-                loadJSONData(-1);
+                loadJSONData(pageNum);
             }
         })
     });
@@ -368,6 +375,7 @@ $(document).ready(function () {
 
     $(".commentUpdate").click(function () {
         const commNo = $("input[name='commNo']").val();
+        const pageNum = 1;
         console.log(commNo);
 
         const comment = {
@@ -388,6 +396,7 @@ $(document).ready(function () {
                 if (result === 'success') {
                     alert("댓글이 수정되었습니다.");
                     modal.modal('hide');
+                    console.log("수정 후 페이지 넘버: " + pageNum);
                     loadJSONData(pageNum);
                 }
             }
@@ -395,8 +404,7 @@ $(document).ready(function () {
     })
 
     window.onload=function (){
-        loadJSONData(-1);
+        loadJSONData(pageNum);
     };
 });
-*/
 

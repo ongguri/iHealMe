@@ -1,6 +1,8 @@
 package com.project.ihealme.community.controller;
 
+import com.project.ihealme.community.domain.Criteria;
 import com.project.ihealme.community.dto.CommentDto;
+import com.project.ihealme.community.dto.CommentPageDto;
 import com.project.ihealme.community.service.CommentService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -26,12 +28,12 @@ public class CommentController {
         return new ResponseEntity<>(commentService.getList(postNo), HttpStatus.OK);
     }
 
-//    @GetMapping(value = "/{postNo}/{page}", produces = MediaType.APPLICATION_JSON_VALUE)      //댓글 목록
-//    public ResponseEntity<CommentPageDto> getListByPost(@PathVariable("postNo") Long postNo, @PathVariable("page") int page){
-//        log.info("postNo: " + postNo + "page: " + page);
-//        Criteria cri = new Criteria(page, 10);
-//        return new ResponseEntity<>(commentService.getListPage(cri, postNo) , HttpStatus.OK);
-//    }
+    @GetMapping(value = "/{postNo}/{page}", produces = MediaType.APPLICATION_JSON_VALUE)      //댓글 목록 페이징
+    public ResponseEntity<CommentPageDto> getListPageByPost(@PathVariable("postNo") Long postNo, @PathVariable("page") int page){
+        log.info("postNo: " + postNo + "page: " + page);
+        Criteria cri = new Criteria(page, 3);
+        return new ResponseEntity<>(commentService.getListPage(cri, postNo) , HttpStatus.OK);
+    }
 
     @PostMapping("{postNo}")
     public ResponseEntity<Long> save(@RequestBody CommentDto commentDto){

@@ -14,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -62,13 +63,16 @@ public class CommentServiceImpl implements CommentService{
                 .collect(Collectors.toList());
     }
 
-//    @Override
-//    @Transactional
-//    public CommentPageDto getListPage(Criteria criteria, Long postNo){
-//        return new CommentPageDto(
-//                commentRepository.countByPostNo(postNo),
-//                commentRepository.getListWithPaging(criteria, postNo));
-//    }
+    @Override
+    @Transactional
+    public CommentPageDto getListPage(Criteria criteria, Long postNo){
+        Post post = postRepository.findByPostNo(postNo)
+                .orElseThrow(()-> new IllegalArgumentException("해당 게시글이 없습니다."));
+        System.out.println("===============댓글 ㄹㅣ스트: " +commentRepository.getListWithPaging(criteria.getAmount(), criteria.getPageNum(), post));
+        return CommentPageDto.createCommentPageDto(
+                commentRepository.countByPostNo(postNo),
+                commentRepository.getListWithPaging(criteria.getAmount(), criteria.getPageNum(), post));
+    }
 
     @Override
     @Transactional
