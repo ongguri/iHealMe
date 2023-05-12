@@ -4,7 +4,7 @@
       layout:decorate="~{layouts/layout}">
 <head>
     <meta charset="UTF-8">
-    <title th:text="${post.title}">후기 상세</title>
+    <title th:text="${postRes.title}">후기 상세</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
     <link rel="stylesheet" th:href="@{/css/community/post.css}" href="../../css/community/post.css">
@@ -17,37 +17,41 @@
     <div class="container">
 
         <div class="post">
-            <h2 class="post-title" th:text="|[${post.hptName}] ${post.title}|">[병원명] 제목</h2>
-            <p class="post-author" th:text="${post.userEmail}">작성자 이메일 &nbsp;&nbsp;&nbsp;&nbsp;</p>
-            <span class="post-hits" th:text="|조회수 ${post.hit}|">조회수 238</span>
+            <h2 class="post-title" th:text="|[${postRes.hptName}] ${postRes.title}|">[병원명] 제목</h2>
+            <p class="post-author" th:text="${postRes.userEmail}">작성자 이메일 &nbsp;&nbsp;&nbsp;&nbsp;</p>
+            <span class="post-hits" th:text="|조회수 ${postRes.hit}|">조회수 238</span>
             <span class="post-registerDate"
-                  th:text="${#temporals.format(post.regDate, 'yyyy/MM/dd HH:mm')}">23.4.4 화</span>
+                  th:text="${#temporals.format(postRes.regDate, 'yyyy/MM/dd HH:mm')}">23.4.4 화</span>
             <hr>
             <div class="post-content">
-                <p th:text="${post.content}">내용</p>
+                <p th:text="${postRes.content}">내용</p>
             </div>
             <hr>
 
-            <!--<form th:action="@{/community/{postNo}/report(postNo=${post.postNo})}" method="post">
-                <input type="hidden" name="page" th:value="${postPageRequestDTO.page}">
-                <input type="hidden" name="type" th:value="${postPageRequestDTO.type}">
-                <input type="hidden" name="keyword" th:value="${postPageRequestDTO.keyword}">-->
+            <!--<form th:action="@{/community/{postNo}/report(postNo=${postRes.postNo})}" method="post">
+                <input type="hidden" name="page" th:value="${postPageReq.page}">
+                <input type="hidden" name="type" th:value="${postPageReq.type}">
+                <input type="hidden" name="keyword" th:value="${postPageReq.keyword}">-->
 
                 <div class="lbuttons">
-                    <button type="submit" class="btn btn-secondary btn-sm reportBtn" th:text="|신고 (${post.report})|">신고</button>
+                    <button type="submit" class="btn btn-secondary btn-sm reportBtn" th:text="|신고 (${postRes.report})|"
+                    th:disabled="${user?.userId == postRes.userId} ? 'disabled'"
+                    th:style="${user?.userId == postRes.userId} ? 'background-color: white; color: black; border: black solid 1px' : ''">신고</button>
                 </div>
             <!--</form>-->
-            <form th:action="@{/community/{postNo}/delete(postNo=${post.postNo})}" method="post">
+            <form th:action="@{/community/{postNo}/delete(postNo=${postRes.postNo})}" method="post">
                 <div class="rbuttons">
-                    <button type="button" class="btn btn-secondary btn-sm"
-                            onclick="location.href='editPost.html'"
-                            th:onclick="|location.href='@{/community/{postNo}/edit(postNo=${post.postNo},page=${postPageRequestDTO.page},type=${postPageRequestDTO.type},keyword=${postPageRequestDTO.keyword})}'|">
-                        수정
-                    </button>
-                    <button type="button" class="btn btn-secondary btn-sm deleteBtn">삭제</button>
+                    <span class="user-authentication" th:if="${user?.userId == postRes.userId}">
+                        <button type="button" class="btn btn-secondary btn-sm"
+                                onclick="location.href='editPost.html'"
+                                th:onclick="|location.href='@{/community/{postNo}/edit(postNo=${postRes.postNo},page=${postPageReq.page},type=${postPageReq.type},keyword=${postPageReq.keyword})}'|">
+                            수정
+                        </button>
+                        <button type="button" class="btn btn-secondary btn-sm deleteBtn">삭제</button>
+                    </span>
                     <button type="button" class="btn btn-secondary btn-sm"
                             onclick="location.href='posts.html'"
-                            th:onclick="|location.href='@{/community(page=${postPageRequestDTO.page},type=${postPageRequestDTO.type},keyword=${postPageRequestDTO.keyword})}'|">
+                            th:onclick="|location.href='@{/community(page=${postPageReq.page},type=${postPageReq.type},keyword=${postPageReq.keyword})}'|">
                         목록
                     </button>
                 </div>
@@ -59,7 +63,7 @@
 
             <!-- 댓글 -->
             <div class="comment">
-                <h4 class="comment-title">댓글<span class="comment-count" th:text="|(${post.commentCount})|"></span>
+                <h4 class="comment-title">댓글<span class="comment-count" th:text="|(${postRes.commentCount})|"></span>
                 </h4>
                 <button class="btn btn-secondary btn-sm addComment">댓글 쓰기</button>
                 <hr>
@@ -92,7 +96,7 @@
                                 </div>
                             </div>
                             <div class="modal-footer">
-                                <input type="hidden" id="postNo" name="postNo" th:value="${post.postNo}">
+                                <input type="hidden" id="postNo" name="postNo" th:value="${postRes.postNo}">
                                 <button type="button" class="btn btn-secondary btn-danger commentDelete">삭제</button>
                                 <button type="button" class="btn btn-secondary btn-warning commentUpdate">수정</button>
                                 <button type="button" class="btn btn-secondary btn-primary commentSave">저장</button>
@@ -110,20 +114,6 @@
     </div>
 
     <script th:inline="javascript">
-
-        /*const urlParams = new URLSearchParams(window.location.search);
-
-        if (urlParams.get('add') != null) {
-            urlParams.delete('add');
-            history.pushState(null, null, window.location.pathname + '?' + urlParams);
-        }*/
-
-        /*$(document).ready(function() {
-            const urlParams = new URLSearchParams(window.location.search);
-            urlParams.delete('add');
-
-            history.pushState(null, null, window.location.pathname + '?' + urlParams);
-        });*/
 
         var actionForm = $("form");
 
@@ -144,13 +134,24 @@
                 return;
             }
 
-            var postNo = [[${post.postNo}]];
+            if ([[${user == null}]]) {
+                if (alert("로그인이 필요합니다.")) {
+                    location.href=[[@{/login}]];
+                }
+            }
+
+            /*if([[${user?.userId == postRes.userId}]]) {
+                alert('본인이 작성한 게시글은 신고할 수 없습니다.');
+                return;
+            }*/
+
+            var postNo = [[${postRes.postNo}]];
 
             actionForm.empty();
 
-            actionForm.append('<input type="hidden" name="page" value=[[${postPageRequestDTO.page}]]>');
-            actionForm.append('<input type="hidden" name="type" value=[[${postPageRequestDTO.type}]]>');
-            actionForm.append('<input type="hidden" name="keyword" value=[[${postPageRequestDTO.keyword}]]>');
+            actionForm.append('<input type="hidden" name="page" value=[[${postPageReq.page}]]>');
+            actionForm.append('<input type="hidden" name="type" value=[[${postPageReq.type}]]>');
+            actionForm.append('<input type="hidden" name="keyword" value=[[${postPageReq.keyword}]]>');
 
             actionForm
                 .attr("action", "/community/" + postNo + "/report")
@@ -158,12 +159,6 @@
 
             actionForm.submit();
         });
-
-        /*document.addEventListener("DOMContentLoaded", function() {
-            if ([[${report}]]) {
-                alert("게시글을 신고하였습니다.");
-            }
-        });*/
     </script>
 </div>
 </body>

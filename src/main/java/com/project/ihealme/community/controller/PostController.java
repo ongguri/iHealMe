@@ -2,6 +2,7 @@ package com.project.ihealme.community.controller;
 
 import com.project.ihealme.community.dto.*;
 import com.project.ihealme.community.service.PostService;
+import com.project.ihealme.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,8 +23,17 @@ public class PostController {
 
     private final PostService postService;
 
+    @ModelAttribute("user")
+    public User temporaryUser() {
+        User user = new User();
+        user.setUserId(1L);
+        user.setEmail("longlee@naver.com");
+
+        return user;
+    }
+
     @GetMapping
-    public String posts(@ModelAttribute PostPageRequestDTO postPageRequestDTO, Model model) {
+    public String posts(@ModelAttribute("postPageReq") PostPageRequestDTO postPageRequestDTO, Model model) {
         Map<String, String> searchTypes = new LinkedHashMap<>();
         searchTypes.put("h", "병원명");
         searchTypes.put("t", "제목");
@@ -36,45 +46,53 @@ public class PostController {
     }
 
     @GetMapping("/{postNo}")
-    public String post(@PathVariable Long postNo,
-                       @ModelAttribute PostPageRequestDTO postPageRequestDTO,
+    public String post(@ModelAttribute("user") User user,
+                       @PathVariable Long postNo,
+                       @ModelAttribute("postPageReq") PostPageRequestDTO postPageRequestDTO,
                        @CookieValue(value = "postView", required = false) Cookie postViewCookie,
                        HttpServletResponse response,
                        Model model) {
 
         //조회수 중복 방지를 위한 쿠키 사용
-        boolean addHitCount = updateHitCount(postNo, postViewCookie, response);
-
+        boolean addHitCount = updateHitCount(postNo, user, postViewCookie, response);
         PostResponseDTO postResponseDTO = postService.getPost(postNo, addHitCount);
-        model.addAttribute("post", postResponseDTO);
+
+        model.addAttribute("postRes", postResponseDTO);
+        //model.addAttribute("user", user);
 
         return "community/post";
     }
 
     @PostMapping("/write")
-    public String writePost(@Valid @ModelAttribute PostWriteRequestDTO postWriteRequestDTO, RedirectAttributes redirectAttributes) {
-        Long postNo = postService.writePost(postWriteRequestDTO);
+    public String writePost(@ModelAttribute("user") User user,
+                            @Valid @ModelAttribute("postWriteReq") PostWriteRequestDTO postWriteRequestDTO,
+                            RedirectAttributes redirectAttributes) {
+
+        Long postNo = postService.writePost(user, postWriteRequestDTO);
         redirectAttributes.addAttribute("postNo", postNo);
 
         return "redirect:/community/{postNo}";
     }
 
     @GetMapping("/{postNo}/edit")
-    public String editForm(@PathVariable Long postNo, @ModelAttribute PostPageRequestDTO postPageRequestDTO, Model model) {
-        PostResponseDTO postResponseDTO = postService.getPost(postNo);
-        model.addAttribute("post", postResponseDTO);
+    public String editForm(@ModelAttribute("user") User user,
+                           @PathVariable Long postNo,
+                           @ModelAttribute("postPageReq") PostPageRequestDTO postPageRequestDTO,
+                           Model model) {
+
+        model.addAttribute("postRes", postService.getPostEditForm(postNo, user));
 
         return "community/editPost";
     }
 
     @PostMapping("/{postNo}/edit")
-    public String editPost(@PathVariable Long postNo,
-                           @ModelAttribute PostEditRequestDTO postEditRequestDTO,
-                           @ModelAttribute PostPageRequestDTO postPageRequestDTO,
+    public String editPost(@ModelAttribute User user,
+                           @PathVariable Long postNo,
+                           @Valid @ModelAttribute("postEditReq") PostEditRequestDTO postEditRequestDTO,
+                           @ModelAttribute("postPageReq") PostPageRequestDTO postPageRequestDTO,
                            RedirectAttributes redirectAttributes) {
 
-        postEditRequestDTO.setPostNo(postNo);
-        postService.edit(postEditRequestDTO);
+        postService.edit(postNo, user, postEditRequestDTO);
 
         Map<String, String> redirectAttrMap = createRedirectAttrMap(postNo, postPageRequestDTO);
         redirectAttributes.addAllAttributes(redirectAttrMap);
@@ -84,18 +102,21 @@ public class PostController {
 
 
     @PostMapping("/{postNo}/delete")
-    public String delete(@PathVariable Long postNo) {
-        postService.deleteWithReplies(postNo);
+    public String delete(@ModelAttribute("user") User user,
+                         @PathVariable Long postNo) {
+
+        postService.deleteWithReplies(postNo, user);
 
         return "redirect:/community";
     }
 
     @PostMapping("/{postNo}/report")
-    public String report(@PathVariable Long postNo,
+    public String report(@ModelAttribute("user") User user,
+                         @PathVariable Long postNo,
                          @ModelAttribute PostPageRequestDTO postPageRequestDTO,
                          RedirectAttributes redirectAttributes) {
 
-        postService.addReport(postNo);
+        postService.addReport(postNo, user);
 
         Map<String, String> redirectAttrMap = createRedirectAttrMap(postNo, postPageRequestDTO);
         redirectAttributes.addAllAttributes(redirectAttrMap);
@@ -103,14 +124,22 @@ public class PostController {
         return "redirect:/community/{postNo}";
     }
 
-    private boolean updateHitCount(Long postNo, Cookie postViewCookie, HttpServletResponse response) {
+    private boolean updateHitCount(Long postNo, User user, Cookie postViewCookie, HttpServletResponse response) {
+        if (postService.checkUserOfPost(postNo, user)) {
+            return false;
+        }
+
+        return checkPostViewCookie(postNo, postViewCookie, response);
+    }
+
+    private boolean checkPostViewCookie(Long postNo, Cookie postViewCookie, HttpServletResponse response) {
         String postNoStr = postNo + "/";
 
         if (postViewCookie != null) {
             if (!postViewCookie.getValue().contains(postNoStr)) {
                 postViewCookie.setValue(postViewCookie.getValue() + postNoStr);
                 postViewCookie.setPath("/");
-                postViewCookie.setMaxAge(60 * 60 * 24);
+                postViewCookie.setMaxAge(60 * 60);
                 response.addCookie(postViewCookie);
 
                 postService.addHitCount(postNo);
@@ -119,7 +148,7 @@ public class PostController {
         } else {
             Cookie newPostViewCookie = new Cookie("postView", postNoStr);
             newPostViewCookie.setPath("/");
-            newPostViewCookie.setMaxAge(60 * 60 * 24);
+            newPostViewCookie.setMaxAge(60 * 60);
             response.addCookie(newPostViewCookie);
 
             postService.addHitCount(postNo);

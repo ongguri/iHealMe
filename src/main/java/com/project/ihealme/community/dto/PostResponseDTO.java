@@ -2,7 +2,6 @@ package com.project.ihealme.community.dto;
 
 import com.project.ihealme.community.domain.Post;
 import com.project.ihealme.user.entity.User;
-import com.project.ihealme.userReservation.domain.UserReservation;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -18,6 +17,7 @@ public class PostResponseDTO {
     private String hptName;
     private String title;
     private String content;
+    private Long userId;
     private String userEmail;
     private LocalDateTime regDate;
     private int hit;
@@ -36,6 +36,7 @@ public class PostResponseDTO {
         this.regDate = post.getRegdate();
         this.hit = hit;
         this.report = post.getReport();
+        this.userId = post.getUser().getUserId();
         this.userEmail = encodeUserEmail(post.getUser());
         this.commentCount = post.getComments().size();
     }

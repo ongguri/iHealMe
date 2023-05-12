@@ -2,6 +2,7 @@ package com.project.ihealme.community.service;
 
 import com.project.ihealme.community.domain.Post;
 import com.project.ihealme.community.dto.*;
+import com.project.ihealme.community.exception.ExceptionType;
 import com.project.ihealme.community.repository.CommentRepository;
 import com.project.ihealme.community.repository.PostRepository;
 import com.project.ihealme.user.entity.User;
@@ -25,15 +26,20 @@ public class PostService {
     private final ReservationRepository reservationRepository;
 
     @Transactional
-    public Long writePost(PostWriteRequestDTO postWriteRequestDTO) {
-        Long userId = postWriteRequestDTO.getUserId();
+    public Long writePost(User user, PostWriteRequestDTO postWriteRequestDTO) {
+        if (user == null) {
+
+        }
+        userRepository.findById(user.getUserId())
+                .orElseThrow(()-> new IllegalArgumentException(ExceptionType.USER_NOT_FOUND.getMessage()));
+
+        if (user.getUserId() != postWriteRequestDTO.getUserId()) {
+            throw new IllegalArgumentException(ExceptionType.POST_WRITE_NOT_ALLOWED.getMessage());
+        }
+
         Long resNo = postWriteRequestDTO.getResNo();
-
-        User user = userRepository.findById(userId)
-                .orElseThrow(()-> new IllegalArgumentException("해당 유저가 없습니다. userId =" + userId));
-
         UserReservation userReservation = reservationRepository.findById(resNo)
-                .orElseThrow(()-> new IllegalArgumentException("해당 접수가 없습니다. resNo =" + resNo));
+                .orElseThrow(()-> new IllegalArgumentException(ExceptionType.USER_RESERVATION_NOT_FOUND.getMessage()));
 
         Post post = Post.create(postWriteRequestDTO, user, userReservation);
 
@@ -70,51 +76,90 @@ public class PostService {
         return new PostPageResponseDTO(result);
     }
 
-    public PostResponseDTO getPost(Long postNo) {
-        return getPost(postNo, false);
-    }
-
     public PostResponseDTO getPost(Long postNo, boolean addHitCount) {
         Post post = postRepository.findByPostNo(postNo)
-                .orElseThrow(()-> new IllegalArgumentException(postNo + "번 게시글이 없습니다."));
+                .orElseThrow(()-> new IllegalArgumentException(ExceptionType.POST_NOT_FOUND.getMessage()));
 
         return new PostResponseDTO(post, addHitCount ? post.getHit() + 1 : post.getHit());
     }
 
-    @Transactional
-    public void deleteWithReplies(Long postNo) {
-        System.out.println("commentRepository.deleteByPostNo(postNo)");
-        commentRepository.deleteByPostNo(postNo);
-        System.out.println("postRepository.deleteById(postNo)");
-        postRepository.deleteById(postNo);
+    public PostResponseDTO getPostEditForm(Long postNo, User user) {
+        validateUserOfPost(postNo, user);
+
+        return getPost(postNo, false);
     }
 
     @Transactional
-    public void edit(PostEditRequestDTO postEditRequestDTO) {
-        Long postNo = postEditRequestDTO.getPostNo();
-        Post post = postRepository.findByPostNo(postNo)
-                .orElseThrow(()-> new IllegalArgumentException(postNo + "번 게시글이 없습니다."));
+    public void deleteWithReplies(Long postNo, User user) {
+        validateUserOfPost(postNo, user);
 
+        commentRepository.deleteByPostNo(postNo);
+        System.out.println("postRepository.deleteById(postNo) 시작");
+        postRepository.deleteById(postNo);
+        System.out.println("postRepository.deleteById(postNo) 끝");
+    }
+
+    @Transactional
+    public void edit(Long postNo, User user, PostEditRequestDTO postEditRequestDTO) {
+        if (postNo != postEditRequestDTO.getPostNo()) {
+            throw new IllegalArgumentException(ExceptionType.POST_EDIT_NOT_ALLOWED.getMessage());
+        }
+
+        validateUserOfPost(postNo, user);
+
+        Post post = postRepository.findByPostNo(postNo).get();
         post.edit(postEditRequestDTO.getTitle(), postEditRequestDTO.getContent());
     }
 
     @Transactional
-    public void addReport(Long postNo) {
-        Post post = postRepository.findByPostNo(postNo)
-                .orElseThrow(()-> new IllegalArgumentException(postNo + "번 게시글이 없습니다."));
+    public void addReport(Long postNo, User user) {
+        if (user == null) {
+            throw new IllegalArgumentException(ExceptionType.USER_NOT_LOGIN.getMessage());
+        }
 
+        if (checkUserOfPost(postNo, user)) { return; }
+
+        Post post = postRepository.findByPostNo(postNo).get();
         int updatedPost = postRepository.updateReport(post.getPostNo());
-        // 예외 던지기
+        if (updatedPost != 1) {
+            throw new IllegalArgumentException(ExceptionType.POST_REPORT_NOT_ALLOWED.getMessage());
+        }
     }
 
     @Transactional
     public void addHitCount(Long postNo) {
         Post post = postRepository.findByPostNo(postNo)
-                .orElseThrow(()-> new IllegalArgumentException(postNo + "번 게시글이 없습니다."));
+                .orElseThrow(()-> new IllegalArgumentException(ExceptionType.POST_NOT_FOUND.getMessage()));
 
         int updatedPost = postRepository.updateHit(postNo);
         if (updatedPost != 1) {
-            throw new IllegalArgumentException(postNo + "번 게시글의 조회수를 수정하지 못했습니다.");
+            throw new IllegalArgumentException(ExceptionType.POST_EDIT_NOT_ALLOWED.getMessage());
+        }
+    }
+
+    public boolean checkUserOfPost(Long postNo, User user) {
+        if (!isLoginUser(user)) {
+            return false;
+        }
+
+        userRepository.findById(user.getUserId())
+                .orElseThrow(()-> new IllegalArgumentException(ExceptionType.USER_NOT_FOUND.getMessage()));
+
+        Post post = postRepository.findByPostNo(postNo)
+                .orElseThrow(()-> new IllegalArgumentException(ExceptionType.POST_NOT_FOUND.getMessage()));
+
+        return post.getUser().getUserId().equals(user.getUserId());
+    }
+
+    private boolean isLoginUser(User user) {
+        return user != null;
+    }
+
+    private void validateUserOfPost(Long postNo, User user) {
+        boolean isUserWriterOfPost = checkUserOfPost(postNo, user);
+
+        if (!isUserWriterOfPost) {
+            throw new IllegalArgumentException(ExceptionType.USER_NOT_MATCH_POST_WRITER.getMessage());
         }
     }
 }
