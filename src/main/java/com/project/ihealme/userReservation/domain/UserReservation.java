@@ -30,10 +30,6 @@ public class UserReservation extends BaseEntity {
     @Column(name = "LIST", updatable=false)
     private String list;
 
-//    @Column(name = "RDATE")
-//    @ColumnDefault("sysdate")
-//    private LocalDateTime rDate;
-
     @Column(name = "CURRENTSTATUS")
     @ColumnDefault("'접수대기'")
     private String currentStatus;
