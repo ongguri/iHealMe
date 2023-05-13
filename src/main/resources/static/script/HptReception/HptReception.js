@@ -25,8 +25,40 @@ function addCounter() {
         });
 }
 
+// function subCounter() {
+//     fetch('/HptReception/HptReceptionList/subCounter', {method: 'POST'})
+//         .then(response => {
+//             if (response.ok) {
+//                 return response.text();
+//             } else {
+//                 throw new Error('Something went wrong');
+//             }
+//         })
+//         .then(data => {
+//             const counterValue = document.querySelector('.counter-value');
+//             counterValue.textContent = parseInt(counterValue.textContent) - 1;
+//             const addBtn = document.querySelector('#add-btn');
+//             addBtn.disabled = false;
+//             const rtCount = parseInt(counterValue.textContent);
+//             const subBtn = document.querySelector('#sub-btn');
+//             if (isNaN(rtCount) || rtCount <= 0) {
+//                 subBtn.disabled = true;
+//             } else {
+//                 subBtn.disabled = false;
+//             }
+//         })
+// }
 function subCounter() {
-    fetch('/HptReception/HptReceptionList/subCounter', {method: 'POST'})
+    const counterValue = document.querySelector('.counter-value');
+    const rtCount = parseInt(counterValue.textContent);
+
+    fetch('/HptReception/HptReceptionList/subCounter', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ rtCount: rtCount })
+    })
         .then(response => {
             if (response.ok) {
                 return response.text();
@@ -36,7 +68,10 @@ function subCounter() {
         })
         .then(data => {
             const counterValue = document.querySelector('.counter-value');
-            counterValue.textContent = parseInt(counterValue.textContent) - 1;
+            const currentValue = parseInt(counterValue.textContent);
+            if (currentValue > 0) {
+                counterValue.textContent = currentValue - 1;
+            }
             const addBtn = document.querySelector('#add-btn');
             addBtn.disabled = false;
             const rtCount = parseInt(counterValue.textContent);
@@ -48,9 +83,11 @@ function subCounter() {
             }
         })
         .catch(error => {
+            // 오류 발생 시 실행할 코드
             console.error('Error:', error);
         });
 }
+
 
 function acceptReception() {
   // 현재 페이지 URL에서 프로토콜과 호스트 부분을 제외한 경로를 추출

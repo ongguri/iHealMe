@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout}">
+<head>
+	<meta charset="UTF-8">
+	<title>iHealMe</title>
+	<th:block layout:fragment="css">
+	</th:block>
+	<th:block layout:fragment="js">
+	</th:block>
+</head>
+<body>
+	<div layout:fragment="content">
+		<h1>병원명 검색</h1>
+		<table>
+			<thead>
+			<tr>
+				<th>No</th>
+				<th>병원정보</th>
+			</tr>
+			</thead>
+			<tbody>
+				<tr>
+				<tr th:each="reservationInfo : ${session.userReservationList}">
+					<td th:text="${reservationInfo.resNo}"></td>
+					<td th:text="${reservationInfo.name}"></td>
+					<td th:text="${reservationInfo.list}"></td>
+					
+					<td th:if="${reservationInfo.currentStatus == '접수대기'}"
+					    th:text="${#temporals.format(reservationInfo.regdate, 'yyyy-MM-dd HH:mm:ss')}"></td>
+					<td th:if="${reservationInfo.currentStatus != '접수대기'}"
+					    th:text="${#temporals.format(reservationInfo.updateRegdate, 'yyyy-MM-dd HH:mm:ss')}"></td>
+					<td th:text="${reservationInfo.currentStatus}"></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</body>
+</html>

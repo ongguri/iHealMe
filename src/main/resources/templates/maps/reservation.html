@@ -9,14 +9,35 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum=1.0, user-scalable=no">
 	<title>접수하기</title>
 	
-	<th:block layout:fragment="css">
-	
-	</th:block>
-	
 </head>
 <body>
 	<div layout:fragment="content">
-	
+		<div class="container">
+			<table>
+				<thead>
+				<tr>
+					<th>예약하기</th>
+				</tr>
+				</thead>
+				<tbody>
+				<tr>
+					<td>환아명 : <input type="text" id="search" name="search" placeholder="ex) xxx"></td>
+				</tr>
+				<tr>
+					<td>진료명 :
+						<select size="1">
+							<option value="#" selected="selected">소아진료</option>
+							<option value="#">영유아검진</option>
+							<option value="#">예방접종</option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td><button type="button" id="button" style="margin-left: 100px">접수 신청</button></td>
+				</tr>
+				</tbody>
+			</table>
+		</div>
 	</div>
 </body>
 </html>
