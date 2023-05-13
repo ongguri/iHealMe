@@ -22,22 +22,22 @@ public class UserController {
 
     @GetMapping("/login")
     public String login() {
-        return "/users/login";
+        return "users/login";
     }
 
     @GetMapping("/type")
     public String chooseType() {
-        return "/users/usertype";
+        return "users/usertype";
     }
 
     @GetMapping("/signupuser")
     public String signupUser() {
-        return "/users/signupuser";
+        return "users/signupuser";
     }
 
     @GetMapping("/signuphospital")
     public String signupHospital() {
-        return "/users/signuphospital";
+        return "users/signuphospital";
     }
 
     @PostMapping(value = "/registeruser")
