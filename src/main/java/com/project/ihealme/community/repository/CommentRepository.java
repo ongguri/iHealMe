@@ -29,14 +29,14 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
             "AND ( " +
             "SELECT COUNT(c2) FROM Comment c2 " +
             "WHERE c2.post = :post " +
-            "AND c2.commNo <= c.commNo " +
+            "AND c2.commNo >= c.commNo " +
             ") > (:pageNum - 1) * :amount " +
             "AND ( " +
             "SELECT COUNT(c2) FROM Comment c2 " +
             "WHERE c2.post = :post " +
-            "AND c2.commNo <= c.commNo " +
+            "AND c2.commNo >= c.commNo " +
             ") <= :pageNum * :amount " +
-            "ORDER BY c.commNo")
+            "ORDER BY c.commNo desc")
     List<Comment> getListWithPaging(@Param("amount")int amount, @Param("pageNum") int pageNum, @Param("post")Post post);
 
     @Query(value = "select count(*) from comments c where c.postNo =:postNo", nativeQuery = true)
