@@ -13,9 +13,9 @@
 </head>
 <body>
 	<div layout:fragment="content">
-		<form action="../maps/searchList.html" method="GET">
+		<form action="" method="GET">
 			<input type="text" id="search" name="search" placeholder="ex) 강남 소아과">
-			<button type="submit" id="button">검색</button>
+			<button type="submit" id="button" th:href="@{/maps/searchList}">검색</button>
 		</form>
 	</div>
 </body>
