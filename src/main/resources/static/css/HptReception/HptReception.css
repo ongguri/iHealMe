@@ -79,3 +79,26 @@ th {
     background-color: #bfbfbf;
     cursor: not-allowed;
 }
+
+form {
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.form-select {
+    width: 15%;
+}
+
+.form-control {
+    width: 70%;
+}
+
+.btn-secondary {
+    background-color: skyblue;
+    color: black;
+    border: none;
+}
+
+.btn-secondary:hover {
+    background-color: steelblue;
+}
