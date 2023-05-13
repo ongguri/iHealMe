@@ -11,13 +11,13 @@ import org.springframework.web.reactive.function.client.WebClient;
 public class KakaoConfig {
 
     @Value("${kakao.map.rest.api.key}")
-    private String appkey;
+    private String apikey;
 
     @Bean
     public WebClient kakaoWebClient() {
         return WebClient.builder()
                 .baseUrl("https://dapi.kakao.com")
-                .defaultHeader("Authorization", "KakaoAK " + appkey).build();
+                .defaultHeader("Authorization", "KakaoAK " + apikey).build();
     }
 
 }

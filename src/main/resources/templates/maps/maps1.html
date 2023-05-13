@@ -1,89 +1,22 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout}">
 <head>
 	<meta charset="UTF-8">
 	<meta http-equiv="X-UA-Compatible" content="IE-edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum=1.0, user-scalable=no">
 	<title>카카오맵 API</title>
 	
-	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
-
-	<form>
-		<label for="query">Search:</label>
-		<input type="text" id="query" name="query">
-		<button type="submit" id="searchBtn">Search</button>
-	</form>
-	
-	<div id="map" style="width:100%;height:800px;position:relative;overflow:hidden;"></div>
-	
-	<div id="placesList"></div>  <!-- 결과를 표시할 div 요소 -->
-	
-	<!-- 지도 표시와 services와 clusterer 라이브러리 불러오기 -->
-	<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=7c6d76e0c895a60f42aa8b0ef2c67d0a&libraries=services,clusterer"></script>
-	
-	<script>
-		
-		var markers = [];
-		
-		var mapContainer = document.getElementById('map'), // 지도를 표시할 div
-				mapOption = {
-					center: new kakao.maps.LatLng(37.477640999999934, 126.95956799999973), // 지도의 중심좌표
-					level: 3 // 지도의 확대 레벨
-				};
-		
-		// 지도를 생성합니다
-		var map = new kakao.maps.Map(mapContainer, mapOption);
-		
-		$(document).ready(function(){
-			$("#searchBtn").click(function(){
-				var query = $("#query").val();
-				$.ajax({
-					type: "GET",
-					url: "/api",
-					data: {query},
-					success: function(data){
-						// 기존의 마커 삭제
-						deleteMarkers();
-						
-						// 장소 목록 삭제
-						var placesList = $("#placesList");
-						placesList.empty();
-						
-						$.each(data, function(index, item) {
-							// 마커 생성
-							var marker = addMarker(new kakao.maps.LatLng(item.y, item.x), item.place_name);
-							
-							// 마커 클릭 이벤트 등록
-							kakao.maps.event.addListener(marker, 'click', function() {
-								// 인포윈도우 생성
-								var infowindow = new kakao.maps.InfoWindow({
-									content: '<div style="padding:5px;font-size:12px;">' + item.place_name + '</div>'
-								});
-								
-								// 인포윈도우 열기
-								infowindow.open(map, marker);
-							});
-							
-							// 장소 목록에 추가
-							var placeItem = $("<div>").addClass("placeItem");
-							var id = $("<div>").addClass("id").text(item.id);
-							var name = $("<div>").addClass("name").text(item.place_name);
-							var phone = $("<div>").addClass("phone").text(item.phone);
-							var address = $("<div>").addClass("address").text(item.road_address_name);
-							var placeUrl = $("<div>").addClass("placeUrl").text(item.place_url);
-							placeItem.append(name, phone, address);
-							placesList.append(placeItem);
-						});
-					},
-					error: function(){
-						alert("Error occurred while getting places data.");
-					}
-				});
-			});
-		});
-		
-	</script>
+	<div layout:fragment="content">
+		<h1>Places</h1>
+		<ul>
+			<#list places as place>
+			<li>${place.placeName} - ${place.roadAddressName}</li>
+		</#list>
+		</ul>
+	</div>
 </body>
 </html>

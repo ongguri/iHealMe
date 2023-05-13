@@ -8,7 +8,7 @@ import lombok.RequiredArgsConstructor;
 
 
 @Data
-@NoArgsConstructor
+@RequiredArgsConstructor
 public class KakaoMapsDto {
 
     private String id;
@@ -17,22 +17,11 @@ public class KakaoMapsDto {
     private String roadAddressName;
     private String placeUrl;
 
-    @Builder
     public KakaoMapsDto(String id, String placeName, String phone, String roadAddressName, String placeUrl) {
         this.id = id;
         this.placeName = placeName;
         this.phone = phone;
         this.roadAddressName = roadAddressName;
         this.placeUrl = placeUrl;
-    }
-
-    public KakaoMapsEntity toEntity() {
-        return KakaoMapsEntity.builder()
-                .id(id)
-                .placeName(placeName)
-                .phone(phone)
-                .roadAddressName(roadAddressName)
-                .placeUrl(placeUrl)
-                .build();
     }
 }
