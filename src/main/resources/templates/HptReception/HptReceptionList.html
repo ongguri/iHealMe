@@ -33,7 +33,7 @@
             </tr>
             </thead>
             <tbody>
-            <tr th:each="hptReception : ${hptReceptionList}">
+            <tr th:each="hptReception : ${result.hptRecList}">
                 <td th:text="${hptReception.resNo}"></td>
                 <td th:text="${hptReception.pName}"></td>
                 <td th:text="${hptReception.txList}"></td>
@@ -55,7 +55,65 @@
             </tr>
             </tbody>
         </table>
+
+        <!-- 페이징 -->
+        <ul class="pagination h-100 justify-content-center align-items-center">
+            <li class="page-item" th:if="${result.prev}">
+                <a class="page-link"
+                   th:href="@{/HptReception/HptReceptionList(page=${result.start - 1},
+                   type=${hptRecPageRequestDTO.type},
+                   keyword=${hptRecPageRequestDTO.keyword})}" tabindex="-1">이전</a>
+            </li>
+
+            <li class="page-item" th:class="${result.currentPage == page} ? 'active' : _"
+                th:each="page : ${result.pageList}">
+                <a class="page-link"
+                   th:href="@{/HptReception/HptReceptionList(page=${page},
+                   type=${hptRecPageRequestDTO.type},
+                   keyword=${hptRecPageRequestDTO.keyword})}">
+                    [[${page}]]
+                </a>
+            </li>
+
+            <li class="page-item" th:if="${result.next}">
+                <a class="page-link"
+                   th:href="@{/HptReception/HptReceptionList(page = ${result.end + 1},
+                   type=${hptRecPageRequestDTO.type},
+                   keyword=${hptRecPageRequestDTO.keyword})}">다음</a>
+            </li>
+        </ul>
+        <!-- 페이징 -->
+
+        <!-- 검색 -->
+        <form th:object="${hptRecPageRequestDTO}">
+            <input type="hidden" name="page" value="1">
+            <select class="form-select" aria-label="Default select example" th:field="*{type}">
+                <option th:each="type : ${searchTypes}"
+                        th:value="${type.key}"
+                        th:text="${type.value}">검색 타입</option>
+            </select>
+            <input type="text" class="form-control" th:field="*{keyword}" placeholder="검색어를 입력하세요.">
+            <button type="button" class="btn btn-secondary btn-sm searchBtn">검색하기</button>
+        </form>
+        <!-- 검색 -->
     </div>
+
+    <script th:inline="javascript">
+        var actionForm = $("form");
+
+        $(".searchBtn").click(function(){
+
+            var keyword = $("input[name='keyword']");
+
+            if (keyword.val() === null || keyword.val() === "") {
+                alert("검색어를 입력해주세요.")
+                return;
+            }
+
+            actionForm.submit();
+        });
+
+    </script>
 </div>
 </body>
 </html>
