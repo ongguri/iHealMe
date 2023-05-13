@@ -63,4 +63,21 @@ public class KakaoMapsController {
         model.addAttribute("places", places);
         return "maps/places";
     }
+
+    /*@PostMapping("/api")
+    public String setPlace(KakaoMapsDto kakaoMapsDto) {
+        KakaoMapsDto kakaoMapsDto1 = new KakaoMapsDto();
+        kakaoMapsDto1.setPlaceName(kakaoMapsDto.getPlaceName());
+        kakaoMapsDto1.setPhone(kakaoMapsDto.getPhone());
+        kakaoMapsDto1.setRoadAddressName(kakaoMapsDto.getRoadAddressName());
+        kakaoMapsDto1.setPlaceUrl(kakaoMapsDto.getPlaceUrl());
+
+        kakaoMapsService.save(kakaoMapsDto1);
+        return "redirect:/";
+    }*/
+
+    @GetMapping("/api/reservation")
+    public String kakaoreservation() {
+        return "maps/reservation";
+    }
 }
