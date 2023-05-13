@@ -28,6 +28,7 @@ $(document).ready(function () {
         });
     }
 
+    //페이징 버튼 기능
     function showCommentPage(commentCnt){
         let endNum = Math.ceil(pageNum / 3.0) * 3;
         let startNum = endNum - 2;
@@ -81,6 +82,7 @@ $(document).ready(function () {
                     pageNum -= 1;
                     loadJSONData(pageNum);
                 }
+                //댓글이 없을 때
                 document.querySelector('.commentList').innerHTML = '<div class="comment-none"><p>등록된 댓글이 없습니다.</p></div>';
                 return false;
             }
@@ -156,6 +158,7 @@ $(document).ready(function () {
         modal.modal('hide');
     });
 
+    //댓글 모달 클릭 시 값 넘겨주는 기능
     $('.commentList').on("click", ".card-body", function () {
         const commNo = this.id;
         pageNum = $("li.active > a").html();
