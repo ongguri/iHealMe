@@ -1,7 +1,11 @@
 package com.project.ihealme.HptReception.service;
 
 import com.project.ihealme.HptReception.domain.HptReception;
+import com.project.ihealme.HptReception.dto.HptRecPageRequestDTO;
+import com.project.ihealme.HptReception.dto.HptRecPageResponseDTO;
 import com.project.ihealme.HptReception.repository.HptReceptionRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -51,5 +55,28 @@ public class HptReceptionService {
         hptReceptionRepository.save(hptReception);
     }
 
+    public HptRecPageResponseDTO getUserResList(HptRecPageRequestDTO hptRecPageRequestDTO) {
+        Page<HptReception> result = null;
+
+        String type = hptRecPageRequestDTO.getType();
+        Pageable pageable = hptRecPageRequestDTO.getPageable(Sort.by("resNo").descending());
+
+        if (type == null || type.equals("")) {
+            result = hptReceptionRepository.findAllByPage(pageable);
+        } else {
+            String keyword = hptRecPageRequestDTO.getKeyword();
+
+            switch (type) {
+                case "tx":
+                    result = hptReceptionRepository.findByTxListContaining(keyword, pageable);
+                    break;
+                case "st":
+                    result = hptReceptionRepository.findByCurrentStatusContaining(keyword, pageable);
+                    break;
+            }
+        }
+
+        return new HptRecPageResponseDTO(result);
+    }
 
 }
