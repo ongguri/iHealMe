@@ -3,6 +3,7 @@ package com.project.ihealme.userReservation.controller;
 import com.project.ihealme.HptReception.service.HptReceptionService;
 import com.project.ihealme.community.dto.PostWriteRequestDTO;
 import com.project.ihealme.user.entity.User;
+import com.project.ihealme.userReservation.dto.UserResPageRequestDTO;
 import com.project.ihealme.userReservation.service.UserReservationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
