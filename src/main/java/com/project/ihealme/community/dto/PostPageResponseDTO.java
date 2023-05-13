@@ -23,11 +23,11 @@ public class PostPageResponseDTO {
     private List<Integer> pageList; //페이지 번호 목록
 
     public PostPageResponseDTO(Page<Post> result) {
-        Function<Post, PostResponseDTO> fn
-                = (en -> new PostResponseDTO(en));
-        postList = result.stream().map(fn).collect(Collectors.toList());
+        Function<Post, PostResponseDTO> fn = (en -> new PostResponseDTO(en));
 
+        postList = result.stream().map(fn).collect(Collectors.toList());
         totalPage = result.getTotalPages();
+
         makeInformation(result.getPageable());
     }
 

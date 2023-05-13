@@ -21,11 +21,8 @@
 
             <h4 class="head">후기 작성</h4>
             <div class="buttons">
-                <button type="submit" class="btn btn-secondary btn-md">등록</button>
-                <button type="button" class="btn btn-secondary btn-md"
-                        onclick="location.href='userReservation.html'"
-                        th:onclick="|location.href='@{/userReservation}'|">취소
-                </button>
+                <button type="submit" class="btn btn-secondary btn-md writeBtn">등록</button>
+                <button type="button" class="btn btn-secondary btn-md cancelBtn">취소</button>
             </div>
             <hr>
             <input type="text" class="form-control-plaintext" name="hptName" th:value="|[${postWriteReq.hptName}]|"
@@ -38,6 +35,27 @@
             </div>
         </form>
     </div>
+
+    <script th:inline="javascript">
+        var actionForm = $("form");
+
+        $(".writeBtn").click(function() {
+
+            if(!confirm("게시글을 등록하시겠습니까?")){
+                return false;
+            }
+        });
+
+        $(".cancelBtn").click(function() {
+
+            if(!confirm("게시글 등록을 취소하시겠습니까?")){
+                return;
+            }
+
+            location.href=[[@{/userReservation}]];
+        });
+    </script>
+
 </div>
 </body>
 </html>

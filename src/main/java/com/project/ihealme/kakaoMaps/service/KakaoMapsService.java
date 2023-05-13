@@ -31,10 +31,10 @@ public class KakaoMapsService {
 
     private final KakaoMapsRepository kakaoMapsRepository;
 
-    public List<KakaoMapsDto> convertToKakaoMapsEntity() throws JsonProcessingException {
-        String place = "강남 소아과";
+    public List<KakaoMapsDto> convertToKakaoMapsEntity(String search) throws JsonProcessingException {
         // 카카오 API 호출하여 검색 결과를 받아옴
-        String apiUrl = "https://dapi.kakao.com/v2/local/search/keyword.json?query=" + place;
+        String apiUrl = "https://dapi.kakao.com/v2/local/search/keyword.json?query=" + search;
+        System.out.println("apiUrl = " + apiUrl);
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", "KakaoAK 0a931d3e53412cb779f034fc86ec4c96");

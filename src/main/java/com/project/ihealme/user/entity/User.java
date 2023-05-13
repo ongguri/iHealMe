@@ -1,10 +1,7 @@
 package com.project.ihealme.user.entity;
 
 import com.project.ihealme.user.dto.UserRequest;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -133,5 +130,14 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true; // 계정의 활성화 여부 리턴
+    }
+
+    //실험용,, 삭제 플리즈
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }

@@ -68,7 +68,7 @@
 
 <body>
 <div class="container">
-    <form th:action="@{/registeruser}" method="post" id="registerUser">
+    <form th:action="@{/registeruser}" method="post">
         <h2 class="head">유저 회원가입</h2>
         <hr>
         <div class="row">
@@ -80,7 +80,7 @@
             </div>
         </div>
 
-        <form action="emailchk" method="post">
+<!--        <form action="emailchk" method="post">-->
             <div class="row">
                 <div class="col">
                     <h5>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&ensp;&nbsp;이메일</h5>
@@ -98,7 +98,7 @@
                     </div>
                 </div>
             </div>
-        </form>
+<!--        </form>-->
 
         <div class="row">
             <div class="col">
@@ -176,10 +176,43 @@
             </div>
         </div>
         <div class="buttons">
-            <button type="submit" class="btn btn-secondary btn-lg register" form="registerUser">회원가입</button>
+            <button type="button" class="btn btn-secondary btn-lg register" th:onclick="userSave()">회원가입</button>
         </div>
     </form>
 </div>
+<script src="http://code.jquery.com/jquery-latest.js"></script>
+<!--<script type="text/javascript" th:src="@{/js/user.js}"></script>-->
+<script>
+    function userSave() {
+        let data = {
+            name: $("#name").val(),
+            email: $("#email").val(),
+            phoneNum: $("#phoneNum").val(),
+            birthDate: $("#birthDate").val(),
+            gender: $("#gender").val(),
+            password: $("#password").val(),
+            confirmPassword: $("#confirmPassword").val(),
+            question: $("#question").val(),
+            answer: $("#answer").val()
+        };
+
+        $.ajax({
+            url: `/registeruser`,
+            type: 'post',
+            data: JSON.stringify(data),
+            contentType: 'application/json; charset=utf-8',
+            // dataType: 'json',
+            success: function (resp) {
+                alert("회원가입이 완료되었습니다.")
+                location.href = `/login`;
+            },
+            error: function (request, error) {
+                alert("status code:" + request.status);
+                alert("error:" + error);
+            }
+        });
+    };
+</script>
 </body>
 
 </html>

@@ -62,9 +62,10 @@ public class KakaoMapsController {
         return "maps/main";
     }
 
-    @GetMapping("/api/plaecs")
-    public String placeList(Model model) throws JsonProcessingException {
-        List<KakaoMapsDto> places = kakaoMapsService.convertToKakaoMapsEntity();
+    @GetMapping("/api/places")
+    public String placeList(@RequestParam String search, Model model) throws JsonProcessingException {
+        System.out.println("search: " + search);
+        List<KakaoMapsDto> places = kakaoMapsService.convertToKakaoMapsEntity(search);
         model.addAttribute("places", places);
         return "maps/searchList";
     }
