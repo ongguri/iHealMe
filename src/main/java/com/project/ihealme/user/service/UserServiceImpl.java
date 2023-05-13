@@ -1,5 +1,6 @@
 package com.project.ihealme.user.service;
 
+import com.project.ihealme.user.dto.HospitalRequest;
 import com.project.ihealme.user.dto.UserDTO;
 import com.project.ihealme.user.dto.UserRequest;
 import com.project.ihealme.user.entity.User;
@@ -27,18 +28,28 @@ public class UserServiceImpl implements UsersService {
 
 
     @Override
-    public ResponseEntity<?> registerUser(UserRequest userRequest) {
-        Optional<User> usernameUserFound = userRepository.findByEmail(userRequest.getEmail());
+    public ResponseEntity<?> registerUser(UserRequest request) {
+        checkRegister(request.getEmail(), request.getPassword(), request.getConfirmPassword());
+        User user = new User(request, passwordEncoder.encode(request.getPassword()));
+        userRepository.save(user);
+        return new ResponseEntity<>("회원가입 성공", HttpStatus.OK);
+    }public ResponseEntity<?> registerHospital(HospitalRequest request) {
+        checkRegister(request.getEmail(), request.getPassword(), request.getConfirmPassword());
+        User hospital = new User(request, passwordEncoder.encode(request.getPassword()));
+        userRepository.save(hospital);
+        return new ResponseEntity<>("회원가입 성공", HttpStatus.OK);
+    }
+
+    private void checkRegister(String email, String request1, String confirmPassword) {
+        Optional<User> usernameUserFound = userRepository.findByEmail(email);
         if (usernameUserFound.isPresent()) {
             throw new ResponseStatusException(HttpStatus.valueOf(409), "중복된 이메일이 존재합니다");
         }
-        if (!userRequest.getPassword().equals(userRequest.getConfirmPassword())) {
+        if (!request1.equals(confirmPassword)) {
             throw new IllegalArgumentException("비밀번호와 비밀번호 확인이 일치하지 않습니다.");
         }
-        User user = new User(userRequest, passwordEncoder.encode(userRequest.getPassword()));
-        userRepository.save(user);
-        return new ResponseEntity<>("회원가입 성공", HttpStatus.OK);
     }
+
 
     @Override
     public UserDTO findUser(String email) {
