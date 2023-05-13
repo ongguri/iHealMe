@@ -1,7 +1,11 @@
 package com.project.ihealme.user.entity;
 
+import com.project.ihealme.user.dto.HospitalRequest;
 import com.project.ihealme.user.dto.UserRequest;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -77,7 +81,23 @@ public class User implements UserDetails {
         this.businessNum = "-";
         this.hptName = "-";
         this.hptAddress = "-";
-        this.phoneNum = "-";
+        this.hptPhoneNum = "-";
+    }
+
+    public User(HospitalRequest requestDto, String password) {
+        this.userRole = UserRole.HOSPITAL;
+        this.name = requestDto.getName();
+        this.email = requestDto.getEmail();
+        this.phoneNum = requestDto.getPhoneNum();
+        this.password = password;
+        this.birthDate = requestDto.getBirthDate();
+        this.gender = requestDto.getGender();
+        this.question = requestDto.getQuestion();
+        this.answer = requestDto.getAnswer();
+        this.businessNum = requestDto.getBusinessNum();
+        this.hptName = requestDto.getHptName();
+        this.hptAddress = requestDto.getHptAddress();
+        this.hptPhoneNum = requestDto.getHptPhoneNum();
     }
 
     @Builder

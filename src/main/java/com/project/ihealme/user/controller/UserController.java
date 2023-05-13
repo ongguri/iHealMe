@@ -1,5 +1,6 @@
 package com.project.ihealme.user.controller;
 
+import com.project.ihealme.user.dto.HospitalRequest;
 import com.project.ihealme.user.dto.UserDTO;
 import com.project.ihealme.user.dto.UserRequest;
 import com.project.ihealme.user.jwt.JwtConfig;
@@ -43,6 +44,12 @@ public class UserController {
     @PostMapping(value = "/registeruser")
     public String registerUser(@RequestBody UserRequest userRequest) {
         usersService.registerUser(userRequest);
+        return "redirect:/login";
+    }
+
+    @PostMapping(value = "/registerhospital")
+    public String registerHospital(@RequestBody HospitalRequest hospitalRequest) {
+        usersService.registerHospital(hospitalRequest);
         return "redirect:/login";
     }
 
