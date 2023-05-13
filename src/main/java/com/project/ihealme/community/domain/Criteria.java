@@ -7,7 +7,7 @@ import lombok.ToString;
 @ToString
 public class Criteria {
     private int pageNum;
-    private int amount;
+    private int amount;     //한 페이지에 보여줄 개수
 
     public Criteria(){
         this(1,3);
