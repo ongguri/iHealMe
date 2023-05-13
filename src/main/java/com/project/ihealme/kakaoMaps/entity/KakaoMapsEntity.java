@@ -14,7 +14,7 @@ public class KakaoMapsEntity {
 
     @Id
     @Column(name = "id", length = 15, nullable = false)
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private String id;
 
     @Column(name = "place_name", length = 100, nullable = false)
