@@ -4,19 +4,27 @@
       layout:decorate="~{layouts/layout}">
 <head>
 	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE-edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum=1.0, user-scalable=no">
 	<title>iHealMe</title>
+	<link rel="stylesheet" type="text/css" href="/css/maps/search.css">
 	<th:block layout:fragment="css">
-		<link rel="stylesheet" type="text/css" href="../css/maps/search.css">
+	
 	</th:block>
 	<th:block layout:fragment="js">
+	
 	</th:block>
 </head>
 <body>
 	<div layout:fragment="content">
-		<form action="" method="GET">
+		<form action="${kakao}" method="GET">
 			<input type="text" id="search" name="search" placeholder="ex) 강남 소아과">
-			<button type="submit" id="button" th:href="@{/maps/searchList}">검색</button>
+			<button type="submit" id="button" th:href="@{/maps/searchList}" onclick="location.href='/api/places'">검색</button>
 		</form>
+		
+		<script type="text/javascript">
+		
+		</script>
 	</div>
 </body>
 </html>
