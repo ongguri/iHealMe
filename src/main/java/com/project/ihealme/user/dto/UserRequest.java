@@ -7,6 +7,7 @@ import lombok.*;
 @AllArgsConstructor
 @RequiredArgsConstructor
 @Builder
+@ToString
 public class UserRequest {
 
     private String name;

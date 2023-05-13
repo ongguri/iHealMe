@@ -7,5 +7,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface KakaoMapsRepository extends JpaRepository<KakaoMapsEntity, Long> {
 
-    public Long save(KakaoMapsEntity kakaoMapsEntity);
+    //public Long save(KakaoMapsEntity kakaoMapsEntity);
 }
