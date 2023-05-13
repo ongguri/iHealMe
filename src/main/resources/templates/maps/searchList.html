@@ -4,7 +4,10 @@
       layout:decorate="~{layouts/layout}">
 <head>
 	<meta charset="UTF-8">
-	<title>iHealMe</title>
+	<meta http-equiv="X-UA-Compatible" content="IE-edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum=1.0, user-scalable=no">
+	<title>병원정보 리스트</title>
+	<link rel="stylesheet" type="text/css" href="/css/maps/searchList.css">
 	<th:block layout:fragment="css">
 	</th:block>
 	<th:block layout:fragment="js">
@@ -12,29 +15,41 @@
 </head>
 <body>
 	<div layout:fragment="content">
-		<h1>병원명 검색</h1>
-		<table>
-			<thead>
-			<tr>
-				<th>No</th>
-				<th>병원정보</th>
-			</tr>
-			</thead>
-			<tbody>
+		<div class="container">
+			<h1>병원 검색</h1>
+			<table>
+				<thead>
 				<tr>
-				<tr th:each="reservationInfo : ${session.userReservationList}">
-					<td th:text="${reservationInfo.resNo}"></td>
-					<td th:text="${reservationInfo.name}"></td>
-					<td th:text="${reservationInfo.list}"></td>
-					
-					<td th:if="${reservationInfo.currentStatus == '접수대기'}"
-					    th:text="${#temporals.format(reservationInfo.regdate, 'yyyy-MM-dd HH:mm:ss')}"></td>
-					<td th:if="${reservationInfo.currentStatus != '접수대기'}"
-					    th:text="${#temporals.format(reservationInfo.updateRegdate, 'yyyy-MM-dd HH:mm:ss')}"></td>
-					<td th:text="${reservationInfo.currentStatus}"></td>
+					<th style="text-align: center">병원명</th>
+					<th style="text-align: center">병원정보</th>
 				</tr>
-			</tbody>
-		</table>
+				</thead>
+				<tbody>
+				<tr th:each="place : ${places}">
+					<td>
+						<p th:text="${place.placeName}" style="text-align: center">Place Name</p>
+						<button type="button" id="button" onclick="location.href='/api/reservation'">예약하기</button>
+						<form action="" method="GET">
+						</form>
+					</td>
+					<td>
+						주소명 : <p th:text="${place.roadAddressName}">Road Address Nam</p>
+						전화번호 : <p th:text="${place.phone}">Phone</p>
+						홈페이지 : <p th:text="${place.placeUrl}">Place URL</p>
+					</td>
+				</tr>
+				</tbody>
+			</table>
+			<!--<ul>
+				<li th:each="place : ${places}">
+					<h3 th:text="${place.id}">Place ID</h3>
+					<p th:text="${place.placeName}">Place Name</p>
+					<p th:text="${place.phone}">Phone</p>
+					<p th:text="${place.roadAddressName}">Road Address Name</p>
+					<p th:text="${place.placeUrl}">Place URL</p>
+				</li>
+			</ul>-->
+		</div>
 	</div>
 </body>
 </html>

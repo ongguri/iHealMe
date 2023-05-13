@@ -31,8 +31,8 @@ public class KakaoMapsController {
 
     /*@GetMapping("/api")
     @ResponseBody
-    public ResponseEntity<String> selectMaps(String query) throws JsonProcessingException {
-        List<KakaoMapsEntity> kakaoList = kakaoMapsService;
+    public ResponseEntity<List<Map<String, Object>> selectMaps(String query) throws JsonProcessingException {
+        List<KakaoMapsDto> kakaoList = kakaoMapsService;
 
         // 필요한 필드만 추출하여 List<Map> 객체로 변환
         List<Map<String, Object>> resultList = kakaoList.stream().map(entity -> {
@@ -45,7 +45,7 @@ public class KakaoMapsController {
             return map;
         }).collect(Collectors.toList());
 
-        return ResponseEntity.ok(resultList.toString());
+        return new ResponseEntity<>(resultList.httpStatus.OK);
     }
 
     /*@GetMapping("/api/search")
@@ -58,10 +58,15 @@ public class KakaoMapsController {
     }*/
 
     @GetMapping("/api")
-    public String getPlaces(Model model) throws JsonProcessingException {
+    public String searchPlace() {
+        return "maps/main";
+    }
+
+    @GetMapping("/api/plaecs")
+    public String placeList(Model model) throws JsonProcessingException {
         List<KakaoMapsDto> places = kakaoMapsService.convertToKakaoMapsEntity();
         model.addAttribute("places", places);
-        return "maps/places";
+        return "maps/searchList";
     }
 
     /*@PostMapping("/api")
