@@ -40,9 +40,8 @@ public class UserController {
         return "/users/signuphospital";
     }
 
-    @PostMapping(value = "/registeruser", consumes="application/json;")
+    @PostMapping(value = "/registeruser")
     public String registerUser(@RequestBody UserRequest userRequest) {
-        System.out.println("userRequest: " + userRequest);
         usersService.registerUser(userRequest);
         return "redirect:/login";
     }

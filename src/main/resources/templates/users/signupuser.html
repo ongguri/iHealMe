@@ -201,12 +201,13 @@
             type: 'post',
             data: JSON.stringify(data),
             contentType: 'application/json; charset=utf-8',
-            dataType: 'json',
+            // dataType: 'json',
             success: function (resp) {
                 alert("회원가입이 완료되었습니다.")
                 location.href = `/login`;
             },
-            error: function (error) {
+            error: function (request, error) {
+                alert("status code:" + request.status);
                 alert("error:" + error);
             }
         });

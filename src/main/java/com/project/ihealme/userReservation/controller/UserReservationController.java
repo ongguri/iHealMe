@@ -6,6 +6,7 @@ import com.project.ihealme.user.entity.User;
 import com.project.ihealme.userReservation.domain.UserReservation;
 import com.project.ihealme.userReservation.service.UserReservationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -55,18 +56,12 @@ public class UserReservationController {
     }*/
 
     @GetMapping("/community/write")
-    public String writePostPage(@RequestParam("resNo") Long resNo,
+    public String writePostPage(@AuthenticationPrincipal User user,
+                                @RequestParam("resNo") Long resNo,
                                 @RequestParam("name") String hptName,
                                 Model model) {
 
-        //임시 유저 -> 여기서도 유저 검증해야 함: 로그인 한 일반유저만 write 페이지 접근 가능
-        User user = new User();
-        user.setUserId(1L);
-        user.setEmail("longlee@naver.com");
-        model.addAttribute("user", user);
-
         model.addAttribute("postWriteReq", new PostWriteRequestDTO(user.getUserId(), resNo, hptName));
-
         return "community/writePost";
     }
 }

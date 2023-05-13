@@ -113,7 +113,27 @@
         </div>
     </div>
 
+    <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
     <script th:inline="javascript">
+        function init() {
+            $.ajax({
+                type : "GET",
+                url : "/community/report/" + [[${postRes.postNo}]],
+                data: {
+                    postNo: [[${postRes.postNo}]],
+                    page: [[${postPageReq.page}]],
+                    type: [[${postPageReq.type}]],
+                    keyword: [[${postPageReq.keyword}]],
+                },
+                success : function (data, status) {
+                    alert("게시글을 신고하였습니다.");
+                },
+                error : function (status) {
+                    alert("게시글을 신고하지 못하였습니다.");
+                    alert(status + "error!");
+                }
+            });
+        }
 
         var actionForm = $("form");
 
@@ -130,22 +150,42 @@
 
         $(".reportBtn").click(function() {
 
+            if ([[${user == null}]]) {
+                alert("로그인이 필요합니다.");
+                location.href='/login';
+                return;
+            }
+
             if(!confirm("게시글을 신고하시겠습니까?")){
                 return;
             }
 
-            if ([[${user == null}]]) {
-                if (alert("로그인이 필요합니다.")) {
-                    location.href=[[@{/login}]];
+            $.ajax({
+                type : "POST",
+                url : "/community/" + [[${postRes.postNo}]] + "/report",
+                data: {
+                    postNo: [[${postRes.postNo}]],
+                    page: [[${postPageReq.page}]],
+                    type: [[${postPageReq.type}]],
+                    keyword: [[${postPageReq.keyword}]],
+                },
+                success : function (data, status) {
+                    alert("게시글을 신고하였습니다.");
+                },
+                error : function (status) {
+                    alert("게시글을 신고하지 못하였습니다.");
+                    alert(status + "error!");
                 }
-            }
+            });
 
             /*if([[${user?.userId == postRes.userId}]]) {
                 alert('본인이 작성한 게시글은 신고할 수 없습니다.');
                 return;
             }*/
 
-            var postNo = [[${postRes.postNo}]];
+
+
+            /*var postNo = [[${postRes.postNo}]];
 
             actionForm.empty();
 
@@ -157,7 +197,7 @@
                 .attr("action", "/community/" + postNo + "/report")
                 .attr("method", "post");
 
-            actionForm.submit();
+            actionForm.submit();*/
         });
     </script>
 </div>

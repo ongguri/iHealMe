@@ -5,6 +5,9 @@ import com.project.ihealme.community.dto.*;
 import com.project.ihealme.community.service.PostService;
 import com.project.ihealme.user.entity.User;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -14,7 +17,6 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.Map;
 
 @Controller
@@ -24,19 +26,9 @@ public class PostController {
 
     private final PostService postService;
 
-    @ModelAttribute("user")
-    public User temporaryUser() {
-        User user = new User();
-        user.setUserId(1L);
-        user.setEmail("longlee@naver.com");
-
-        return user;
-    }
-
     @GetMapping
     public String posts(@ModelAttribute("postPageReq") PostPageRequestDTO postPageRequestDTO,
                         Model model) {
-
         model.addAttribute("postPageRes", postService.getPostList(postPageRequestDTO));
         model.addAttribute("searchTypes", SearchType.values());
 
@@ -44,7 +36,7 @@ public class PostController {
     }
 
     @GetMapping("/{postNo}")
-    public String post(@ModelAttribute("user") User user,
+    public String post(@AuthenticationPrincipal User user,
                        @PathVariable Long postNo,
                        @ModelAttribute("postPageReq") PostPageRequestDTO postPageRequestDTO,
                        @CookieValue(value = "postView", required = false) Cookie postViewCookie,
@@ -56,13 +48,13 @@ public class PostController {
         PostResponseDTO postResponseDTO = postService.getPost(postNo, addHitCount);
 
         model.addAttribute("postRes", postResponseDTO);
-        //model.addAttribute("user", user);
+        model.addAttribute("user", user);
 
         return "community/post";
     }
 
     @PostMapping("/write")
-    public String writePost(@ModelAttribute("user") User user,
+    public String writePost(@AuthenticationPrincipal User user,
                             @Valid @ModelAttribute("postWriteReq") PostWriteRequestDTO postWriteRequestDTO,
                             RedirectAttributes redirectAttributes) {
 
@@ -73,7 +65,7 @@ public class PostController {
     }
 
     @GetMapping("/{postNo}/edit")
-    public String editForm(@ModelAttribute("user") User user,
+    public String editForm(@AuthenticationPrincipal User user,
                            @PathVariable Long postNo,
                            @ModelAttribute("postPageReq") PostPageRequestDTO postPageRequestDTO,
                            Model model) {
@@ -84,7 +76,7 @@ public class PostController {
     }
 
     @PostMapping("/{postNo}/edit")
-    public String editPost(@ModelAttribute User user,
+    public String editPost(@AuthenticationPrincipal User user,
                            @PathVariable Long postNo,
                            @Valid @ModelAttribute("postEditReq") PostEditRequestDTO postEditRequestDTO,
                            @ModelAttribute("postPageReq") PostPageRequestDTO postPageRequestDTO,
@@ -100,37 +92,55 @@ public class PostController {
 
 
     @PostMapping("/{postNo}/delete")
-    public String delete(@ModelAttribute("user") User user,
+    public String delete(@AuthenticationPrincipal User user,
                          @PathVariable Long postNo) {
 
         postService.deleteWithReplies(postNo, user);
-
         return "redirect:/community";
     }
 
     @PostMapping("/{postNo}/report")
-    public String report(@ModelAttribute("user") User user,
-                         @PathVariable Long postNo,
-                         @ModelAttribute PostPageRequestDTO postPageRequestDTO,
-                         RedirectAttributes redirectAttributes) {
+    public ResponseEntity<String> report(@AuthenticationPrincipal User user,
+                                 @PathVariable Long postNo,
+                                 @ModelAttribute PostPageRequestDTO postPageRequestDTO,
+                                 @CookieValue(value = "reportedPost", required = false) Cookie reportedPostCookie,
+                                 HttpServletResponse response,
+                                 RedirectAttributes redirectAttributes) {
 
-        postService.addReport(postNo, user);
+        //신고 중복 방지를 위한 쿠키 사용
+        boolean addReportCount = updateReportCount(postNo, reportedPostCookie, response);
+        ResponseEntity responseEntity = new ResponseEntity("notAddReport", HttpStatus.ALREADY_REPORTED);
+
+        if (addReportCount) {
+            postService.addReport(postNo, user);
+            responseEntity = new ResponseEntity("addReport", HttpStatus.OK);
+        }
 
         Map<String, String> redirectAttrMap = createRedirectAttrMap(postNo, postPageRequestDTO);
         redirectAttributes.addAllAttributes(redirectAttrMap);
 
-        return "redirect:/community/{postNo}";
+        return responseEntity;
     }
 
     private boolean updateHitCount(Long postNo, User user, Cookie postViewCookie, HttpServletResponse response) {
-        if (postService.checkWriter(postNo, user)) {
+        if (postService.isWriterOfPost(postNo, user)) {
             return false;
         }
 
-        return checkPostViewCookie(postNo, postViewCookie, response);
+        String cookieName = "postViewCookie";
+        int maxAgeHour = 1;
+
+        return addCookie(postNo, postViewCookie, cookieName, maxAgeHour, response);
     }
 
-    private boolean checkPostViewCookie(Long postNo, Cookie postViewCookie, HttpServletResponse response) {
+    private boolean updateReportCount(Long postNo, Cookie reportedPostCookie, HttpServletResponse response) {
+        String cookieName = "reportedPostCookie";
+        int maxAgeHour = 24;
+
+        return addCookie(postNo, reportedPostCookie, cookieName, maxAgeHour, response);
+    }
+
+/*    private boolean checkPostViewCookie(Long postNo, Cookie postViewCookie, HttpServletResponse response) {
         String postNoStr = postNo + "/";
 
         if (postViewCookie != null) {
@@ -150,6 +160,28 @@ public class PostController {
             response.addCookie(newPostViewCookie);
 
             postService.addHitCount(postNo);
+            return true;
+        }
+
+        return false;
+    }*/
+
+    private boolean addCookie(Long postNo, Cookie cookie, String cookieName, int maxAgeHour, HttpServletResponse response) {
+        String postNoStr = postNo + "/";
+
+        if (cookie != null) {
+            if (!cookie.getValue().contains(postNoStr)) {
+                cookie.setValue(cookie.getValue() + postNoStr);
+                cookie.setPath("/");
+                cookie.setMaxAge(60 * 60 * maxAgeHour);
+                response.addCookie(cookie);
+                return true;
+            }
+        } else {
+            Cookie newCookie = new Cookie(cookieName, postNoStr);
+            newCookie.setPath("/");
+            newCookie.setMaxAge(60 * 60 * maxAgeHour);
+            response.addCookie(newCookie);
             return true;
         }
 

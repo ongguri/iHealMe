@@ -3,7 +3,6 @@ package com.project.ihealme.community.service;
 import com.project.ihealme.community.domain.Post;
 import com.project.ihealme.community.domain.SearchType;
 import com.project.ihealme.community.dto.*;
-import com.project.ihealme.community.exception.ExceptionType;
 import com.project.ihealme.community.repository.CommentRepository;
 import com.project.ihealme.community.repository.PostRepository;
 import com.project.ihealme.user.entity.User;
@@ -29,20 +28,18 @@ public class PostService {
     @Transactional
     public Long writePost(User user, PostWriteRequestDTO postWriteRequestDTO) {
         //비로그인 회원 -> 로그인 필요
-        if (user == null) {
-            throw new IllegalArgumentException(ExceptionType.USER_NOT_LOGIN.getMessage());
-        }
+        validateUserLogin(user);
+
         //로그인 회원 -> 병원 유저는 글 작성 불가
-        if (user.getUserRole() == UserRole.HOSPITAL) {
-            throw new IllegalArgumentException(ExceptionType.POST_WRITE_NOT_ALLOWED.getMessage());
-        }
-        //로그인 회원 -> 포스트 작성을 할 수 있는 유저가 아니면 글 작성 불가
-        if (!user.getUserId().equals(postWriteRequestDTO.getUserId())) {
+        //          -> 해당 접수의 후기 작성을 할 수 있는 유저가 아니면 작성 불가
+        if (user.getUserRole() == UserRole.HOSPITAL ||
+                !user.getUserId().equals(postWriteRequestDTO.getUserId())) {
+
             throw new IllegalArgumentException(ExceptionType.POST_WRITE_NOT_ALLOWED.getMessage());
         }
 
-        Long resNo = postWriteRequestDTO.getResNo();
         //존재하지 않는 접수내역에 대한 후기 작성 불가
+        Long resNo = postWriteRequestDTO.getResNo();
         UserReservation userReservation = reservationRepository.findById(resNo)
                 .orElseThrow(()-> new IllegalArgumentException(ExceptionType.USER_RESERVATION_NOT_FOUND.getMessage()));
 
@@ -54,6 +51,7 @@ public class PostService {
 
         return savedPost.getPostNo();
     }
+
 
     public PostPageResponseDTO getPostList(PostPageRequestDTO postPageRequestDTO) {
         String type = postPageRequestDTO.getType();
@@ -79,26 +77,23 @@ public class PostService {
     }
 
     public PostResponseDTO getPost(Long postNo, boolean addHitCount) {
-        Post post = postRepository.findByPostNo(postNo)
-                .orElseThrow(()-> new IllegalArgumentException(ExceptionType.POST_NOT_FOUND.getMessage()));
-
+        Post post = validateFindPost(postNo);
         return new PostResponseDTO(post, addHitCount ? post.getHit() + 1 : post.getHit());
     }
 
-    public PostResponseDTO getPostEditForm(Long postNo, User user) {
-        validateWriter(postNo, user);
+    @Transactional
+    public void addHitCount(Long postNo) {
+        validateFindPost(postNo);
 
-        return getPost(postNo, false);
+        int updatedPost = postRepository.updateHit(postNo);
+        if (updatedPost != 1) {
+            throw new IllegalArgumentException(ExceptionType.EXCEPTION.getMessage());
+        }
     }
 
-    @Transactional
-    public void deleteWithReplies(Long postNo, User user) {
-        validateWriter(postNo, user);
-
-        commentRepository.deleteByPostNo(postNo);
-        System.out.println("postRepository.deleteById(postNo) 시작");
-        postRepository.deleteById(postNo);
-        System.out.println("postRepository.deleteById(postNo) 끝");
+    public PostResponseDTO getPostEditForm(Long postNo, User user) {
+        validateWriterOfPost(postNo, user);
+        return getPost(postNo, false);
     }
 
     @Transactional
@@ -107,49 +102,35 @@ public class PostService {
             throw new IllegalArgumentException(ExceptionType.POST_EDIT_NOT_ALLOWED.getMessage());
         }
 
-        validateWriter(postNo, user);
+        validateWriterOfPost(postNo, user);
 
         Post post = postRepository.findByPostNo(postNo).get();
         post.edit(postEditRequestDTO.getTitle(), postEditRequestDTO.getContent());
     }
 
     @Transactional
-    public void addReport(Long postNo, User user) {
-        if (user == null) {
-            throw new IllegalArgumentException(ExceptionType.USER_NOT_LOGIN.getMessage());
-        }
+    public void deleteWithReplies(Long postNo, User user) {
+        validateWriterOfPost(postNo, user);
 
-        if (checkWriter(postNo, user)) { return; }
-
-        Post post = postRepository.findByPostNo(postNo).get();
-        int updatedPost = postRepository.updateReport(post.getPostNo());
-        if (updatedPost != 1) {
-            throw new IllegalArgumentException(ExceptionType.POST_REPORT_NOT_ALLOWED.getMessage());
-        }
+        commentRepository.deleteByPostNo(postNo);
+        postRepository.deleteById(postNo);
     }
 
     @Transactional
-    public void addHitCount(Long postNo) {
-        Post post = postRepository.findByPostNo(postNo)
-                .orElseThrow(()-> new IllegalArgumentException(ExceptionType.POST_NOT_FOUND.getMessage()));
+    public void addReport(Long postNo, User user) {
+        validateUserLogin(user);
+        if (isWriterOfPost(postNo, user)) return;
 
-        int updatedPost = postRepository.updateHit(postNo);
-        if (updatedPost != 1) {
-            throw new IllegalArgumentException(ExceptionType.POST_EDIT_NOT_ALLOWED.getMessage());
-        }
+        Post post = postRepository.findByPostNo(postNo).get();
+        int updatedPost = postRepository.updateReport(post.getPostNo());
+        if (updatedPost != 1)
+            throw new IllegalArgumentException(ExceptionType.POST_REPORT_NOT_ALLOWED.getMessage());
     }
 
-    public boolean checkWriter(Long postNo, User user) {
-        if (!isLoginUser(user)) {
-            return false;
-        }
+    public boolean isWriterOfPost(Long postNo, User user) {
+        if (!isLoginUser(user)) return false;
 
-        userRepository.findById(user.getUserId())
-                .orElseThrow(()-> new IllegalArgumentException(ExceptionType.USER_NOT_FOUND.getMessage()));
-
-        Post post = postRepository.findByPostNo(postNo)
-                .orElseThrow(()-> new IllegalArgumentException(ExceptionType.POST_NOT_FOUND.getMessage()));
-
+        Post post = validateFindPost(postNo);
         return post.getUser().getUserId().equals(user.getUserId());
     }
 
@@ -157,10 +138,19 @@ public class PostService {
         return user != null;
     }
 
-    private void validateWriter(Long postNo, User user) {
-        boolean isUserWriterOfPost = checkWriter(postNo, user);
+    private void validateUserLogin(User user) {
+        if (!isLoginUser(user)) {
+            throw new IllegalArgumentException(ExceptionType.USER_NOT_LOGIN.getMessage());
+        }
+    }
 
-        if (!isUserWriterOfPost) {
+    private Post validateFindPost(Long postNo) {
+        return postRepository.findByPostNo(postNo)
+                .orElseThrow(()-> new IllegalArgumentException(ExceptionType.POST_NOT_FOUND.getMessage()));
+    }
+
+    private void validateWriterOfPost(Long postNo, User user) {
+        if (!isWriterOfPost(postNo, user)) {
             throw new IllegalArgumentException(ExceptionType.USER_NOT_MATCH_POST_WRITER.getMessage());
         }
     }
