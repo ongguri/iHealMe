@@ -88,82 +88,94 @@ function subCounter() {
         });
 }
 
-
 function acceptReception() {
-  // 현재 페이지 URL에서 프로토콜과 호스트 부분을 제외한 경로를 추출
-  const urlPathname = window.location.pathname;
-  const updateStatusPath = '/HptReception/HptReceptionList/updateCurrentStatusToAccept';
+  const isAccept = confirm('접수를 수락하시겠습니까?');
 
-  // 버튼 클릭 이벤트가 일어나면 form 요소를 동적으로 생성
-  const form = document.createElement('form');
-  form.setAttribute('method', 'post');
-  form.setAttribute('action', updateStatusPath);
+  if (isAccept) {
+    const updateStatusPath = '/HptReception/HptReceptionList/updateCurrentStatusToAccept';
 
-  // resNo 값을 전달하기 위한 hidden input 요소 추가
-  const resNoInput = document.createElement('input');
-  resNoInput.setAttribute('type', 'hidden');
-  resNoInput.setAttribute('name', 'resNo');
-  resNoInput.setAttribute('value', '${hptReception.resNo}');
+    // 버튼 클릭 이벤트가 일어나면 form 요소를 동적으로 생성
+    const form = document.createElement('form');
+    form.setAttribute('method', 'post');
+    form.setAttribute('action', updateStatusPath);
 
-  // form 요소와 hidden input 요소를 body에 추가하고 submit
-  form.appendChild(resNoInput);
-  document.body.appendChild(form);
-  form.submit();
+    // resNo 값을 전달하기 위한 hidden input 요소 추가
+    const resNoInput = document.createElement('input');
+    resNoInput.setAttribute('type', 'hidden');
+    resNoInput.setAttribute('name', 'resNo');
+    resNoInput.setAttribute('value', '${hptReception.resNo}');
 
-  // 알림창을 띄우는 코드
-  alert('접수 완료되었습니다.');
+    // form 요소와 hidden input 요소를 body에 추가하고 submit
+    form.appendChild(resNoInput);
+    document.body.appendChild(form);
+
+    //confirm 메시지를 띄우고, 사용자가 확인을 누른 경우에만 form을 submit합니다.
+    form.submit();
+    alert('접수가 수락되었습니다.');
+  }
+
+  return isAccept;
 }
-
 
 function rejectReception() {
-  // 현재 페이지 URL에서 프로토콜과 호스트 부분을 제외한 경로를 추출
-  const urlPathname = window.location.pathname;
-  const updateStatusPath = '/HptReception/HptReceptionList/updateCurrentStatusToReject';
+  const isReject = confirm('접수를 취소하시겠습니까?');
 
-  // 버튼 클릭 이벤트가 일어나면 form 요소를 동적으로 생성
-  const form = document.createElement('form');
-  form.setAttribute('method', 'post');
-  form.setAttribute('action', updateStatusPath);
+  if (isReject) {
+    const updateStatusPath = '/HptReception/HptReceptionList/updateCurrentStatusToReject';
 
-  // resNo 값을 전달하기 위한 hidden input 요소 추가
-  const resNoInput = document.createElement('input');
-  resNoInput.setAttribute('type', 'hidden');
-  resNoInput.setAttribute('name', 'resNo');
-  resNoInput.setAttribute('value', '${hptReception.resNo}');
+    // 버튼 클릭 이벤트가 일어나면 form 요소를 동적으로 생성
+    const form = document.createElement('form');
+    form.setAttribute('method', 'post');
+    form.setAttribute('action', updateStatusPath);
 
-  // form 요소와 hidden input 요소를 body에 추가하고 submit
-  form.appendChild(resNoInput);
-  document.body.appendChild(form);
-  form.submit();
+    // resNo 값을 전달하기 위한 hidden input 요소 추가
+    const resNoInput = document.createElement('input');
+    resNoInput.setAttribute('type', 'hidden');
+    resNoInput.setAttribute('name', 'resNo');
+    resNoInput.setAttribute('value', '${hptReception.resNo}');
 
-  // 알림창을 띄우는 코드
-  alert('접수 취소되었습니다.');
+    // form 요소와 hidden input 요소를 body에 추가하고 submit
+    form.appendChild(resNoInput);
+    document.body.appendChild(form);
+
+    //confirm 메시지를 띄우고, 사용자가 확인을 누른 경우에만 form을 submit합니다.
+    form.submit();
+    alert('접수가 취소되었습니다.');
+  }
+
+  return isReject;
 }
 
-function completeReception() {
-  // 현재 페이지 URL에서 프로토콜과 호스트 부분을 제외한 경로를 추출
-  const urlPathname = window.location.pathname;
-  const updateStatusPath = '/HptReception/HptReceptionList/updateCurrentStatusToComplete';
 
-  // 버튼 클릭 이벤트가 일어나면 form 요소를 동적으로 생성
-  const form = document.createElement('form');
-  form.setAttribute('method', 'post');
-  form.setAttribute('action', updateStatusPath);
+function completeTreatment() {
+  const isComplete = confirm('진료를 완료하시겠습니까?');
 
-  // resNo 값을 전달하기 위한 hidden input 요소 추가
-  const resNoInput = document.createElement('input');
-  resNoInput.setAttribute('type', 'hidden');
-  resNoInput.setAttribute('name', 'resNo');
-  resNoInput.setAttribute('value', '${hptReception.resNo}');
+  if (isComplete) {
+    const updateStatusPath = '/HptReception/HptReceptionList/updateCurrentStatusToComplete';
 
-  // form 요소와 hidden input 요소를 body에 추가하고 submit
-  form.appendChild(resNoInput);
-  document.body.appendChild(form);
-  form.submit();
+    // 버튼 클릭 이벤트가 일어나면 form 요소를 동적으로 생성
+    const form = document.createElement('form');
+    form.setAttribute('method', 'post');
+    form.setAttribute('action', updateStatusPath);
 
-  // 알림창을 띄우는 코드
-  alert('진료완료되었습니다.');
-}
+    // resNo 값을 전달하기 위한 hidden input 요소 추가
+    const resNoInput = document.createElement('input');
+    resNoInput.setAttribute('type', 'hidden');
+    resNoInput.setAttribute('name', 'resNo');
+    resNoInput.setAttribute('value', '${hptReception.resNo}');
+
+    // form 요소와 hidden input 요소를 body에 추가하고 submit
+    form.appendChild(resNoInput);
+    document.body.appendChild(form);
+    form.submit();
+
+    //confirm 메시지를 띄우고, 사용자가 확인을 누른 경우에만 form을 submit합니다.
+     form.submit();
+     alert('진료가 완료되었습니다.');
+   }
+
+    return isComplete;
+  }
 
 
 
