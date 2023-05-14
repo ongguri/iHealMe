@@ -64,10 +64,25 @@ public class KakaoMapsController {
 
     @GetMapping("/api/places")
     public String placeList(@RequestParam String search, Model model) throws JsonProcessingException {
-        System.out.println("search: " + search);
-        List<KakaoMapsDto> places = kakaoMapsService.convertToKakaoMapsEntity(search);
-        model.addAttribute("places", places);
+        List<KakaoMapsDto> places = kakaoMapsService.convertToKakaoMapsDto(search);
+        boolean isDataExist = kakaoMapsService.checkIfDataExist();
+
+        if (isDataExist) {
+            kakaoMapsService.deleteAllPlaces();
+        }
+        kakaoMapsService.saveAllPlaces(places);
+
+        List<KakaoMapsEntity> entities = kakaoMapsService.convertToKakaoMapsEntity(places);
+
+        model.addAttribute("places", entities);
         return "maps/searchList";
+    }
+
+    @GetMapping("/api/places/map")
+    public String map(Model model) {
+        List<KakaoMapsEntity> entities = kakaoMapsService.getAll();
+        model.addAttribute("places", entities);
+        return "maps/maps";
     }
 
     /*@PostMapping("/api")

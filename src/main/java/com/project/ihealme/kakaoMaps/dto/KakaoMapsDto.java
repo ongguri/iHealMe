@@ -11,17 +11,21 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class KakaoMapsDto {
 
-    private String id;
+    private Long id;
     private String placeName;
     private String phone;
     private String roadAddressName;
     private String placeUrl;
+    private String x;
+    private String y;
 
-    public KakaoMapsDto(String id, String placeName, String phone, String roadAddressName, String placeUrl) {
+    public KakaoMapsDto(Long id, String placeName, String phone, String roadAddressName, String placeUrl, String x, String y) {
         this.id = id;
         this.placeName = placeName;
         this.phone = phone;
         this.roadAddressName = roadAddressName;
         this.placeUrl = placeUrl;
+        this.x = x;
+        this.y = y;
     }
 }

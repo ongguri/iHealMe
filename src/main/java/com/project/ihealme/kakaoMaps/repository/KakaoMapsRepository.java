@@ -9,5 +9,4 @@ import java.util.List;
 @Repository
 public interface KakaoMapsRepository extends JpaRepository<KakaoMapsEntity, Long> {
 
-    List<KakaoMapsEntity> findAll();
 }

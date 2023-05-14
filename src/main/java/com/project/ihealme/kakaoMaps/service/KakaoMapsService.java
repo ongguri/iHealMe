@@ -21,6 +21,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -31,10 +32,9 @@ public class KakaoMapsService {
 
     private final KakaoMapsRepository kakaoMapsRepository;
 
-    public List<KakaoMapsDto> convertToKakaoMapsEntity(String search) throws JsonProcessingException {
+    public List<KakaoMapsDto> convertToKakaoMapsDto(String search) throws JsonProcessingException {
         // 카카오 API 호출하여 검색 결과를 받아옴
         String apiUrl = "https://dapi.kakao.com/v2/local/search/keyword.json?query=" + search;
-        System.out.println("apiUrl = " + apiUrl);
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", "KakaoAK 0a931d3e53412cb779f034fc86ec4c96");
@@ -48,22 +48,42 @@ public class KakaoMapsService {
         if (root.has("documents")) {
             JsonNode documents = root.get("documents");
             for (JsonNode document : documents) {
-                String id = document.get("id").asText();
+                Long id = Long.valueOf(document.get("id").asText());
                 String placeName = document.get("place_name").asText();
                 String phone = document.get("phone").asText();
                 String roadAddressName = document.get("road_address_name").asText();
                 String placeUrl = document.get("place_url").asText();
-                KakaoMapsDto list = new KakaoMapsDto(id, placeName, phone, roadAddressName, placeUrl);
+                String x = document.get("x").asText();
+                String y = document.get("y").asText();
+                KakaoMapsDto list = new KakaoMapsDto(id, placeName, phone, roadAddressName, placeUrl, x, y);
                 kakaoList.add(list);
             }
         }
         return kakaoList;
     }
 
-    public String kakaoPlace() {
-        MultiValueMap<String, ObjectMapper> formData = new LinkedMultiValueMap<>();
+    public List<KakaoMapsEntity> convertToKakaoMapsEntity(List<KakaoMapsDto> dtos) {
+        return dtos.stream()
+                .map(dto -> new KakaoMapsEntity(dto.getId(), dto.getPlaceName(), dto.getPhone(),
+                        dto.getRoadAddressName(), dto.getPlaceUrl(), dto.getX(), dto.getY()))
+                .collect(Collectors.toList());
+    }
 
-        /*formData.add("apikey", );*/
-        return kakaoPlace();
+    public void saveAllPlaces(List<KakaoMapsDto> dtos) {
+        List<KakaoMapsEntity> entities = convertToKakaoMapsEntity(dtos);
+        kakaoMapsRepository.saveAll(entities);
+    }
+
+    public List<KakaoMapsEntity> getAll() {
+        return kakaoMapsRepository.findAll();
+    }
+
+    public boolean checkIfDataExist() {
+        long count = kakaoMapsRepository.count();
+        return count > 0;
+    }
+
+    public void deleteAllPlaces() {
+        kakaoMapsRepository.deleteAll();
     }
 }

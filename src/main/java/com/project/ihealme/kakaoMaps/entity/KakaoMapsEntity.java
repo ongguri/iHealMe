@@ -7,15 +7,15 @@ import javax.persistence.*;
 @Entity
 @Builder
 @Table(name = "maps")
-@Getter @ToString
+@Getter @Setter
+@ToString
 @AllArgsConstructor
 @NoArgsConstructor
 public class KakaoMapsEntity {
 
     @Id
     @Column(name = "id", length = 15, nullable = false)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private String id;
+    private Long id;
 
     @Column(name = "place_name", length = 100, nullable = false)
     private String placeName;
@@ -28,5 +28,11 @@ public class KakaoMapsEntity {
 
     @Column(name = "place_url", length = 100, nullable = false)
     private String placeUrl;
+
+    @Column(name = "x", length = 100, nullable = false)
+    private String x;
+
+    @Column(name = "y", length = 100, nullable = false)
+    private String y;
 }
 
