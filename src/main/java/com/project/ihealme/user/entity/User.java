@@ -18,12 +18,13 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
-@Table(name = "USERS")
+@Builder
 @Entity
+@Table(name = "USERS")
 public class User implements UserDetails {
 
     // 이름, 이메일, 연락처, 생년월일, 성별, 비밀번호, 질문, 답
-    @Id @Column
+    @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "USER_GEN")
     @SequenceGenerator(sequenceName = "USER_USERNO_SEQ", name = "USER_GEN", allocationSize = 1)
     private Long userId;
@@ -56,16 +57,16 @@ public class User implements UserDetails {
     @Column(nullable = false)
     private String answer;
 
-    @Column(unique = true)
+    @Column
     private String businessNum;
 
     @Column
     private String hptName;
 
-    @Column(unique = true)
+    @Column
     private String hptAddress;
 
-    @Column(unique = true)
+    @Column
     private String hptPhoneNum;
 
     public User(UserRequest requestDto, String password) {
@@ -100,14 +101,12 @@ public class User implements UserDetails {
         this.hptPhoneNum = requestDto.getHptPhoneNum();
     }
 
-    @Builder
     private User(String password, UserRole userRole, String email) {
         this.password = password;
         this.userRole = userRole;
         this.email = email;
     }
 
-    @Builder
     private User(UserRequest requestDto) {
         this.password = requestDto.getPassword();
         this.userRole = requestDto.getUserRole();
