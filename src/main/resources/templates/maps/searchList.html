@@ -27,15 +27,16 @@
 				<tbody>
 				<tr th:each="place : ${places}">
 					<td>
-						<p th:text="${place.placeName}" style="text-align: center">Place Name</p>
-						<button type="button" id="button" onclick="location.href='/api/reservation'">예약하기</button>
+						<p th:text="${place.placeName}" id="placeName">Place Name</p>
+						<a th:href="@{/maps/reservation}" id="reservation" th:text="예약하기"></a>
+						<a th:href="@{/maps/maps}" id="map" th:text="지도보기"></a>
 						<form action="" method="GET">
 						</form>
 					</td>
 					<td>
 						주소명 : <p th:text="${place.roadAddressName}">Road Address Nam</p>
 						전화번호 : <p th:text="${place.phone}">Phone</p>
-						홈페이지 : <p th:text="${place.placeUrl}">Place URL</p>
+						홈페이지 : <a th:href="${place.placeUrl}" th:text="${place.placeUrl}"></a>
 					</td>
 				</tr>
 				</tbody>
