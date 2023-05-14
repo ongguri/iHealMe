@@ -1,5 +1,6 @@
 package com.project.ihealme.user.controller;
 
+import com.project.ihealme.user.dto.HospitalRequest;
 import com.project.ihealme.user.dto.UserDTO;
 import com.project.ihealme.user.dto.UserRequest;
 import com.project.ihealme.user.jwt.JwtConfig;
@@ -22,27 +23,33 @@ public class UserController {
 
     @GetMapping("/login")
     public String login() {
-        return "/users/login";
+        return "users/login";
     }
 
     @GetMapping("/type")
     public String chooseType() {
-        return "/users/usertype";
+        return "users/usertype";
     }
 
     @GetMapping("/signupuser")
     public String signupUser() {
-        return "/users/signupuser";
+        return "users/signupuser";
     }
 
     @GetMapping("/signuphospital")
     public String signupHospital() {
-        return "/users/signuphospital";
+        return "users/signuphospital";
     }
 
     @PostMapping(value = "/registeruser")
     public String registerUser(@RequestBody UserRequest userRequest) {
         usersService.registerUser(userRequest);
+        return "redirect:/login";
+    }
+
+    @PostMapping(value = "/registerhospital")
+    public String registerHospital(@RequestBody HospitalRequest hospitalRequest) {
+        usersService.registerHospital(hospitalRequest);
         return "redirect:/login";
     }
 
