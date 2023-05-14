@@ -4,6 +4,6 @@
 --
 -- commit;
 
-INSERT INTO HPTRECEPTION (RESNO, EMAIL, PNAME, TXLIST, CURRENTSTATUS) VALUES (HIBERNATE_SEQUENCE.NEXTVAL, 'sebom@hospital.co.kr', '안유진', '소아진료', '접수대기');
-INSERT INTO userreservation(resno, email, name, list) VALUES (userreservation_no_seq.nextval, 'longlee@daum.net', '새롬소아청년과의원', '영유아 검진');
-commit;
+-- INSERT INTO HPTRECEPTION (RESNO, EMAIL, PNAME, TXLIST, CURRENTSTATUS) VALUES (HIBERNATE_SEQUENCE.NEXTVAL, 'sebom@hospital.co.kr', '안유진', '소아진료', '접수대기');
+-- INSERT INTO userreservation(resno, email, name, list) VALUES (userreservation_no_seq.nextval, 'longlee@daum.net', '새롬소아청년과의원', '영유아 검진');
+-- commit;
