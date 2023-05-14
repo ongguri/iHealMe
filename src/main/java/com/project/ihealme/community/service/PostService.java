@@ -7,7 +7,6 @@ import com.project.ihealme.community.repository.CommentRepository;
 import com.project.ihealme.community.repository.PostRepository;
 import com.project.ihealme.user.entity.User;
 import com.project.ihealme.user.entity.UserRole;
-import com.project.ihealme.user.repository.UserRepository;
 import com.project.ihealme.userReservation.domain.UserReservation;
 import com.project.ihealme.userReservation.repository.ReservationRepository;
 import lombok.RequiredArgsConstructor;
