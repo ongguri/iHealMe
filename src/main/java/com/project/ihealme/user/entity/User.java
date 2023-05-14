@@ -1,5 +1,6 @@
 package com.project.ihealme.user.entity;
 
+import com.project.ihealme.user.dto.HospitalRequest;
 import com.project.ihealme.user.dto.UserRequest;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -80,7 +81,23 @@ public class User implements UserDetails {
         this.businessNum = "-";
         this.hptName = "-";
         this.hptAddress = "-";
-        this.phoneNum = "-";
+        this.hptPhoneNum = "-";
+    }
+
+    public User(HospitalRequest requestDto, String password) {
+        this.userRole = UserRole.HOSPITAL;
+        this.name = requestDto.getName();
+        this.email = requestDto.getEmail();
+        this.phoneNum = requestDto.getPhoneNum();
+        this.password = password;
+        this.birthDate = requestDto.getBirthDate();
+        this.gender = requestDto.getGender();
+        this.question = requestDto.getQuestion();
+        this.answer = requestDto.getAnswer();
+        this.businessNum = requestDto.getBusinessNum();
+        this.hptName = requestDto.getHptName();
+        this.hptAddress = requestDto.getHptAddress();
+        this.hptPhoneNum = requestDto.getHptPhoneNum();
     }
 
     @Builder
@@ -133,5 +150,14 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true; // 계정의 활성화 여부 리턴
+    }
+
+    //실험용,, 삭제 플리즈
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }

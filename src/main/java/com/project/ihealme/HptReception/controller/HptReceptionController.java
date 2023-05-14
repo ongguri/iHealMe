@@ -1,6 +1,7 @@
 package com.project.ihealme.HptReception.controller;
 
 import com.project.ihealme.HptReception.domain.HptReception;
+import com.project.ihealme.HptReception.dto.HptRecPageRequestDTO;
 import com.project.ihealme.HptReception.service.HptReceptionService;
 import com.project.ihealme.userReservation.service.UserReservationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -22,11 +24,15 @@ public class HptReceptionController {
     private HptReceptionService hptReceptionService;
 
     @GetMapping("/HptReception/HptReceptionList")
-    public String hptReception(Model model) {
+    public String hptReception(@ModelAttribute HptRecPageRequestDTO hptRecPageRequestDTO, Model model) {
         int rtCount = hptReceptionService.getRtCount();
+        Map<String, String> searchTypes = new LinkedHashMap<>();
+        searchTypes.put("tx", "진료항목");
+        searchTypes.put("st", "상태");
+
         model.addAttribute("rtCount", rtCount);
-        List<HptReception> hptReceptionList = hptReceptionService.getHptReceptionList();
-        model.addAttribute("hptReceptionList", hptReceptionList);
+        model.addAttribute("searchTypes", searchTypes);
+        model.addAttribute("result", hptReceptionService.getUserResList(hptRecPageRequestDTO));
         return "HptReception/HptReceptionList";
     }
 

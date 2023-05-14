@@ -83,19 +83,45 @@
         <form th:action="@{/login}" method="post">
             <div class="input-group">
                 <label>Email</label>
-                <input type="email" name="email" required>
+                <input type="email" id="email" name="email" required>
             </div>
             <div class="input-group">
                 <label>Password</label>
-                <input type="password" name="password" required>
+                <input type="password" id="password" name="password" required>
             </div>
-            <button type="submit" class="btn">Login</button>
+            <button type="button" class="btn" onclick="userLogin()">Login</button>
         </form>
         <div class="bottom-container">
             <a th:href="@{/type}" class="btn">Signup</a>
             <a href="/static#" class="btn">Find ID/PW</a>
         </div>
     </div>
+
+    <script src="http://code.jquery.com/jquery-latest.js"></script>
+    <!--<script type="text/javascript" th:src="@{/js/user.js}"></script>-->
+    <script>
+        function userLogin() {
+            let data = {
+                email: $("#email").val(),
+                password: $("#password").val(),
+            };
+
+            $.ajax({
+                url: `/login`,
+                type: 'post',
+                data: JSON.stringify(data),
+                contentType: 'application/json; charset=utf-8',
+                // dataType: 'json',
+                success: function (resp) {
+                    alert("로그인이 완료되었습니다.")
+                    location.href = `/`;
+                },
+                error: function (request, error) {
+                    alert("status code:" + request.status + ", error:" + error);
+                }
+            });
+        };
+    </script>
 </body>
 
 </html>

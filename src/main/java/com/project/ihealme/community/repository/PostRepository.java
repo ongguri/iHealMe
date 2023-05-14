@@ -17,8 +17,8 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     @Query("SELECT DISTINCT p FROM Post p "
             + "JOIN FETCH p.userReservation "
             + "JOIN FETCH p.user "
-            + "LEFT JOIN FETCH p.comments " +
-            "where p.postNo = :postNo")
+            + "LEFT JOIN FETCH p.comments "
+            + "where p.postNo = :postNo")
     Optional<Post> findByPostNo(@Param("postNo") Long postNo);
 
     @Query(value = "SELECT DISTINCT p FROM Post p "

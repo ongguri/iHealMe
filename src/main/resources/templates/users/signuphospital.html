@@ -67,7 +67,7 @@
 
 <body>
     <div class="container">
-        <form action="/users/signup/register" method="post">
+        <form th:action="@{/registerhospital}" method="post">
             <h2 class="head">병원 회원가입</h2>
             <hr>
             <div class="row">
@@ -75,35 +75,36 @@
                     <h5>로그인 정보&emsp;&emsp;|&emsp;&emsp;대표 이름</h5>
                 </div>
                 <div class="col">
-                    <input type="text" class="form-control" name="repName" placeholder="이름 입력">
+                    <input type="text" class="form-control" name="name" id="name" placeholder="이름 입력">
                 </div>
             </div>
 
-            <form action="/users/validation/email" method="post">
-                <div class="row">
-                    <div class="col">
-                        <h5>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&ensp;&nbsp;대표 이메일</h5>
-                    </div>
-                    <div class="col">
-                        <div class="input-group">
-                            <div class="size">
-                                <input type="email" class="form-control" name="repEmail" placeholder="이메일 입력">
-                                &emsp;
-                            </div>
-                            <div class="input-group-append">
-                                <button type="submit" class="btn btn-secondary btn-md">중복검사</button>
-                            </div>
+            <!--            <form action="/users/validation/email" method="post">-->
+            <div class="row">
+                <div class="col">
+                    <h5>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&ensp;&nbsp;대표 이메일</h5>
+                </div>
+                <div class="col">
+                    <div class="input-group">
+                        <div class="size">
+                            <input type="email" class="form-control" name="email" id="email" placeholder="이메일 입력">
+                            &emsp;
                         </div>
+                        <!--                            <div class="input-group-append">-->
+                        <!--                                <button type="submit" class="btn btn-secondary btn-md">중복검사</button>-->
+                        <!--                            </div>-->
                     </div>
                 </div>
-            </form>
+            </div>
+            <!--            </form>-->
 
             <div class="row">
                 <div class="col">
                     <h5>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&ensp;&nbsp;대표 연락처</h5>
                 </div>
                 <div class="col">
-                    <input type="number" class="form-control" name="repPhoneNum" placeholder="연락처 입력(하이픈(-) 제외)">
+                    <input type="number" class="form-control" name="phoneNum" id="phoneNum"
+                           placeholder="연락처 입력(하이픈(-) 제외)">
                 </div>
             </div>
 
@@ -112,7 +113,8 @@
                     <h5>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&ensp;&nbsp;생년월일</h5>
                 </div>
                 <div class="col">
-                    <input type="number" class="form-control" name="title" placeholder="생년월일 입력(ex.20020625)">
+                    <input type="number" class="form-control" name="birthDate" id="birthDate"
+                           placeholder="생년월일 입력(ex.20020625)">
                 </div>
             </div>
 
@@ -121,7 +123,7 @@
                     <h5>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&ensp;&nbsp;성별</h5>
                 </div>
                 <div class="col">
-                    <select class="form-control" name="title">
+                    <select class="form-control" name="gender" id="gender">
                         <option value="" disabled selected>여기를 클릭하세요.</option>
                         <option value="1">남자</option>
                         <option value="2">여자</option>
@@ -134,7 +136,7 @@
                     <h5>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&ensp;&nbsp;비밀번호</h5>
                 </div>
                 <div class="col">
-                    <input type="password" class="form-control" name="repPassword" placeholder="비밀번호 입력">
+                    <input type="password" class="form-control" name="password" id="password" placeholder="비밀번호 입력">
                 </div>
             </div>
 
@@ -143,7 +145,8 @@
                     <h5>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&ensp;&nbsp;비밀번호 확인</h5>
                 </div>
                 <div class="col">
-                    <input type="password" class="form-control" name="confirmPassword" placeholder="비밀번호 다시 입력">
+                    <input type="password" class="form-control" name="confirmPassword" id="confirmPassword"
+                           placeholder="비밀번호 다시 입력">
                 </div>
             </div>
 
@@ -152,7 +155,7 @@
                     <h5>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&ensp;&nbsp;보안 질문</h5>
                 </div>
                 <div class="col">
-                    <select class="form-control" name="repQuestion">
+                    <select class="form-control" name="question" id="question">
                         <option value="" disabled selected>여기를 클릭하세요.</option>
                         <option value="1">질문1</option>
                         <option value="2">질문2</option>
@@ -166,7 +169,7 @@
                     <h5>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&ensp;&nbsp;답변</h5>
                 </div>
                 <div class="col">
-                    <input type="text" class="form-control" name="repAnswer" placeholder="질문 답 입력">
+                    <input type="text" class="form-control" name="answer" id="answer" placeholder="질문 답 입력">
                 </div>
             </div>
 
@@ -175,7 +178,8 @@
                     <h5>병원 정보&ensp;&emsp;&emsp;|&emsp;&emsp;&nbsp;사업자번호</h5>
                 </div>
                 <div class="col">
-                    <input type="number" class="form-control" name="businessNum" placeholder="사업자번호 입력(하이픈(-) 제외)">
+                    <input type="number" class="form-control" name="businessNum" id="businessNum"
+                           placeholder="사업자번호 입력(하이픈(-) 제외)">
                 </div>
             </div>
 
@@ -185,7 +189,8 @@
                     <h5>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&ensp;&nbsp;병원명</h5>
                 </div>
                 <div class="col">
-                    <input type="text" class="form-control" name="hptName" placeholder="병원명 입력 (사업자등록증과 동일하게 작성)">
+                    <input type="text" class="form-control" name="hptName" id="hptName"
+                           placeholder="병원명 입력 (사업자등록증과 동일하게 작성)">
                 </div>
             </div>
 
@@ -194,7 +199,8 @@
                     <h5>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&ensp;&nbsp;병원 주소</h5>
                 </div>
                 <div class="col">
-                    <input type="text" class="form-control" name="hptAddress" placeholder="병원 주소 입력 (사업자등록증과 동일하게 작성)">
+                    <input type="text" class="form-control" name="hptAddress" id="hptAddress"
+                           placeholder="병원 주소 입력 (사업자등록증과 동일하게 작성)">
                 </div>
             </div>
 
@@ -203,16 +209,53 @@
                     <h5>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&ensp;&nbsp;병원 전화번호</h5>
                 </div>
                 <div class="col">
-                    <input type="number" class="form-control" name="hptPhoneNum" placeholder="병원 전화번호 입력(하이픈(-) 제외)">
+                    <input type="number" class="form-control" name="hptPhoneNum" id="hptPhoneNum"
+                           placeholder="병원 전화번호 입력(하이픈(-) 제외)">
                 </div>
             </div>
 
             <div class="buttons">
                 <button type="submit" class="btn btn-secondary btn-lg">회원가입</button>
             </div>
-
         </form>
     </div>
+
+    <script src="http://code.jquery.com/jquery-latest.js"></script>
+    <script>
+        function hospitalSave() {
+            let data = {
+                name: $("#name").val(),
+                email: $("#email").val(),
+                phoneNum: $("#phoneNum").val(),
+                birthDate: $("#birthDate").val(),
+                gender: $("#gender").val(),
+                password: $("#password").val(),
+                confirmPassword: $("#confirmPassword").val(),
+                question: $("#question").val(),
+                answer: $("#answer").val(),
+                answer: $("#businessNum").val(),
+                answer: $("#hptName").val(),
+                answer: $("#hptAddress").val(),
+                answer: $("#hptPhoneNum").val()
+            };
+
+            $.ajax({
+                url: `/registerhospital`,
+                type: 'post',
+                data: JSON.stringify(data),
+                contentType: 'application/json; charset=utf-8',
+                // dataType: 'json',
+                success: function (resp) {
+                    alert("회원가입이 완료되었습니다.")
+                    location.href = `/login`;
+                },
+                error: function (request, error) {
+                    alert("status code:" + request.status);
+                    alert("error:" + error);
+                }
+            });
+        };
+    </script>
 </body>
 
 </html>

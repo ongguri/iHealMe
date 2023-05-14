@@ -82,20 +82,20 @@
   <div class="center">
     <div class="button-container">
       <button  th:onclick="|location.href='@{signupuser}'|" class="user-button">
-        <img src="user-image.jpg" alt="user">
-        <span>User</span>
+        <img th:src="@{/image/user.png}" alt="user">
+        <span>일반 회원</span>
       </button>
       <div class="description">
-        <p>Click here to register as a user.</p>
+        <p>병원을 쉽게 찾고, 진료를 예약하세요!</p>
       </div>
     </div>
     <div class="button-container">
       <button  th:onclick="|location.href='@{signuphospital}'|" class="user-button">
-        <img src="hospital-image.jpg" alt="hospital">
-        <span>Hospital</span>
+        <img th:src="@{/image/hospital.png}" alt="hospital">
+        <span>병원 회원</span>
       </button>
       <div class="description">
-        <p>Click here to register as a hospital.</p>
+        <p>내 병원을 등록하고, 온라인 접수를 받아보세요!</p>
       </div>
     </div>
   </div>

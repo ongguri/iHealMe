@@ -22,5 +22,4 @@ public class CommentDto {
     private String encodeEmail(User user) {
        return this.email = user.getEmail().substring(0, 3).concat("****");
     }
-
 }
