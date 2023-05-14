@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>오류 발생</title>
+</head>
+<body>
+<script th:inline="javascript">
+    alert([[${exception.message}]]);
+    history.back();
+</script>
+</body>
+</html>
