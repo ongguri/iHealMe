@@ -66,6 +66,10 @@ public class UserReservationController {
                                 @RequestParam("name") String hptName,
                                 Model model) {
 
+        if (user == null) {
+            return "redirect:/login";
+        }
+
         model.addAttribute("postWriteReq", new PostWriteRequestDTO(user.getUserId(), resNo, hptName));
         return "community/writePost";
     }

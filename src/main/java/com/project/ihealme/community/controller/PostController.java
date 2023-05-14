@@ -5,7 +5,6 @@ import com.project.ihealme.community.dto.*;
 import com.project.ihealme.community.service.PostService;
 import com.project.ihealme.user.entity.User;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -99,27 +98,21 @@ public class PostController {
         return "redirect:/community";
     }
 
-    @PostMapping("/{postNo}/report")
+    @PostMapping(value = "/{postNo}/report")
     public ResponseEntity<String> report(@AuthenticationPrincipal User user,
-                                 @PathVariable Long postNo,
-                                 @ModelAttribute PostPageRequestDTO postPageRequestDTO,
-                                 @CookieValue(value = "reportedPost", required = false) Cookie reportedPostCookie,
-                                 HttpServletResponse response,
-                                 RedirectAttributes redirectAttributes) {
+                                         @PathVariable Long postNo,
+                                         @ModelAttribute PostPageRequestDTO postPageRequestDTO,
+                                         @CookieValue(value = "reportedPost", required = false) Cookie reportedPostCookie,
+                                         HttpServletResponse response) {
 
         //신고 중복 방지를 위한 쿠키 사용
         boolean addReportCount = updateReportCount(postNo, reportedPostCookie, response);
-        ResponseEntity responseEntity = new ResponseEntity("notAddReport", HttpStatus.ALREADY_REPORTED);
+        return postService.addReport(postNo, user, addReportCount);
 
-        if (addReportCount) {
-            postService.addReport(postNo, user);
-            responseEntity = new ResponseEntity("addReport", HttpStatus.OK);
-        }
-
-        Map<String, String> redirectAttrMap = createRedirectAttrMap(postNo, postPageRequestDTO);
+        /*Map<String, String> redirectAttrMap = createRedirectAttrMap(postNo, postPageRequestDTO);
         redirectAttributes.addAllAttributes(redirectAttrMap);
 
-        return responseEntity;
+        return responseEntity;*/
     }
 
     private boolean updateHitCount(Long postNo, User user, Cookie postViewCookie, HttpServletResponse response) {
@@ -127,44 +120,12 @@ public class PostController {
             return false;
         }
 
-        String cookieName = "postViewCookie";
-        int maxAgeHour = 1;
-
-        return addCookie(postNo, postViewCookie, cookieName, maxAgeHour, response);
+        return addCookie(postNo, postViewCookie, "postView", 1, response);
     }
 
     private boolean updateReportCount(Long postNo, Cookie reportedPostCookie, HttpServletResponse response) {
-        String cookieName = "reportedPostCookie";
-        int maxAgeHour = 24;
-
-        return addCookie(postNo, reportedPostCookie, cookieName, maxAgeHour, response);
+        return addCookie(postNo, reportedPostCookie, "reportedPost", 24, response);
     }
-
-/*    private boolean checkPostViewCookie(Long postNo, Cookie postViewCookie, HttpServletResponse response) {
-        String postNoStr = postNo + "/";
-
-        if (postViewCookie != null) {
-            if (!postViewCookie.getValue().contains(postNoStr)) {
-                postViewCookie.setValue(postViewCookie.getValue() + postNoStr);
-                postViewCookie.setPath("/");
-                postViewCookie.setMaxAge(60 * 60);
-                response.addCookie(postViewCookie);
-
-                postService.addHitCount(postNo);
-                return true;
-            }
-        } else {
-            Cookie newPostViewCookie = new Cookie("postView", postNoStr);
-            newPostViewCookie.setPath("/");
-            newPostViewCookie.setMaxAge(60 * 60);
-            response.addCookie(newPostViewCookie);
-
-            postService.addHitCount(postNo);
-            return true;
-        }
-
-        return false;
-    }*/
 
     private boolean addCookie(Long postNo, Cookie cookie, String cookieName, int maxAgeHour, HttpServletResponse response) {
         String postNoStr = postNo + "/";
