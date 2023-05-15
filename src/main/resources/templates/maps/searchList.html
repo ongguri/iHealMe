@@ -20,37 +20,93 @@
 			<table>
 				<thead>
 				<tr>
-					<th style="text-align: center">병원명</th>
-					<th style="text-align: center">병원정보</th>
+					<th style="text-align: center; font-size: 25px;">병원명</th>
+					<th style="text-align: center; font-size: 25px;">병원정보</th>
 				</tr>
 				</thead>
 				<tbody>
-				<tr th:each="place : ${places}">
-					<td>
-						<p th:text="${place.placeName}" id="placeName">Place Name</p>
-						<a th:href="@{/maps/reservation}" id="reservation" th:text="예약하기"></a>
-						<a th:href="@{/maps/maps}" id="map" th:text="지도보기"></a>
-						<form action="" method="GET">
-						</form>
-					</td>
-					<td>
-						주소명 : <p th:text="${place.roadAddressName}">Road Address Nam</p>
-						전화번호 : <p th:text="${place.phone}">Phone</p>
-						홈페이지 : <a th:href="${place.placeUrl}" th:text="${place.placeUrl}"></a>
-					</td>
-				</tr>
+					<tr th:each="place : ${places}">
+						<td>
+							<p th:text="${place.placeName}" th:id="'placeName-' + ${place.id}" style="font-size: 25px;">Place Name</p>
+							<button class="reservation" th:text="예약하기" th:data-placeid="${place.id}" onclick="showModal(${place.id})"></button>
+							<button class="maps" th:href="@{/maps/maps}" th:text="지도보기" onclick="goToMaps(${place.id})"></button>
+							<br>
+							<br>
+							<a>실시간 대기자  수 : </a>
+						</td>
+						<td>
+							<h5>주소명</h5> <p th:text="${place.roadAddressName}">Road Address Nam</p>
+							<h5>전화번호</h5> <p th:text="${place.phone}">Phone</p>
+							<h5>홈페이지</h5> <a th:href="${place.placeUrl}" th:text="${place.placeUrl}"></a>
+						</td>
+					</tr>
 				</tbody>
 			</table>
-			<!--<ul>
-				<li th:each="place : ${places}">
-					<h3 th:text="${place.id}">Place ID</h3>
-					<p th:text="${place.placeName}">Place Name</p>
-					<p th:text="${place.phone}">Phone</p>
-					<p th:text="${place.roadAddressName}">Road Address Name</p>
-					<p th:text="${place.placeUrl}">Place URL</p>
-				</li>
-			</ul>-->
+			
+			<div id="myModal" class="modal">
+				<div class="modal-content">
+					<h4><p>선택한 병원: <span id="selectedPlaceName"></span></p></h4>
+					<h4><p>예약하시겠습니까?</p></h4>
+					<button id="confirmBtn">예</button>
+					<button id="cancelBtn">아니요</button>
+				</div>
+			</div>
 		</div>
+		
+		<script type="text/javascript">
+			// JavaScript 코드
+			const modal = document.getElementById("myModal");
+			const reservationBtns = document.querySelectorAll(".reservation");
+			const selectedPlaceName = document.getElementById("selectedPlaceName");
+			const confirmBtn = document.getElementById("confirmBtn");
+			const cancelBtn = document.getElementById("cancelBtn");
+			
+			function showModal(placeId) {
+				const placeName = document.getElementById(`placeName-${placeId}`).textContent;
+				selectedPlaceName.textContent = placeName;
+				modal.style.display = "block";
+			}
+			
+			function onConfirm() {
+				const nextUrl = "/api/reservation";
+				window.location.replace(nextUrl);
+				closeModal();
+			}
+			
+			function closeModal() {
+				modal.style.display = "none";
+			}
+			
+			confirmBtn.addEventListener("click", onConfirm);
+			cancelBtn.addEventListener("click", closeModal);
+			
+			reservationBtns.forEach((reservationBtn) => {
+				const placeId = reservationBtn.dataset.placeid;
+				reservationBtn.addEventListener("click", () => {
+					showModal(placeId);
+				});
+			
+			const mapsBtn = reservationBtn.nextElementSibling;
+			mapsBtn.addEventListener("click", () => {
+				const url = `/maps/reservation?placeId=${placeId}`;
+				window.location.href = url;
+				});
+				
+				function setCookie(name, value, days) {
+					const expires = new Date();
+					expires.setTime(expires.getTime() + days * 24 * 60 * 60 * 1000);
+					document.cookie = `${name}=${encodeURIComponent(value)};expires=${expires.toUTCString()};path=/`;
+				}
+				
+				const selectedPlaceName = document.getElementById("selectedPlaceName").textContent;
+				setCookie("selectedPlaceName", selectedPlaceName, 1); // 1일간 쿠키 유지
+				
+				function goToMaps(placeId) {
+					const url = `/maps/maps?placeId=${placeId}`;
+					window.location.href = url;
+				}
+			});
+		</script>
 	</div>
 </body>
 </html>

@@ -34,5 +34,21 @@ public class KakaoMapsEntity {
 
     @Column(name = "y", length = 100, nullable = false)
     private String y;
+
+    /*@JoinColumn(name = "HPTRECEPTION_pName")
+    private String pName; // HPTRECEPTION 테이블의 환아명
+
+    @JoinColumn(name = "HPTRECEPTION_TXLIST")
+    private String txList; // HPTRECEPTION 테이블의 진료항목
+
+    @JoinColumn(name = "HPTRECEPTION_RTCOUNT")
+    private int rtCount; // HPTRECEPTION 테이블의 실시간 대기자 수
+
+    @JoinColumn(name = "USERRESERVATION_NAME")
+    private String name; // USERRESERVATION 테이블의 병원명
+
+    @JoinColumn(name = "USERRESERVATION_LIST")
+    private String list; // USERRESERVATION 테이블의 진료항목*/
+
 }
 
