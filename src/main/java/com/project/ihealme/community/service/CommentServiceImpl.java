@@ -5,7 +5,7 @@ import com.project.ihealme.community.domain.Criteria;
 import com.project.ihealme.community.domain.Post;
 import com.project.ihealme.community.dto.CommentDto;
 import com.project.ihealme.community.dto.CommentPageDto;
-import com.project.ihealme.community.exception.MemberNotEqualsException;
+import com.project.ihealme.community.exception.CommentNotFoundException;
 import com.project.ihealme.community.repository.CommentRepository;
 import com.project.ihealme.community.repository.PostRepository;
 import com.project.ihealme.user.entity.User;
@@ -75,7 +75,7 @@ public class CommentServiceImpl implements CommentService{
         Comment comment = commentRepository.findById(commentDto.getCommNo())
                 .orElseThrow(() -> new IllegalArgumentException("해당 댓글이 없습니다."));
 
-        validateCommentWriter(user, comment);
+//        validateCommentWriter(user, comment.getCommNo());
 
         comment.update(commentDto.getContent());
     }
@@ -83,18 +83,21 @@ public class CommentServiceImpl implements CommentService{
     @Override
     @Transactional
     public void delete(User user, Long commNo) {
-        Comment comment = commentRepository.findById(commNo)
-                .orElseThrow(() -> new IllegalArgumentException("해당 댓글이 없습니다."));
-
-        validateCommentWriter(user, comment);
+//        validateCommentWriter(user, commNo);
 
         commentRepository.deleteById(commNo);
     }
 
-    private void validateCommentWriter(User user, Comment comment) {
-        if (!comment.isOwnComment(user)) {
-            throw new MemberNotEqualsException();
-        }
+    private boolean validateCommentWriter(User user, Long commNo) {
+        if (!isLoginUser(user)) return false;
+
+        Comment comment = validateFindComment(commNo);
+        return comment.getUser().getUserId().equals(user.getUserId());
+    }
+
+    private Comment validateFindComment(Long commNo) {
+        return commentRepository.findById(commNo)
+                .orElseThrow(CommentNotFoundException::new);
     }
 
     private boolean isLoginUser(User user) {
