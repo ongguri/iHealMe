@@ -1,7 +1,6 @@
 package com.project.ihealme.HptReception.repository;
 
 import com.project.ihealme.HptReception.domain.HptReception;
-import com.project.ihealme.userReservation.domain.UserReservation;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

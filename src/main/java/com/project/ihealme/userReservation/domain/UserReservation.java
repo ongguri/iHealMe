@@ -34,11 +34,4 @@ public class UserReservation extends BaseEntity {
     @ColumnDefault("'접수대기'")
     private String currentStatus;
 
-//    public UserReservation toEntity(UserReservation userRes) {
-//        UserReservation userReservation = userRes.builder()
-//                .resNo(resNo)
-//                .currentStatus("접수취소")
-//                .build();
-//        return userReservation;
-//    }
 }
