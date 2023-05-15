@@ -5,8 +5,11 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.ihealme.kakaoMaps.config.KakaoConfig;
 import com.project.ihealme.kakaoMaps.dto.KakaoMapsDto;
+import com.project.ihealme.kakaoMaps.dto.KakaoReservationDto;
 import com.project.ihealme.kakaoMaps.entity.KakaoMapsEntity;
+import com.project.ihealme.kakaoMaps.entity.KakaoReservationEntity;
 import com.project.ihealme.kakaoMaps.repository.KakaoMapsRepository;
+import com.project.ihealme.kakaoMaps.repository.KakaoReservationRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
@@ -24,6 +27,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class KakaoMapsService {
 
@@ -31,6 +35,7 @@ public class KakaoMapsService {
     private KakaoConfig kakaoConfig;
 
     private final KakaoMapsRepository kakaoMapsRepository;
+    private final KakaoReservationRepository kakaoReservationRepository;
 
     public List<KakaoMapsDto> convertToKakaoMapsDto(String search) throws JsonProcessingException {
         // 카카오 API 호출하여 검색 결과를 받아옴
@@ -86,4 +91,17 @@ public class KakaoMapsService {
     public void deleteAllPlaces() {
         kakaoMapsRepository.deleteAll();
     }
+
+    public void saveReservation(KakaoReservationDto kakaoReservationDto) {
+
+        KakaoReservationEntity kakaoReservationEntity = new KakaoReservationEntity();
+        kakaoReservationEntity.setId(kakaoReservationDto.getId());
+        kakaoReservationEntity.setPxName(kakaoReservationDto.getPxName());
+        kakaoReservationEntity.setTxtList(kakaoReservationDto.getTxtList());
+        kakaoReservationEntity.setSelectedPlaceName(kakaoReservationDto.getSelectedPlaceName());
+
+        // DB에 저장합니다.
+        kakaoReservationRepository.save(kakaoReservationEntity);
+    }
+
 }

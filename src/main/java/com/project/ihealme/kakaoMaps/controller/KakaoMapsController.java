@@ -1,10 +1,12 @@
 package com.project.ihealme.kakaoMaps.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.ihealme.kakaoMaps.dto.KakaoMapsDto;
+import com.project.ihealme.kakaoMaps.dto.KakaoReservationDto;
 import com.project.ihealme.kakaoMaps.entity.KakaoMapsEntity;
+import com.project.ihealme.kakaoMaps.entity.KakaoReservationEntity;
 import com.project.ihealme.kakaoMaps.repository.KakaoMapsRepository;
+import com.project.ihealme.kakaoMaps.repository.KakaoReservationRepository;
 import com.project.ihealme.kakaoMaps.service.KakaoMapsService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,9 +17,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 //@RestController
@@ -27,6 +27,8 @@ import java.util.stream.Collectors;
 public class KakaoMapsController {
 
     private final KakaoMapsService kakaoMapsService;
+    private final KakaoMapsRepository kakaoMapsRepository;
+    private final KakaoReservationRepository kakaoReservationRepository;
 
 
     /*@GetMapping("/api")
@@ -57,12 +59,12 @@ public class KakaoMapsController {
         return kakaoMapsService.convertToKakaoMapsEntity();
     }*/
 
-    @GetMapping("/api")
+    @GetMapping("/")
     public String searchPlace() {
         return "maps/main";
     }
 
-    @GetMapping("/api/places")
+    @GetMapping("/places")
     public String placeList(@RequestParam String search, Model model) throws JsonProcessingException {
         List<KakaoMapsDto> places = kakaoMapsService.convertToKakaoMapsDto(search);
         boolean isDataExist = kakaoMapsService.checkIfDataExist();
@@ -78,7 +80,7 @@ public class KakaoMapsController {
         return "maps/searchList";
     }
 
-    @GetMapping("/api/places/map")
+    @GetMapping("/places/map")
     public String map(Model model) {
         List<KakaoMapsEntity> entities = kakaoMapsService.getAll();
         model.addAttribute("places", entities);
@@ -97,8 +99,29 @@ public class KakaoMapsController {
         return "redirect:/";
     }*/
 
-    @GetMapping("/api/reservation")
-    public String kakaoreservation() {
+    @GetMapping("/reservation")
+    public String kakaoreservation(Model model) {
+        Long id = new Long(1);
+        String pxName = new String();
+        String selectedPlaceName = new String();
+        List<String> options = new ArrayList<String>();
+        options.add("소아진료");
+        options.add("영유아검진");
+        options.add("예방접종");
+        model.addAttribute("id", id);
+        model.addAttribute("pxName", pxName);
+        model.addAttribute("options", options);
+        model.addAttribute("selectedPlaceName", selectedPlaceName);
         return "maps/reservation";
+    }
+
+    @PostMapping("/reservation")
+    @ResponseBody
+    public void saveReservation(@ModelAttribute KakaoReservationDto kakaoReservationDt0) {
+        /*KakaoReservationDto reservationDto = new KakaoReservationDto();
+        kakaoReservationDto.setId(reservationDto.getId());
+        kakaoReservationDto.setPxName(reservationDto.getPxName());
+        kakaoReservationDto.setTxtList(reservationDto.getTxtList());*/
+        kakaoMapsService.saveReservation(kakaoReservationDt0);
     }
 }

@@ -24,7 +24,7 @@ public class KakaoController {
         return kakaoMapsService.save(kakaoMapsDto);
     }*/
 
-    @GetMapping("/")
+    /*@GetMapping("/")
     public String maps(HttpServletRequest request, HttpServletResponse response, RedirectAttributes redirectAttributes) {
         Map<String, ?> inputFlashMap = RequestContextUtils.getInputFlashMap(request);
 
@@ -34,7 +34,7 @@ public class KakaoController {
         }
 
         return "maps/kakaoMaps";
-    }
+    }*/
 
 
 }
