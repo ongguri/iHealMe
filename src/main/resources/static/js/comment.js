@@ -185,7 +185,7 @@ $(document).ready(function () {
                 }
             },
             error: function (request, status, error){
-                alert("댓글 작성자만 삭제할 수 있습니다.")
+                alert("본인만 삭제할 수 있습니다.")
             }
         })
     });
@@ -216,7 +216,7 @@ $(document).ready(function () {
                 }
             },
             error: function (request, status, error){
-                alert("댓글 작성자만 수정할 수 있습니다.")
+                alert("본인만 수정할 수 있습니다.")
             }
         })
     })
