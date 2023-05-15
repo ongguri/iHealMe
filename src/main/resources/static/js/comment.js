@@ -115,10 +115,6 @@ $(document).ready(function () {
     })
 
 
-    // $(".comment-count").click(function () {
-    //     loadJSONData(1);
-    // }) //end click
-
     var modal = $('.modal');
 
     $(".addComment").click(function () {
@@ -187,6 +183,9 @@ $(document).ready(function () {
                     modal.modal('hide');
                     loadJSONData(pageNum);
                 }
+            },
+            error: function (request, status, error){
+                alert("본인만 삭제할 수 있습니다.")
             }
         })
     });
@@ -215,6 +214,9 @@ $(document).ready(function () {
                     modal.modal('hide');
                     loadJSONData(pageNum);
                 }
+            },
+            error: function (request, status, error){
+                alert("본인만 수정할 수 있습니다.")
             }
         })
     })
