@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
       layout:decorate="~{layouts/layout}">
 <head>
     <meta charset="UTF-8">
@@ -33,8 +34,8 @@
                 <input type="hidden" name="type" th:value="${postPageReq.type}">
                 <input type="hidden" name="keyword" th:value="${postPageReq.keyword}">-->
 
-                <div class="lbuttons">
-                    <button type="submit" class="btn btn-secondary btn-sm reportBtn" th:text="|신고 (${postRes.report})|"
+                <div class="lbuttons" id="lbuttons">
+                    <button type="button" id="reportBtn" class="btn btn-secondary btn-sm reportBtn" th:text="|신고 (${postRes.report})|"
                     th:disabled="${user?.userId == postRes.userId} ? 'disabled'"
                     th:style="${user?.userId == postRes.userId} ? 'background-color: white; color: black; border: black solid 1px' : ''">신고</button>
                 </div>
@@ -65,7 +66,9 @@
             <div class="comment">
                 <h4 class="comment-title">댓글<span class="comment-count" th:text="|(${postRes.commentCount})|"></span>
                 </h4>
-                <button class="btn btn-secondary btn-sm addComment">댓글 쓰기</button>
+                <span sec:authorize="isAuthenticated()">
+                    <button class="btn btn-secondary btn-sm addComment">댓글 쓰기</button>
+                </span>
                 <hr>
                 <div class="commentList">
 
@@ -115,90 +118,70 @@
 
     <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
     <script th:inline="javascript">
-        function init() {
-            $.ajax({
-                type : "GET",
-                url : "/community/report/" + [[${postRes.postNo}]],
-                data: {
-                    postNo: [[${postRes.postNo}]],
-                    page: [[${postPageReq.page}]],
-                    type: [[${postPageReq.type}]],
-                    keyword: [[${postPageReq.keyword}]],
-                },
-                success : function (data, status) {
-                    alert("게시글을 신고하였습니다.");
-                },
-                error : function (status) {
-                    alert("게시글을 신고하지 못하였습니다.");
-                    alert(status + "error!");
+        // $(window).load(function () {
+
+            var actionForm = $("form");
+
+            $(".deleteBtn").click(function () {
+
+                if (!confirm("게시글을 삭제하시겠습니까?")) {
+                    return;
                 }
-            });
-        }
 
-        var actionForm = $("form");
-
-        $(".deleteBtn").click(function(){
-
-            if(!confirm("게시글을 삭제하시겠습니까?")){
-                return ;
-            }
-
-            actionForm
-                .attr("method","post")
-                .submit();
-        });
-
-        $(".reportBtn").click(function() {
-
-            if ([[${user == null}]]) {
-                alert("로그인이 필요합니다.");
-                location.href='/login';
-                return;
-            }
-
-            if(!confirm("게시글을 신고하시겠습니까?")){
-                return;
-            }
-
-            $.ajax({
-                type : "POST",
-                url : "/community/" + [[${postRes.postNo}]] + "/report",
-                data: {
-                    postNo: [[${postRes.postNo}]],
-                    page: [[${postPageReq.page}]],
-                    type: [[${postPageReq.type}]],
-                    keyword: [[${postPageReq.keyword}]],
-                },
-                success : function (data, status) {
-                    alert("게시글을 신고하였습니다.");
-                },
-                error : function (status) {
-                    alert("게시글을 신고하지 못하였습니다.");
-                    alert(status + "error!");
-                }
+                actionForm
+                    .attr("method", "post")
+                    .submit();
             });
 
-            /*if([[${user?.userId == postRes.userId}]]) {
-                alert('본인이 작성한 게시글은 신고할 수 없습니다.');
-                return;
-            }*/
+            $('#lbuttons').on('click', '#reportBtn', function() {
+
+                if ([[${user == null}]]) {
+                    alert("로그인이 필요합니다.");
+                    location.href = '/login';
+                    return;
+                }
+
+                if (!confirm("게시글을 신고하시겠습니까?")) {
+                    return;
+                }
+
+                $.ajax({
+                    type: "POST",
+                    url: "/community/" + [[${postRes.postNo}]] + "/report",
+                    data: {
+                        postNo: [[${postRes.postNo}]],
+                        page: [[${postPageReq.page}]],
+                        type: [[${postPageReq.type}]],
+                        keyword: [[${postPageReq.keyword}]],
+                    },
+                    dataType: "json",
+                    complete: function(data) {
+                        alert(data.responseText);
+                        $('#lbuttons').load(location.href + ' #lbuttons');
+                    }
+                });
+
+                /*if([[${user?.userId == postRes.userId}]]) {
+                    alert('본인이 작성한 게시글은 신고할 수 없습니다.');
+                    return;
+                }*/
 
 
+                /*var postNo = [[${postRes.postNo}]];
 
-            /*var postNo = [[${postRes.postNo}]];
+                actionForm.empty();
 
-            actionForm.empty();
+                actionForm.append('<input type="hidden" name="page" value=[[${postPageReq.page}]]>');
+                actionForm.append('<input type="hidden" name="type" value=[[${postPageReq.type}]]>');
+                actionForm.append('<input type="hidden" name="keyword" value=[[${postPageReq.keyword}]]>');
 
-            actionForm.append('<input type="hidden" name="page" value=[[${postPageReq.page}]]>');
-            actionForm.append('<input type="hidden" name="type" value=[[${postPageReq.type}]]>');
-            actionForm.append('<input type="hidden" name="keyword" value=[[${postPageReq.keyword}]]>');
+                actionForm
+                    .attr("action", "/community/" + postNo + "/report")
+                    .attr("method", "post");
 
-            actionForm
-                .attr("action", "/community/" + postNo + "/report")
-                .attr("method", "post");
-
-            actionForm.submit();*/
-        });
+                actionForm.submit();*/
+            });
+        // });
     </script>
 </div>
 </body>

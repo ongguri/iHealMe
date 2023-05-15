@@ -249,14 +249,14 @@
 							'<h3>접수하기</h3>' +
 							'<form>' +
 							'<label for="name">환자명:</label>' +
-							'<input type="text" id="name" name="name"><br><br>' +
+							'<input type="text" id="name" name="name" required><br><br>' +
 							'<label for="treatment">진료 항목:</label>' +
 							'<select id="treatment" name="treatment">' +
 							'<option value="1">소아진료</option>' +
 							'<option value="2">영유아검진</option>' +
 							'<option value="3">예방접종</option>' +
 							'</select><br><br>' +
-							'<input type="button" id="submitBtn" value="접수 신청">' +
+							'<input type="submit" id="submitBtn" value="접수 신정">' +
 							'<input type="button" id="cancelBtn" value="취소">' +
 							'</form>' +
 							'</div>';
@@ -266,10 +266,15 @@
 					document.body.appendChild(popup);
 					
 					// 접수 신청 버튼 클릭 시 팝업창 닫기 및 alert 창 띄우기
-					document.getElementById('submitBtn').addEventListener('click', function() {
-						popup.remove();
-						alert('접수 완료!');
-						window.location.href = '/userReservation';
+					document.getElementById('submitBtn').addEventListener('click', function(e) {
+						var form = document.querySelector('#popup form');
+						if (!form.checkValidity()) {
+							return false;
+						} else {
+							popup.remove();
+							alert('접수 완료!');
+							window.location.href = '/userReservation';
+						}
 					});
 					
 					// 취소 버튼 클릭 시 팝업창 닫기

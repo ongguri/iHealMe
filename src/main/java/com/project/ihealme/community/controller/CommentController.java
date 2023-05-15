@@ -4,11 +4,13 @@ import com.project.ihealme.community.domain.Criteria;
 import com.project.ihealme.community.dto.CommentDto;
 import com.project.ihealme.community.dto.CommentPageDto;
 import com.project.ihealme.community.service.CommentService;
+import com.project.ihealme.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -36,25 +38,25 @@ public class CommentController {
     }
 
     @PostMapping("{postNo}")
-    public ResponseEntity<Long> save(@RequestBody CommentDto commentDto){
+    public ResponseEntity<Long> save(@AuthenticationPrincipal User user, @RequestBody CommentDto commentDto){
         log.info(commentDto);
-        Long commNo = commentService.save(commentDto);
+        Long commNo = commentService.save(user, commentDto);
 
         return new ResponseEntity<>(commNo, HttpStatus.OK);
     }
 
     @DeleteMapping("/comment/{commNo}")
-    public ResponseEntity<String> delete(@PathVariable("commNo")Long commNo){
+    public ResponseEntity<String> delete(@AuthenticationPrincipal User user, @PathVariable("commNo")Long commNo){
         log.info("COMMNO: " + commNo);
-        commentService.delete(commNo);
+        commentService.delete(user, commNo);
 
         return new ResponseEntity<>("success", HttpStatus.OK);
     }
 
     @PutMapping("/comment/{commNo}")
-    public ResponseEntity<String> update(@RequestBody CommentDto commentDto){
+    public ResponseEntity<String> update(@AuthenticationPrincipal User user, @RequestBody CommentDto commentDto){
         log.info(commentDto);
-        commentService.update(commentDto);
+        commentService.update(user, commentDto);
 
         return new ResponseEntity<>("success", HttpStatus.OK);
     }

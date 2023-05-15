@@ -7,12 +7,13 @@ import com.project.ihealme.community.repository.CommentRepository;
 import com.project.ihealme.community.repository.PostRepository;
 import com.project.ihealme.user.entity.User;
 import com.project.ihealme.user.entity.UserRole;
-import com.project.ihealme.user.repository.UserRepository;
 import com.project.ihealme.userReservation.domain.UserReservation;
 import com.project.ihealme.userReservation.repository.ReservationRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,7 +23,6 @@ public class PostService {
 
     private final PostRepository postRepository;
     private final CommentRepository commentRepository;
-    private final UserRepository userRepository;
     private final ReservationRepository reservationRepository;
 
     @Transactional
@@ -76,13 +76,15 @@ public class PostService {
         }
     }
 
+    @Transactional
     public PostResponseDTO getPost(Long postNo, boolean addHitCount) {
         Post post = validateFindPost(postNo);
+        if (addHitCount) addHitCount(post.getPostNo());
+
         return new PostResponseDTO(post, addHitCount ? post.getHit() + 1 : post.getHit());
     }
 
-    @Transactional
-    public void addHitCount(Long postNo) {
+    private void addHitCount(Long postNo) {
         validateFindPost(postNo);
 
         int updatedPost = postRepository.updateHit(postNo);
@@ -98,7 +100,7 @@ public class PostService {
 
     @Transactional
     public void edit(Long postNo, User user, PostEditRequestDTO postEditRequestDTO) {
-        if (postNo != postEditRequestDTO.getPostNo()) {
+        if (!postNo.equals(postEditRequestDTO.getPostNo())) {
             throw new IllegalArgumentException(ExceptionType.POST_EDIT_NOT_ALLOWED.getMessage());
         }
 
@@ -117,14 +119,21 @@ public class PostService {
     }
 
     @Transactional
-    public void addReport(Long postNo, User user) {
+    public ResponseEntity<String> addReport(Long postNo, User user, boolean addReportCount) {
         validateUserLogin(user);
-        if (isWriterOfPost(postNo, user)) return;
+
+        if (!addReportCount)
+            return new ResponseEntity<>("이미 신고한 게시글입니다.", HttpStatus.OK);
+
+        if (isWriterOfPost(postNo, user))
+            return new ResponseEntity<>("글 작성자는 신고할 수 없습니다.", HttpStatus.OK);
 
         Post post = postRepository.findByPostNo(postNo).get();
         int updatedPost = postRepository.updateReport(post.getPostNo());
         if (updatedPost != 1)
             throw new IllegalArgumentException(ExceptionType.POST_REPORT_NOT_ALLOWED.getMessage());
+
+        return new ResponseEntity<>("게시글을 신고하였습니다.", HttpStatus.CREATED);
     }
 
     public boolean isWriterOfPost(Long postNo, User user) {
