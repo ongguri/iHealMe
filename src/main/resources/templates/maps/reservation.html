@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout}">
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE-edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum=1.0, user-scalable=no">
+	<title>접수하기</title>
+	<link rel="stylesheet" type="text/css" href="/css/maps/kakaoreservation.css">
+	
+</head>
+<body>
+	<div layout:fragment="content">
+		<div class="container">
+			<p>선택한 병원: <span th:text="${selectedPlaceName}" /></p>
+			<form th:action="@{/reservation}" method="POST">
+				<label th:for="${pxName}">환아명:</label>
+				<input type="text" th:id="${pxName}" name="pxName" placeholder="ex) 홍길동" required>
+				<br>
+				<label for="txtList">진료명:</label>
+				<select id="txtList" name="txtList" required>
+					<option value="">&#45;&#45;선택&#45;&#45;</option>
+					<option th:each="option : ${options}" th:value="${option}" th:text="${option}"></option>
+				</select>
+				<br>
+				<input type="hidden" name="selectedPlaceName" th:value="${selectedPlaceName}" />
+				<input type="submit" value="접수 신청">
+				<input type="button" value="뒤로 가기" onclick="history.back()">
+			</form>
+			
+			<script>
+				function getCookie(name) {
+					const value = `; ${document.cookie}`;
+					const parts = value.split(`; ${name}=`);
+					if (parts.length === 2) {
+						const cookieValue = parts.pop().split(";").shift();
+						return decodeURIComponent(cookieValue.trim());
+					}
+					handleReservationSuccess();
+					return null;
+				}
+				
+				const selectedPlaceName = getCookie("selectedPlaceName");
+				const selectedPlaceNameElement = document.getElementById("selectedPlaceName");
+				if (selectedPlaceName && selectedPlaceNameElement) {
+					selectedPlaceNameElement.textContent = selectedPlaceName;
+				}
+				
+				// 예약이 성공적으로 처리되었을 때 실행되는 함수
+				function handleReservationSuccess() {
+					// 예약 성공 메시지를 보여줄 요소를 가져옵니다.
+					const successMsgEl = document.querySelector("input");
+					
+					// 예약 성공 메시지를 보여줍니다.
+					successMsgEl.style.display = "block";
+				}
+			</script>
+		</div>
+	</div>
+</body>
+</html>

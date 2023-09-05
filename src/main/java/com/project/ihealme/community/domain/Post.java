@@ -1,51 +1,39 @@
 package com.project.ihealme.community.domain;
 
-import com.project.ihealme.community.dto.PostResponseDTO;
+import com.project.ihealme.community.dto.PostWriteRequestDTO;
+import com.project.ihealme.user.entity.User;
+import com.project.ihealme.userReservation.domain.UserReservation;
 import lombok.*;
+import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
-import java.util.ArrayList;
+import javax.validation.constraints.NotBlank;
 import java.util.List;
 
 @Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString(exclude = "user")
+@ToString(exclude = {"user", "userReservation"})
 @Entity
 public class Post extends BaseEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "POSTNO_GEN")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "POSTNO_GEN")
     @SequenceGenerator(sequenceName = "POST_POSTNO_SEQ", name = "POSTNO_GEN", allocationSize = 1)
+    @Column(name = "POSTNO")
     private Long postNo;
 
-//    @OneToOne(fetch = FetchType.LAZY)
-//    @JoinColumns({
-//            @JoinColumn(name = "resNo", referencedColumnName = "resNo"),
-//            @JoinColumn(name = "hptName", referencedColumnName = "hptName")
-//    })
-//    private UserReservation userReservation;
-
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "userId")
+    @JoinColumn(name = "USERID")
     private User user;
 
-//    @OneToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "resNo")
-//    private Reservation reservation;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "RESNO", unique = true, nullable = false)
+    private UserReservation userReservation;
 
-    @Column(nullable = false)
-    private int resNo;
-
-    @Column(nullable = false)
-    private String hptName;
-
-//    @Column(nullable = false)
-//    private String userEmail;
-
-    @Column(nullable = false)
+    @Column(nullable = false, length = 100)
     private String title;
 
     @Lob
@@ -58,39 +46,23 @@ public class Post extends BaseEntity {
     private int report;
 
     @OneToMany(mappedBy = "post", fetch = FetchType.LAZY)
-    @Transient
-    private List<Comment> comments = new ArrayList<>();
+    @BatchSize(size = 10)
+    @OrderBy("commNo desc")
+    private List<Comment> comments;
 
-    public PostResponseDTO toPostResponseDTO() {
-        PostResponseDTO postResponseDTO = PostResponseDTO.builder()
-                .postNo(postNo)
-                .resNo(resNo)
-                .hptName(hptName)
-                .title(title)
-                .content(content)
-                .userEmail(user.getUserEmail())
-                .regDate(getRegdate())
-                .hit(hit)
-                .report(report)
-                .commentCount(comments.size())
+    public static Post create(PostWriteRequestDTO postWriteRequestDTO, User user, UserReservation userReservation) {
+        Post post = Post.builder()
+                .user(user)
+                .userReservation(userReservation)
+                .title(postWriteRequestDTO.getTitle())
+                .content(postWriteRequestDTO.getContent())
                 .build();
 
-        return postResponseDTO;
+        return post;
     }
 
-    public void changeTitle(String title) {
+    public void edit(String title, String content) {
         this.title = title;
-    }
-
-    public void changeContent(String content) {
         this.content = content;
-    }
-
-    public void addHitCount() {
-        hit++;
-    }
-
-    public void addReportCount() {
-        report++;
     }
 }

@@ -1,45 +1,47 @@
 package com.project.ihealme.community.domain;
 
+import com.project.ihealme.user.entity.User;
 import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
-import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 
 @NoArgsConstructor
-@Getter
+@Builder
+@AllArgsConstructor
+@Getter @Setter
+@ToString(exclude = {"post", "user"})
+@Table(name = "COMMENTS", indexes = @Index(name = "idx_comment", columnList = "commNo, postNo"))
 @Entity
-@Table(name = "COMMENTS")
-public class Comment {
+public class Comment extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "COMMNO_GEN")
     @SequenceGenerator(sequenceName = "COMMENT_COMMNO_SEQ", name = "COMMNO_GEN", allocationSize = 1)
-    private Long commno;
+    private Long commNo;
 
     @Column(nullable = false, length = 600)
     private String content;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "userEmail", nullable = false)
+    @JoinColumn(name = "USERID", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "postNo", nullable = false)
+    @JoinColumn(name = "POSTNO", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Post post;
 
-    @CreatedDate
-    private LocalDateTime regdate;
-
-    public Comment(String content, User user, Post post, LocalDateTime regdate) {
+    public Comment(String content, User user, Post post) {
         this.content = content;
         this.user = user;
         this.post = post;
-        this.regdate = regdate;
+    }
+
+    public void update(String content){
+        this.content = content;
     }
 
     public boolean isOwnComment(User user){

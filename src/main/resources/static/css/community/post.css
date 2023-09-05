@@ -1,3 +1,7 @@
+.fs-4 {
+    color: skyblue;
+}
+
 body {
     font-family: Arial, sans-serif;
     margin: 0;
@@ -13,7 +17,6 @@ body {
 
 .post-title {
     font-size: 32px;
-    font-weight: bold;
     margin: 0;
     padding: 0;
 }
@@ -48,10 +51,15 @@ hr {
     box-shadow: 0 2px 2px #ccc;
 }
 
+.post-content > p {
+    min-height: 300px;
+}
+
 .lbuttons{
     float: left;
     justify-content: flex-end;
 }
+
 .rbuttons {
     float: right;
     justify-content: flex-end;
@@ -59,6 +67,7 @@ hr {
 
 
 .comment-title{
+    display: inline;
     clear: both;
     font-size: 18px;
     font-weight: bold;
@@ -71,7 +80,7 @@ hr {
     font-weight: normal;
 }
 
-.comment-input{
+.comment-content{
     position: relative;
 }
 
@@ -83,4 +92,28 @@ tr {
 
 td {
     vertical-align: middle;
+}
+
+.addComment {
+    float: right;
+    margin-bottom: 20px;
+}
+
+.card-body {
+    clear: both;
+    border: 1px solid lightgray;
+    padding: 5px;
+    margin-bottom: 5px;
+}
+
+.card-body:hover {
+    background-color: #f9f9f9;
+}
+
+.card-subtitle {
+    padding-right: 15px;
+}
+
+.card-text {
+    font-size: 8px;
 }
