@@ -41,7 +41,7 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     @Query(value = "SELECT DISTINCT p FROM Post p "
             + "JOIN FETCH p.userReservation r "
             + "JOIN FETCH p.user "
-            + "WHERE r.name like %:name%",
+            + "WHERE r.patientName like %:name%",
             countQuery = "select count(p) from Post p")
     Page<Post> findByHptNameContaining(@Param("name") String hptName, Pageable pageable);
 

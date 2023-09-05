@@ -14,7 +14,6 @@ import java.util.List;
 @Repository
 public interface ReservationRepository extends JpaRepository<UserReservation, Long> {
 
-    UserReservation findByEmailAndCurrentStatus(String userEmail, String currentStatus);
     UserReservation findByResNo(Long resNo);
 
     @Query(value = "SELECT DISTINCT u FROM UserReservation u ", countQuery = "select count(u) from UserReservation u")
@@ -25,13 +24,13 @@ public interface ReservationRepository extends JpaRepository<UserReservation, Lo
      */
     // 병원명
     @Query(value = "SELECT DISTINCT u FROM UserReservation u "
-            + "WHERE u.name like %:name%",
+            + "WHERE u.patientName like %:name%",
             countQuery = "select count(u) from UserReservation u")
     Page<UserReservation> findByNameContaining(@Param("name") String name, Pageable pageable);
 
     // 진료상태
     @Query(value = "SELECT DISTINCT u FROM UserReservation u "
-            + "WHERE u.list like %:list%",
+            + "WHERE u.txList like %:list%",
             countQuery = "select count(u) from UserReservation u")
     Page<UserReservation> findByListContaining(@Param("list") String list, Pageable pageable);
 
