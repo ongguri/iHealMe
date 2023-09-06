@@ -1,5 +1,6 @@
 package com.project.ihealme.HptReception.domain;
 
+import com.project.ihealme.userReservation.domain.UserReservation;
 import lombok.Data;
 import org.hibernate.annotations.ColumnDefault;
 
@@ -12,29 +13,13 @@ import java.time.LocalDateTime;
 public class HptReception {
 
         @Id @Column(name = "RESNO", length = 20)
-        @GeneratedValue(strategy = GenerationType.SEQUENCE)
+        @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "RECNO_GEN")
+        @SequenceGenerator(sequenceName = "HPTRECEPTION_NO_SEQ", name = "RECNO_GEN", allocationSize = 1)
         private int resNo;
 
-        @Column(name = "EMAIL", length = 50)
-        private String email;
+        @ManyToOne(optional = false) private UserReservation userReservation;
 
-        @Column(name = "PNAME", length = 20)
-        private String pName;
-
-        @Column(name = "TXLIST", length = 20)
-        private String txList;
-
-        @Column(name = "RDATE")
-        @ColumnDefault("sysdate")
-        private LocalDateTime rDate;
-
-        @Column(name = "CURRENTSTATUS", length = 20)
-        @ColumnDefault("'접수대기'")
-        private String currentStatus;
-
-        @Column(name = "RTCOUNT", length = 10)
-        @ColumnDefault("0")
-        private int rtCount;
+        @Column(name = "RTCOUNT", length = 10) @ColumnDefault("0") private int rtCount;
 
 }
 

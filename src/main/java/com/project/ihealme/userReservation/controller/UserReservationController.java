@@ -41,8 +41,8 @@ public class UserReservationController {
 
     @GetMapping("/userResCancelUpdate")
     public String updateCurrentStatusToComplete(@RequestParam("resNo") int resNo) {
-        userReservationService.updateCurrentStatus(resNo, "접수취소");
-        hptReceptionService.updateCurrentStatus(resNo, "접수취소", LocalDateTime.now());
+//        userReservationService.updateCurrentStatus(resNo, "접수취소");
+//        hptReceptionService.updateCurrentStatus(resNo, "접수취소", LocalDateTime.now());
         hptReceptionService.decreaseRtCount(); // 대기자 수 -1
 
         return "redirect:/userReservation";
