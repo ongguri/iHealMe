@@ -33,14 +33,14 @@ public interface HptReceptionRepository extends JpaRepository<HptReception, Long
      */
     // 진료상태
     @Query(value = "SELECT DISTINCT h FROM HptReception h "
-            + "WHERE h.txList like %:txList%",
+            + "WHERE h.userReservation.txList like %:txList%",
             countQuery = "select count(h) from HptReception h")
-    Page<HptReception> findByTxListContaining(@Param("txList") String txList, Pageable pageable);
+    Page<HptReception> findByUserReservation_TxListContaining(@Param("txList") String txList, Pageable pageable);
 
     // 상태
     @Query(value = "SELECT DISTINCT h FROM HptReception h "
-            + "WHERE h.currentStatus like %:currentStatus%",
+            + "WHERE h.userReservation.currentStatus like %:currentStatus%",
             countQuery = "select count(u) from UserReservation u")
-    Page<HptReception> findByCurrentStatusContaining(@Param("currentStatus") String currentStatus, Pageable pageable);
+    Page<HptReception> findByUserReservation_CurrentStatusContaining(@Param("currentStatus") String currentStatus, Pageable pageable);
 
 }

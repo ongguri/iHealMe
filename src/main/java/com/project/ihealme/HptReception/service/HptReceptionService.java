@@ -21,10 +21,10 @@ public class HptReceptionService {
         this.hptReceptionRepository = hptReceptionRepository;
     }
 
-    @Transactional
-    public int getRtCount() {
-        return hptReceptionRepository.findRtCount();
-    }
+//    @Transactional
+//    public int getRtCount() {
+//        return hptReceptionRepository.findRtCount();
+//    }
 
     @Transactional
     public List<HptReception> getHptReceptionList() {
@@ -40,21 +40,21 @@ public class HptReceptionService {
         hptReceptionRepository.decreaseRtCount();
     }
 
-    @Transactional
-    public void updateCurrentStatus(int resNo, String newStatus, LocalDateTime rDate) {
-        // 해당 접수 번호(resNo)에 대한 HptReception 객체 가져오기
-        HptReception hptReception = hptReceptionRepository.findByResNo(resNo);
-
-        // 새로운 상태(newStatus)로 변경하기
-        hptReception.setCurrentStatus(newStatus);
-
-        // 접수 링크를 누른 시점의 sysdate 로 변경하기
-        hptReception.setRDate(rDate);
-
-        // 변경된 상태를 데이터베이스에 업데이트하기
-        hptReceptionRepository.save(hptReception);
-    }
-
+//    @Transactional
+//    public void updateCurrentStatus(int resNo, String newStatus, LocalDateTime rDate) {
+//        // 해당 접수 번호(resNo)에 대한 HptReception 객체 가져오기
+//        HptReception hptReception = hptReceptionRepository.findByResNo(resNo);
+//
+//        // 새로운 상태(newStatus)로 변경하기
+//        hptReception.setCurrentStatus(newStatus);
+//
+//        // 접수 링크를 누른 시점의 sysdate 로 변경하기
+//        hptReception.setRDate(rDate);
+//
+//        // 변경된 상태를 데이터베이스에 업데이트하기
+//        hptReceptionRepository.save(hptReception);
+//    }
+//
     public HptRecPageResponseDTO getUserResList(HptRecPageRequestDTO hptRecPageRequestDTO) {
         Page<HptReception> result = null;
 
@@ -68,10 +68,10 @@ public class HptReceptionService {
 
             switch (type) {
                 case "tx":
-                    result = hptReceptionRepository.findByTxListContaining(keyword, pageable);
+                    result = hptReceptionRepository.findByUserReservation_TxListContaining(keyword, pageable);
                     break;
                 case "st":
-                    result = hptReceptionRepository.findByCurrentStatusContaining(keyword, pageable);
+                    result = hptReceptionRepository.findByUserReservation_CurrentStatusContaining(keyword, pageable);
                     break;
             }
         }
