@@ -33,7 +33,7 @@ public class PostResponseDTO {
         this.hptName = post.getUserReservation().getPatientName();
         this.title = post.getTitle();
         this.content = post.getContent();
-        this.regDate = post.getRegdate();
+        this.regDate = post.getRegDate();
         this.hit = hit;
         this.report = post.getReport();
         this.userId = post.getUser().getUserId();

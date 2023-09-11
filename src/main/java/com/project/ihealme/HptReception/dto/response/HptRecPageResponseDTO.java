@@ -1,4 +1,4 @@
-package com.project.ihealme.HptReception.dto;
+package com.project.ihealme.HptReception.dto.response;
 
 import com.project.ihealme.HptReception.domain.HptReception;
 import lombok.Getter;

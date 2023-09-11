@@ -1,8 +1,8 @@
 package com.project.ihealme.userReservation.service;
 
 import com.project.ihealme.userReservation.domain.UserReservation;
-import com.project.ihealme.userReservation.dto.UserResPageRequestDTO;
-import com.project.ihealme.userReservation.dto.UserResPageResponseDTO;
+import com.project.ihealme.userReservation.dto.request.UserResPageRequestDTO;
+import com.project.ihealme.userReservation.dto.response.UserResPageResponseDTO;
 import com.project.ihealme.userReservation.repository.ReservationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -11,7 +11,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 //@Transactional
@@ -26,8 +25,8 @@ public class UserReservationService {
         return reservationRepository.findAll(Sort.by(Sort.Direction.DESC, "resNo"));
     }
 
-    public void updateCurrentStatus(int resNo, String newStatus) {
-        UserReservation userReservation = reservationRepository.findByResNo((long) resNo);
+    public void updateCurrentStatus(Long resNo, String newStatus) {
+        UserReservation userReservation = reservationRepository.findByResNo(resNo);
 
         userReservation.setCurrentStatus(newStatus);
 

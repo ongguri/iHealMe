@@ -20,9 +20,9 @@ public abstract class BaseEntity {
     @CreatedDate
     @Column(updatable = false)
     @ColumnDefault("sysdate")
-    private LocalDateTime regdate;
+    private LocalDateTime regDate;
 
     @LastModifiedDate
-    private LocalDateTime updateRegdate;
+    private LocalDateTime updateRegDate;
 
 }

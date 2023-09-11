@@ -34,22 +34,22 @@
             </thead>
             <tbody>
             <tr th:each="hptReception : ${result.hptRecList}">
-                <td th:text="${hptReception.resNo}"></td>
+                <td th:text="${hptReception.recNo}"></td>
                 <td th:text="${hptReception.userReservation.patientName}"></td>
                 <td th:text="${hptReception.userReservation.txList}"></td>
-                <td th:text="${#temporals.format(hptReception.userReservation.regdate, 'yy/MM/dd HH:mm:ss')}"></td>
+                <td th:text="${#temporals.format(hptReception.userReservation.regDate, 'yy/MM/dd HH:mm:ss')}"></td>
                 <td th:text="${hptReception.userReservation.currentStatus}"></td>
                 <td>
                     <a th:if="${hptReception.userReservation.currentStatus == '접수대기'}"
-                       th:href="@{/HptReception/HptReceptionList/updateCurrentStatusToAccept(resNo=${hptReception.resNo})}"
+                       th:href="@{/HptReception/HptReceptionList/updateCurrentStatusToAccept(recNo=${hptReception.recNo})}"
                        onclick="return acceptReception()">접수</a>
 
                     <a th:if="${hptReception.userReservation.currentStatus == '접수대기'}"
-                       th:href="@{/HptReception/HptReceptionList/updateCurrentStatusToReject(resNo=${hptReception.resNo})}"
+                       th:href="@{/HptReception/HptReceptionList/updateCurrentStatusToReject(recNo=${hptReception.recNo})}"
                        onclick="return rejectReception()">거절</a>
 
                     <a th:if="${hptReception.userReservation.currentStatus == '진료 전'}"
-                       th:href="@{/HptReception/HptReceptionList/updateCurrentStatusToComplete(resNo=${hptReception.resNo})}"
+                       th:href="@{/HptReception/HptReceptionList/updateCurrentStatusToComplete(recNo=${hptReception.recNo})}"
                        onclick="return completeTreatment()">진료완료</a>
                 </td>
             </tr>
