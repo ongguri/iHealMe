@@ -12,7 +12,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface HptReceptionRepository extends JpaRepository<HptReception, Long> {
 
-    HptReception findByResNo(int resNo);
+    HptReception findByRecNo(int resNo);
 
     @Query("SELECT rtCount FROM HptReception")
     Integer findRtCount();
