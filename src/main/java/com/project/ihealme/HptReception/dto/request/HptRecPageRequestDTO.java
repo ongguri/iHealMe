@@ -1,4 +1,4 @@
-package com.project.ihealme.HptReception.dto;
+package com.project.ihealme.HptReception.dto.request;
 
 import lombok.*;
 import org.springframework.data.domain.PageRequest;

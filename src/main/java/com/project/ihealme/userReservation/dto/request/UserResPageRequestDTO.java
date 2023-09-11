@@ -1,4 +1,4 @@
-package com.project.ihealme.userReservation.dto;
+package com.project.ihealme.userReservation.dto.request;
 
 import lombok.*;
 import org.springframework.data.domain.PageRequest;

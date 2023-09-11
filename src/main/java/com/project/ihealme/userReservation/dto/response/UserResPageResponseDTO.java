@@ -1,4 +1,4 @@
-package com.project.ihealme.userReservation.dto;
+package com.project.ihealme.userReservation.dto.response;
 
 import com.project.ihealme.userReservation.domain.UserReservation;
 import lombok.Getter;
