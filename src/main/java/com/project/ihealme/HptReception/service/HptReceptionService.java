@@ -1,24 +1,40 @@
 package com.project.ihealme.HptReception.service;
 
 import com.project.ihealme.HptReception.domain.HptReception;
-import com.project.ihealme.HptReception.dto.HptRecPageRequestDTO;
-import com.project.ihealme.HptReception.dto.HptRecPageResponseDTO;
+import com.project.ihealme.HptReception.dto.HptReceptionDto;
+import com.project.ihealme.HptReception.dto.request.HptRecPageRequestDTO;
+import com.project.ihealme.HptReception.dto.response.HptRecPageResponseDTO;
 import com.project.ihealme.HptReception.repository.HptReceptionRepository;
+import com.project.ihealme.userReservation.domain.UserReservation;
+import com.project.ihealme.userReservation.repository.ReservationRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
 public class HptReceptionService {
+    private final ReservationRepository reservationRepository;
     private final HptReceptionRepository hptReceptionRepository;
 
-    public HptReceptionService(HptReceptionRepository hptReceptionRepository) {
+    public HptReceptionService(
+            ReservationRepository reservationRepository,
+            HptReceptionRepository hptReceptionRepository
+    ) {
+        this.reservationRepository = reservationRepository;
         this.hptReceptionRepository = hptReceptionRepository;
+    }
+
+    @Transactional
+    public HptReceptionDto getHptReception(Long recId) {
+        return hptReceptionRepository.findById(recId)
+                .map(HptReceptionDto::from)
+                .orElseThrow(() -> new EntityNotFoundException("접수 정보가 없습니다."));
     }
 
 //    @Transactional
@@ -40,26 +56,21 @@ public class HptReceptionService {
         hptReceptionRepository.decreaseRtCount();
     }
 
-//    @Transactional
-//    public void updateCurrentStatus(int resNo, String newStatus, LocalDateTime rDate) {
-//        // 해당 접수 번호(resNo)에 대한 HptReception 객체 가져오기
-//        HptReception hptReception = hptReceptionRepository.findByResNo(resNo);
-//
-//        // 새로운 상태(newStatus)로 변경하기
-//        hptReception.setCurrentStatus(newStatus);
-//
-//        // 접수 링크를 누른 시점의 sysdate 로 변경하기
-//        hptReception.setRDate(rDate);
-//
-//        // 변경된 상태를 데이터베이스에 업데이트하기
-//        hptReceptionRepository.save(hptReception);
-//    }
-//
+    @Transactional
+    public void updateCurrentStatus(Long recNo, String newStatus, LocalDateTime updateRegDate) {
+        HptReception hptReception = hptReceptionRepository.getReferenceById(recNo);
+        UserReservation userReservation = hptReception.getUserReservation();
+
+        userReservation.setCurrentStatus(newStatus);
+
+        hptReceptionRepository.save(hptReception);
+    }
+
     public HptRecPageResponseDTO getUserResList(HptRecPageRequestDTO hptRecPageRequestDTO) {
         Page<HptReception> result = null;
 
         String type = hptRecPageRequestDTO.getType();
-        Pageable pageable = hptRecPageRequestDTO.getPageable(Sort.by("resNo").descending());
+        Pageable pageable = hptRecPageRequestDTO.getPageable(Sort.by("recNo").descending());
 
         if (type == null || type.equals("")) {
             result = hptReceptionRepository.findAllByPage(pageable);

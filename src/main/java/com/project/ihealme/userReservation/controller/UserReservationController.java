@@ -3,7 +3,7 @@ package com.project.ihealme.userReservation.controller;
 import com.project.ihealme.HptReception.service.HptReceptionService;
 import com.project.ihealme.community.dto.PostWriteRequestDTO;
 import com.project.ihealme.user.entity.User;
-import com.project.ihealme.userReservation.dto.UserResPageRequestDTO;
+import com.project.ihealme.userReservation.dto.request.UserResPageRequestDTO;
 import com.project.ihealme.userReservation.service.UserReservationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.time.LocalDateTime;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -40,10 +39,9 @@ public class UserReservationController {
     }
 
     @GetMapping("/userResCancelUpdate")
-    public String updateCurrentStatusToComplete(@RequestParam("resNo") int resNo) {
-//        userReservationService.updateCurrentStatus(resNo, "접수취소");
-//        hptReceptionService.updateCurrentStatus(resNo, "접수취소", LocalDateTime.now());
-        hptReceptionService.decreaseRtCount(); // 대기자 수 -1
+    public String updateCurrentStatusToComplete(@RequestParam("resNo") Long resNo) {
+        userReservationService.updateCurrentStatus(resNo, "접수취소");
+//        hptReceptionService.decreaseRtCount(); // 대기자 수 -1
 
         return "redirect:/userReservation";
     }
