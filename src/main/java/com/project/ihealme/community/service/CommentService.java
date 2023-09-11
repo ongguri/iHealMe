@@ -22,7 +22,7 @@ public interface CommentService {
                 .postNo(comment.getPost().getPostNo())
                 .content(comment.getContent())
                 .email(comment.getUser().getEmail().substring(0, 3).concat("****"))
-                .regDate(comment.getRegdate())
+                .regDate(comment.getRegDate())
                 .build();
     }
 }

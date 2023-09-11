@@ -102,8 +102,8 @@ function acceptReception() {
     // resNo 값을 전달하기 위한 hidden input 요소 추가
     const resNoInput = document.createElement('input');
     resNoInput.setAttribute('type', 'hidden');
-    resNoInput.setAttribute('name', 'resNo');
-    resNoInput.setAttribute('value', '${hptReception.resNo}');
+    resNoInput.setAttribute('name', 'recNo');
+    resNoInput.setAttribute('value', '${hptReception.recNo}');
 
     // form 요소와 hidden input 요소를 body에 추가하고 submit
     form.appendChild(resNoInput);
@@ -131,8 +131,8 @@ function rejectReception() {
     // resNo 값을 전달하기 위한 hidden input 요소 추가
     const resNoInput = document.createElement('input');
     resNoInput.setAttribute('type', 'hidden');
-    resNoInput.setAttribute('name', 'resNo');
-    resNoInput.setAttribute('value', '${hptReception.resNo}');
+    resNoInput.setAttribute('name', 'recNo');
+    resNoInput.setAttribute('value', '${hptReception.recNo}');
 
     // form 요소와 hidden input 요소를 body에 추가하고 submit
     form.appendChild(resNoInput);
@@ -161,8 +161,8 @@ function completeTreatment() {
     // resNo 값을 전달하기 위한 hidden input 요소 추가
     const resNoInput = document.createElement('input');
     resNoInput.setAttribute('type', 'hidden');
-    resNoInput.setAttribute('name', 'resNo');
-    resNoInput.setAttribute('value', '${hptReception.resNo}');
+    resNoInput.setAttribute('name', 'recNo');
+    resNoInput.setAttribute('value', '${hptReception.recNo}');
 
     // form 요소와 hidden input 요소를 body에 추가하고 submit
     form.appendChild(resNoInput);

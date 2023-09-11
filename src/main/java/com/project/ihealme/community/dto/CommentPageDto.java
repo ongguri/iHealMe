@@ -21,7 +21,7 @@ public class CommentPageDto {
             commentDtoList.add(CommentDto.builder()
                     .commNo(comment.getCommNo())
                     .content(comment.getContent())
-                    .regDate(comment.getRegdate())
+                    .regDate(comment.getRegDate())
                     .email(comment.getUser().getEmail().substring(0, 3).concat("****"))
                     .postNo(comment.getPost().getPostNo())
                     .build());
