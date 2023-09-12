@@ -37,7 +37,12 @@
                 <td th:text="${hptReception.recNo}"></td>
                 <td th:text="${hptReception.userReservation.patientName}"></td>
                 <td th:text="${hptReception.userReservation.txList}"></td>
-                <td th:text="${#temporals.format(hptReception.userReservation.regDate, 'yy/MM/dd HH:mm:ss')}"></td>
+
+                <td th:if="${hptReception.userReservation.currentStatus == '접수대기'}"
+                    th:text="${#temporals.format(hptReception.regDate, 'yyyy-MM-dd HH:mm:ss')}"></td>
+                <td th:if="${hptReception.userReservation.currentStatus != '접수대기'}"
+                    th:text="${#temporals.format(hptReception.userReservation.updateRegDate, 'yyyy-MM-dd HH:mm:ss')}"></td>
+
                 <td th:text="${hptReception.userReservation.currentStatus}"></td>
                 <td>
                     <a th:if="${hptReception.userReservation.currentStatus == '접수대기'}"
