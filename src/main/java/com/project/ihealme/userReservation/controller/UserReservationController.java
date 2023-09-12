@@ -3,14 +3,15 @@ package com.project.ihealme.userReservation.controller;
 import com.project.ihealme.community.dto.PostWriteRequestDTO;
 import com.project.ihealme.user.entity.User;
 import com.project.ihealme.userReservation.dto.request.UserResPageRequestDTO;
+import com.project.ihealme.userReservation.dto.request.UserReservationRequest;
 import com.project.ihealme.userReservation.service.UserReservationService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.LinkedHashMap;
@@ -35,9 +36,12 @@ public class UserReservationController {
         return "reservation/userReservation";
     }
 
-    @GetMapping("/userResCancelUpdate")
-    public String updateCurrentStatusToComplete(@RequestParam("resNo") Long resNo) {
-        userReservationService.updateCurrentStatus(resNo, "접수취소");
+    @PostMapping("/userResCancelUpdate")
+    public String updateCurrentStatusToComplete(
+            @RequestParam("resNo") Long resNo,
+            UserReservationRequest userReservationRequest
+    ) {
+        userReservationService.updateCurrentStatus(resNo, userReservationRequest.toDto());
 
         return "redirect:/userReservation";
     }

@@ -2,6 +2,7 @@ package com.project.ihealme.userReservation.service;
 
 import com.project.ihealme.HptReception.repository.HptReceptionRepository;
 import com.project.ihealme.userReservation.domain.UserReservation;
+import com.project.ihealme.userReservation.dto.UserReservationDto;
 import com.project.ihealme.userReservation.dto.request.UserResPageRequestDTO;
 import com.project.ihealme.userReservation.dto.response.UserResPageResponseDTO;
 import com.project.ihealme.userReservation.repository.ReservationRepository;
@@ -26,9 +27,13 @@ public class UserReservationService {
         return reservationRepository.findAll(Sort.by(Sort.Direction.DESC, "resNo"));
     }
 
-    public void updateCurrentStatus(Long resNo, String newStatus) {
+    public void updateCurrentStatus(Long resNo, UserReservationDto dto) {
         UserReservation userReservation = reservationRepository.findByResNo(resNo);
+        String newStatus = dto.getCurrentStatus();
 
+        if(newStatus.equals("진료 전")) {
+            newStatus = "접수 취소";
+        }
         userReservation.setCurrentStatus(newStatus);
 
         reservationRepository.save(userReservation);
