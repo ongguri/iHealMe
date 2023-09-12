@@ -2,7 +2,6 @@ package com.project.ihealme.HptReception.controller;
 
 import com.project.ihealme.HptReception.dto.request.HptRecPageRequestDTO;
 import com.project.ihealme.HptReception.service.HptReceptionService;
-import com.project.ihealme.userReservation.service.UserReservationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,7 +15,6 @@ import java.util.Map;
 @Controller
 public class HptReceptionController {
 
-    private final UserReservationService userReservationService;
     private final HptReceptionService hptReceptionService;
 
     @GetMapping("/HptReceptionList")
