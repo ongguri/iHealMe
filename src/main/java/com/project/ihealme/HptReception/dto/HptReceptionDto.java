@@ -1,7 +1,6 @@
 package com.project.ihealme.HptReception.dto;
 
 import com.project.ihealme.HptReception.domain.HptReception;
-import com.project.ihealme.userReservation.domain.UserReservation;
 import com.project.ihealme.userReservation.dto.UserReservationDto;
 import lombok.Getter;
 import lombok.Setter;

@@ -6,7 +6,6 @@ import com.project.ihealme.HptReception.dto.request.HptRecPageRequestDTO;
 import com.project.ihealme.HptReception.dto.response.HptRecPageResponseDTO;
 import com.project.ihealme.HptReception.repository.HptReceptionRepository;
 import com.project.ihealme.userReservation.domain.UserReservation;
-import com.project.ihealme.userReservation.repository.ReservationRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
