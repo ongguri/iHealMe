@@ -7,6 +7,7 @@ import com.project.ihealme.HptReception.dto.response.HptRecPageResponseDTO;
 import com.project.ihealme.HptReception.repository.HptReceptionRepository;
 import com.project.ihealme.userReservation.domain.UserReservation;
 import com.project.ihealme.userReservation.repository.ReservationRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -18,17 +19,9 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class HptReceptionService {
-    private final ReservationRepository reservationRepository;
     private final HptReceptionRepository hptReceptionRepository;
-
-    public HptReceptionService(
-            ReservationRepository reservationRepository,
-            HptReceptionRepository hptReceptionRepository
-    ) {
-        this.reservationRepository = reservationRepository;
-        this.hptReceptionRepository = hptReceptionRepository;
-    }
 
     @Transactional
     public HptReceptionDto getHptReception(Long recId) {
@@ -37,10 +30,10 @@ public class HptReceptionService {
                 .orElseThrow(() -> new EntityNotFoundException("접수 정보가 없습니다."));
     }
 
-//    @Transactional
-//    public int getRtCount() {
-//        return hptReceptionRepository.findRtCount();
-//    }
+    @Transactional
+    public int getRtCount() {
+        return hptReceptionRepository.findRtCount();
+    }
 
     @Transactional
     public List<HptReception> getHptReceptionList() {

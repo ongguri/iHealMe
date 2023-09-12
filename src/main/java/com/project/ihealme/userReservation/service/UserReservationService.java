@@ -1,9 +1,11 @@
 package com.project.ihealme.userReservation.service;
 
+import com.project.ihealme.HptReception.repository.HptReceptionRepository;
 import com.project.ihealme.userReservation.domain.UserReservation;
 import com.project.ihealme.userReservation.dto.request.UserResPageRequestDTO;
 import com.project.ihealme.userReservation.dto.response.UserResPageResponseDTO;
 import com.project.ihealme.userReservation.repository.ReservationRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -15,11 +17,12 @@ import java.util.List;
 
 //@Transactional
 @Transactional
+@RequiredArgsConstructor
 @Service
 public class UserReservationService {
 
-    @Autowired
-    private ReservationRepository reservationRepository;
+    private final ReservationRepository reservationRepository;
+    private final HptReceptionRepository hptReceptionRepository;
 
     public List<UserReservation> getUserReservationList() {
         return reservationRepository.findAll(Sort.by(Sort.Direction.DESC, "resNo"));
@@ -31,6 +34,7 @@ public class UserReservationService {
         userReservation.setCurrentStatus(newStatus);
 
         reservationRepository.save(userReservation);
+        hptReceptionRepository.decreaseRtCount();
     }
 
     public UserResPageResponseDTO getUserResList(UserResPageRequestDTO userResPageRequestDTO) {
