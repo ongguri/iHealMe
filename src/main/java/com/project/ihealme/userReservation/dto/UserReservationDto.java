@@ -28,6 +28,10 @@ public class UserReservationDto {
         this.updateRegDate = updateRegDate;
     }
 
+    public static UserReservationDto of(String patientName, String txList, String currentStatus) {
+        return new UserReservationDto(null, patientName, txList, currentStatus, null, null);
+    }
+
     public static UserReservationDto of(Long resNo, String patientName, String txList, String currentStatus, LocalDateTime regDate, LocalDateTime updateRegDate) {
         return new UserReservationDto(resNo, patientName, txList, currentStatus, regDate, updateRegDate);
     }
