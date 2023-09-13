@@ -1,6 +1,7 @@
 package com.project.ihealme.HptReception.controller;
 
 import com.project.ihealme.HptReception.dto.request.HptRecPageRequestDTO;
+import com.project.ihealme.HptReception.dto.request.HptReceptionRequest;
 import com.project.ihealme.HptReception.service.HptReceptionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -48,26 +49,35 @@ public class HptReceptionController {
         return "success";
     }
 
-    @GetMapping("/HptReceptionList/updateCurrentStatusToAccept")       // <a> 태그는 get 방식으로 요청한다.
-    public String updateCurrentStatusToAccept(@RequestParam("recNo") Long recNo) {
-        hptReceptionService.updateCurrentStatus(recNo, "진료 전", LocalDateTime.now());
-        hptReceptionService.increaseRtCount(); // 대기자 수 +1
+    @PostMapping("/HptReceptionList/updateCurrentStatus")       // <a> 태그는 get 방식으로 요청한다.(9/13일: <a>태그에서 <form> 태그로 수정)
+    public String updateCurrentStatusToAccept(
+        @RequestParam("recNo") Long recNo,
+        HptReceptionRequest hptReceptionRequest
+    ) {
+        hptReceptionService.updateCurrentStatus(recNo, hptReceptionRequest.toDto());
+//        hptReceptionService.increaseRtCount(); // 대기자 수 +1
 
         return "redirect:/HptReception/HptReceptionList";
     }
 
-    @GetMapping("/HptReceptionList/updateCurrentStatusToReject")
-    public String updateCurrentStatusToReject(@RequestParam("recNo") Long recNo) {
-        hptReceptionService.updateCurrentStatus(recNo, "접수취소", LocalDateTime.now());
-        return "redirect:/HptReception/HptReceptionList";
-    }
-
-    @GetMapping("/HptReceptionList/updateCurrentStatusToComplete")
-    public String updateCurrentStatusToComplete(@RequestParam("recNo") Long recNo) {
-        hptReceptionService.updateCurrentStatus(recNo, "진료완료", LocalDateTime.now());
-        hptReceptionService.decreaseRtCount(); // 대기자 수 -1
-
-        return "redirect:/HptReception/HptReceptionList";
-    }
+//    @PostMapping("/HptReceptionList/updateCurrentStatusToReject")
+//    public String updateCurrentStatusToReject(
+//        @RequestParam("recNo") Long recNo,
+//        HptReceptionRequest hptReceptionRequest
+//    ) {
+//        hptReceptionService.updateCurrentStatus(recNo, hptReceptionRequest.toDto());
+//        return "redirect:/HptReception/HptReceptionList";
+//    }
+//
+//    @PostMapping("/HptReceptionList/updateCurrentStatusToComplete")
+//    public String updateCurrentStatusToComplete(
+//        @RequestParam("recNo") Long recNo,
+//        HptReceptionRequest hptReceptionRequest
+//    ) {
+//        hptReceptionService.updateCurrentStatus(recNo, hptReceptionRequest.toDto());
+//        hptReceptionService.decreaseRtCount(); // 대기자 수 -1
+//
+//        return "redirect:/HptReception/HptReceptionList";
+//    }
 
 }

@@ -92,25 +92,6 @@ function acceptReception() {
   const isAccept = confirm('접수를 수락하시겠습니까?');
 
   if (isAccept) {
-    const updateStatusPath = '/HptReception/HptReceptionList/updateCurrentStatusToAccept';
-
-    // 버튼 클릭 이벤트가 일어나면 form 요소를 동적으로 생성
-    const form = document.createElement('form');
-    form.setAttribute('method', 'post');
-    form.setAttribute('action', updateStatusPath);
-
-    // resNo 값을 전달하기 위한 hidden input 요소 추가
-    const resNoInput = document.createElement('input');
-    resNoInput.setAttribute('type', 'hidden');
-    resNoInput.setAttribute('name', 'recNo');
-    resNoInput.setAttribute('value', '${hptReception.recNo}');
-
-    // form 요소와 hidden input 요소를 body에 추가하고 submit
-    form.appendChild(resNoInput);
-    document.body.appendChild(form);
-
-    //confirm 메시지를 띄우고, 사용자가 확인을 누른 경우에만 form을 submit합니다.
-    form.submit();
     alert('접수가 수락되었습니다.');
   }
 
@@ -121,25 +102,6 @@ function rejectReception() {
   const isReject = confirm('접수를 취소하시겠습니까?');
 
   if (isReject) {
-    const updateStatusPath = '/HptReception/HptReceptionList/updateCurrentStatusToReject';
-
-    // 버튼 클릭 이벤트가 일어나면 form 요소를 동적으로 생성
-    const form = document.createElement('form');
-    form.setAttribute('method', 'post');
-    form.setAttribute('action', updateStatusPath);
-
-    // resNo 값을 전달하기 위한 hidden input 요소 추가
-    const resNoInput = document.createElement('input');
-    resNoInput.setAttribute('type', 'hidden');
-    resNoInput.setAttribute('name', 'recNo');
-    resNoInput.setAttribute('value', '${hptReception.recNo}');
-
-    // form 요소와 hidden input 요소를 body에 추가하고 submit
-    form.appendChild(resNoInput);
-    document.body.appendChild(form);
-
-    //confirm 메시지를 띄우고, 사용자가 확인을 누른 경우에만 form을 submit합니다.
-    form.submit();
     alert('접수가 취소되었습니다.');
   }
 
@@ -151,32 +113,8 @@ function completeTreatment() {
   const isComplete = confirm('진료를 완료하시겠습니까?');
 
   if (isComplete) {
-    const updateStatusPath = '/HptReception/HptReceptionList/updateCurrentStatusToComplete';
-
-    // 버튼 클릭 이벤트가 일어나면 form 요소를 동적으로 생성
-    const form = document.createElement('form');
-    form.setAttribute('method', 'post');
-    form.setAttribute('action', updateStatusPath);
-
-    // resNo 값을 전달하기 위한 hidden input 요소 추가
-    const resNoInput = document.createElement('input');
-    resNoInput.setAttribute('type', 'hidden');
-    resNoInput.setAttribute('name', 'recNo');
-    resNoInput.setAttribute('value', '${hptReception.recNo}');
-
-    // form 요소와 hidden input 요소를 body에 추가하고 submit
-    form.appendChild(resNoInput);
-    document.body.appendChild(form);
-    form.submit();
-
-    //confirm 메시지를 띄우고, 사용자가 확인을 누른 경우에만 form을 submit합니다.
-     form.submit();
      alert('진료가 완료되었습니다.');
    }
 
     return isComplete;
   }
-
-
-
-
