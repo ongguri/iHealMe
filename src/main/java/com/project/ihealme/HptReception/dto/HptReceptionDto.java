@@ -27,7 +27,11 @@ public class HptReceptionDto {
         this.updateRegDate = updateRegDate;
     }
 
-    private HptReceptionDto of(Long recNo, String currentStatus, UserReservationDto userReservationDto, LocalDateTime regDate, LocalDateTime updateRegDate) {
+    public static HptReceptionDto of(String currentStatus) {
+        return new HptReceptionDto(null, currentStatus, null, null, null);
+    }
+
+    public static HptReceptionDto of(Long recNo, String currentStatus, UserReservationDto userReservationDto, LocalDateTime regDate, LocalDateTime updateRegDate) {
         return new HptReceptionDto(recNo, currentStatus, userReservationDto, regDate, updateRegDate);
     }
 

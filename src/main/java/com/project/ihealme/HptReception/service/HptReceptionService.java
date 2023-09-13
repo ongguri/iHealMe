@@ -49,9 +49,20 @@ public class HptReceptionService {
     }
 
     @Transactional
-    public void updateCurrentStatus(Long recNo, String newStatus, LocalDateTime updateRegDate) {
+    public void updateCurrentStatus(Long recNo, HptReceptionDto dto) {
         HptReception hptReception = hptReceptionRepository.getReferenceById(recNo);
         UserReservation userReservation = hptReception.getUserReservation();
+        String newStatus = dto.getCurrentStatus();
+
+        if(newStatus.equals("접수")) {
+            newStatus = "진료 전";
+            hptReceptionRepository.increaseRtCount();
+        }
+        else if(newStatus.equals("진료 전")) {
+            newStatus = "진료완료";
+            hptReceptionRepository.decreaseRtCount();
+        }
+        else if(newStatus.equals("거절")) { newStatus = "접수취소"; }
 
         userReservation.setCurrentStatus(newStatus);
 
