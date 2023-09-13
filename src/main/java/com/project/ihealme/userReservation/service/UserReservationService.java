@@ -32,7 +32,7 @@ public class UserReservationService {
         String newStatus = dto.getCurrentStatus();
 
         if(newStatus.equals("진료 전")) {
-            newStatus = "접수 취소";
+            newStatus = "접수취소";
         }
         userReservation.setCurrentStatus(newStatus);
 
