@@ -102,3 +102,10 @@ form {
 .btn-secondary:hover {
     background-color: steelblue;
 }
+
+.btn-outline {
+  background-color: transparent;
+  border: none;
+  padding: 0;
+  color: blue;
+}
